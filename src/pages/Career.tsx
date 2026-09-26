@@ -262,10 +262,10 @@ const testimonials = [
 ];
 
 const stats = [
-  { value: '200+', label: 'Team Members', icon: Users },
+  { value: '100+', label: 'Team Members', icon: Users },
   { value: '6', label: 'Branch', icon: MapPin },
   { value: '94%', label: 'Staff Retention', icon: Heart },
-  { value: '50+', label: 'Promotions (2024)', icon: ArrowRight },
+  { value: '10+', label: 'Promotions', icon: ArrowRight },
 ];
 
 const benefits = [
