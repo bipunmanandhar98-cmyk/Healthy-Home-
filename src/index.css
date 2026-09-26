@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+@import "tailwindcss";
+
+/* ── Mobile / touch ──────────────────────────────────────────────────
+   - text-size-adjust stops iOS inflating body text in landscape, which
+     otherwise breaks layouts sized against the header token below.
+   - tap-highlight-color removes the default blue flash on links/buttons.
+   - overscroll-behavior-x contain stops a horizontal carousel from
+     dragging the whole page sideways once it reaches its last slide. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+a,
+button,
+[role="button"],
+summary,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.no-scrollbar {
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Entrance for the mobile drawer's service accordion. Done in CSS rather than
+   a nested AnimatePresence: a height animation nested inside the drawer (which
+   also animates height) never completed its unmount, leaving collapsed
+   sub-service links mounted and in the tab order. */
+@keyframes hh-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hh-drop-in {
+  animation: hh-drop-in 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hh-drop-in {
+    animation: none;
+  }
+}
+
+/*
+ * Combined height of the sticky TopBar + Navbar. The hero subtracts this from
+ * 100svh so its CTAs sit inside the viewport instead of below the fold.
+ * Three measured sizes:
+ *   <640px   top bar 50px (text wraps) + nav 69px = 119px
+ *   640-1023 top bar 33px                  + nav 69px = 102px
+ *   >=1024px top bar 33px                  + nav 77px = 110px
+ * Keep in sync if the header padding or type size changes.
+ */
+:root {
+  --hh-header-h: 102px;
+}
+@media (max-width: 639px) {
+  :root {
+    --hh-header-h: 119px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --hh-header-h: 110px;
+  }
+}
+
+@theme {
+  --color-cream: #F5FAFA;
+  --color-sand: #E9F3F3;
+  --color-linen: #D7E5E6;
+  --color-gold: #00919A;
+  --color-goldlight: #19C7CF;
+  --color-golddark: #007C83;
+  --color-ink: #172326;
+  --color-espresso: #07191B;
+  --color-mocha: #667477;
+  --color-stone2: #85999B;
+  --color-blush: #D9EEEF;
+  --color-mist: #A9BFC1;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Jost", system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+.font-display { font-family: var(--font-display); }
+::selection { background: #00919A; color: white; }
+.gold-text {
+  background: linear-gradient(105deg, #00747B 0%, #00919A 35%, #19C7CF 50%, #00919A 65%, #00747B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.gold-line { background: linear-gradient(90deg, transparent, #00919A, transparent); height: 1px; }
+.texture-grain {
+  background-image: radial-gradient(rgba(0,145,154,0.10) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.marquee-track { animation: marquee 28s linear infinite; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.animate-floaty { animation: floaty 5s ease-in-out infinite; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+input, select, textarea { outline: none; }
