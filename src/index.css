@@ -25,6 +25,7 @@ label {
   -webkit-overflow-scrolling: touch;
 }
 
+<<<<<<< HEAD
 /* Entrance for the mobile drawer's service accordion. Done in CSS rather than
    a nested AnimatePresence: a height animation nested inside the drawer (which
    also animates height) never completed its unmount, leaving collapsed
@@ -50,6 +51,8 @@ label {
   }
 }
 
+=======
+>>>>>>> 400c92d48d38acec7b58ac33bf9abdc739442a70
 /*
  * Combined height of the sticky TopBar + Navbar. The hero subtracts this from
  * 100svh so its CTAs sit inside the viewport instead of below the fold.

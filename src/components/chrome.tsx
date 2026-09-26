@@ -303,17 +303,21 @@ const navUnderline =
 
 export function Navbar() {
   const [mobile, setMobile] = useState(false);
+<<<<<<< HEAD
   /* The mobile drawer nests the three main services inside a single SERVICES
      dropdown, so it needs two levels of state: whether that group is open, and
      which of its categories is expanded. Each holds a single value (not a Set)
      so both behave as accordions and the drawer stays short. */
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [openSubs, setOpenSubs] = useState<string | null>(null);
+=======
+>>>>>>> 400c92d48d38acec7b58ac33bf9abdc739442a70
   const [drop, setDrop] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { openBooking } = useBooking();
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   /** Close the drawer and reset the accordions, so it reopens fully collapsed. */
   const closeMenu = () => {
     setMobile(false);
@@ -327,6 +331,8 @@ export function Navbar() {
     setOpenGroup('services');
   };
 
+=======
+>>>>>>> 400c92d48d38acec7b58ac33bf9abdc739442a70
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -487,6 +493,7 @@ export function Navbar() {
           <button onClick={() => setMobile(!mobile)} aria-label={mobile ? 'Close menu' : 'Open menu'} aria-expanded={mobile} className="lg:hidden w-11 h-11 flex items-center justify-center rounded-full border border-linen">{mobile ? <X size={18} /> : <Menu size={18} />}</button>
         </div>
       </div>
+<<<<<<< HEAD
       {/* The drawer body is capped and internally scrollable: expanding a
           category can make it taller than a phone screen, and the header is
           sticky, so an uncapped drawer would pin a header that fills the whole
@@ -577,6 +584,27 @@ export function Navbar() {
               <Link to="/wellness-hub" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">WELLNESS HUB</Link>
               <button onClick={() => { closeMenu(); openBooking(); }} className="mt-2 bg-gold text-white rounded-full py-3 min-h-[44px] text-xs tracking-widest uppercase hover:bg-[#00747B]">Book Consultation</button>
             </div>
+=======
+      <AnimatePresence>
+        {mobile && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="lg:hidden overflow-hidden border-t border-linen bg-cream">
+            <div className="px-5 py-4 grid gap-1 text-sm">
+              <Link to="/services" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center border-b border-linen font-medium uppercase tracking-widest text-xs">SERVICES</Link>
+              {serviceLinks.map(s => (
+                <div key={s.id}>
+                  <Link to={serviceUrl(s.id)} onClick={() => setMobile(false)} className="py-2 min-h-[44px] flex items-center text-ink font-medium uppercase tracking-widest text-xs">{s.label}</Link>
+                  {s.subs.map(sub => <Link key={sub} to={subServiceUrl(s.id, sub)} onClick={() => setMobile(false)} className="py-2.5 pl-3 min-h-[44px] flex items-center text-mocha text-[13px]">— {sub}</Link>)}
+                </div>
+              ))}
+              <Link to="/locations" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">LOCATION</Link>
+              <Link to="/franchise" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">FRANCHISE</Link>
+              <Link to="/specials" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">SPECIAL</Link>
+              <Link to="/about" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">ABOUT US</Link>
+              <Link to="/career" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">CAREER</Link>
+              <Link to="/wellness-store" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">WELLNESS STORE</Link>
+              <Link to="/wellness-hub" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">WELLNESS HUB</Link>
+              <button onClick={() => { setMobile(false); openBooking(); }} className="mt-2 bg-gold text-white rounded-full py-3 text-xs tracking-widest uppercase hover:bg-[#00747B]">Book Consultation</button>
+>>>>>>> 400c92d48d38acec7b58ac33bf9abdc739442a70
             </div>
           </motion.div>
         )}
