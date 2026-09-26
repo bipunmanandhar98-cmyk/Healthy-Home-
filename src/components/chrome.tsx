@@ -303,36 +303,17 @@ const navUnderline =
 
 export function Navbar() {
   const [mobile, setMobile] = useState(false);
-<<<<<<< HEAD
   /* The mobile drawer nests the three main services inside a single SERVICES
      dropdown, so it needs two levels of state: whether that group is open, and
      which of its categories is expanded. Each holds a single value (not a Set)
      so both behave as accordions and the drawer stays short. */
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [openSubs, setOpenSubs] = useState<string | null>(null);
-=======
->>>>>>> 400c92d48d38acec7b58ac33bf9abdc739442a70
   const [drop, setDrop] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { openBooking } = useBooking();
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  /** Close the drawer and reset the accordions, so it reopens fully collapsed. */
-  const closeMenu = () => {
-    setMobile(false);
-    setOpenGroup(null);
-    setOpenSubs(null);
-  };
-
-  /** Opening a category reveals the SERVICES group it lives inside. */
-  const toggleSubs = (id: string) => {
-    setOpenSubs((cur) => (cur === id ? null : id));
-    setOpenGroup('services');
-  };
-
-=======
->>>>>>> 400c92d48d38acec7b58ac33bf9abdc739442a70
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -493,98 +474,6 @@ export function Navbar() {
           <button onClick={() => setMobile(!mobile)} aria-label={mobile ? 'Close menu' : 'Open menu'} aria-expanded={mobile} className="lg:hidden w-11 h-11 flex items-center justify-center rounded-full border border-linen">{mobile ? <X size={18} /> : <Menu size={18} />}</button>
         </div>
       </div>
-<<<<<<< HEAD
-      {/* The drawer body is capped and internally scrollable: expanding a
-          category can make it taller than a phone screen, and the header is
-          sticky, so an uncapped drawer would pin a header that fills the whole
-          viewport. overscroll-contain stops the inner scroll from chaining to
-          the page. */}
-      <AnimatePresence>
-        {mobile && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="lg:hidden overflow-hidden border-t border-linen bg-cream">
-            <div className="max-h-[calc(100svh-80px)] overflow-y-auto overscroll-contain">
-            {/* The three main services live inside a single SERVICES dropdown.
-                Each level is conditionally rendered rather than wrapped in a
-                nested AnimatePresence: a nested height animation inside the
-                drawer (which itself animates height) left the exiting subtree
-                mounted forever, so links accumulated and the drawer got stuck
-                at height 0. A CSS entrance keeps the motion without the
-                bookkeeping, and unmounts collapsed links so they leave the
-                tab order. */}
-            <div className="px-5 py-4 grid gap-1 text-sm">
-              <button
-                onClick={() => { setOpenGroup(openGroup === 'services' ? null : 'services'); setOpenSubs(null); }}
-                aria-expanded={openGroup === 'services'}
-                className="w-full py-2.5 min-h-[44px] flex items-center gap-2 border-b border-linen text-left font-medium uppercase tracking-widest text-xs"
-              >
-                <span className="grow">SERVICES</span>
-                <ChevronDown
-                  size={15}
-                  className={`shrink-0 text-stone2 transition-transform duration-300 ${openGroup === 'services' ? 'rotate-180' : ''}`}
-                />
-              </button>
-
-              {openGroup === 'services' && (
-                <div className="pb-1 hh-drop-in">
-                  {serviceLinks.map(s => {
-                    const open = openSubs === s.id;
-                    return (
-                      <div key={s.id}>
-                        <button
-                          onClick={() => toggleSubs(s.id)}
-                          aria-expanded={open}
-                          className="w-full py-2 min-h-[44px] flex items-center gap-2 pl-3 text-left text-ink font-medium uppercase tracking-widest text-xs"
-                        >
-                          <span className="grow">{s.label}</span>
-                          <ChevronDown
-                            size={15}
-                            className={`shrink-0 text-stone2 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-                          />
-                        </button>
-                        {open && (
-                          <div className="pb-1 hh-drop-in">
-                            {s.subs.map(sub => (
-                              <Link
-                                key={sub}
-                                to={subServiceUrl(s.id, sub)}
-                                onClick={closeMenu}
-                                className="py-2.5 pl-7 min-h-[44px] flex items-center text-mocha text-[13px]"
-                              >
-                                — {sub}
-                              </Link>
-                            ))}
-                            <Link
-                              to={serviceUrl(s.id)}
-                              onClick={closeMenu}
-                              className="py-2.5 pl-7 min-h-[44px] flex items-center gap-1.5 text-golddark text-[11px] tracking-[0.15em] uppercase font-medium"
-                            >
-                              All {s.label} <ArrowRight size={13} />
-                            </Link>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                  <Link
-                    to="/services"
-                    onClick={closeMenu}
-                    className="py-2.5 pl-3 min-h-[44px] flex items-center gap-1.5 text-golddark text-[11px] tracking-[0.15em] uppercase font-medium"
-                  >
-                    All Services <ArrowRight size={13} />
-                  </Link>
-                </div>
-              )}
-
-              <Link to="/locations" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">LOCATION</Link>
-              <Link to="/franchise" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">FRANCHISE</Link>
-              <Link to="/specials" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">SPECIAL</Link>
-              <Link to="/about" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">ABOUT US</Link>
-              <Link to="/career" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">CAREER</Link>
-              <Link to="/wellness-store" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">WELLNESS STORE</Link>
-              <Link to="/wellness-hub" onClick={closeMenu} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">WELLNESS HUB</Link>
-              <button onClick={() => { closeMenu(); openBooking(); }} className="mt-2 bg-gold text-white rounded-full py-3 min-h-[44px] text-xs tracking-widest uppercase hover:bg-[#00747B]">Book Consultation</button>
-            </div>
-=======
       <AnimatePresence>
         {mobile && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="lg:hidden overflow-hidden border-t border-linen bg-cream">
@@ -604,7 +493,6 @@ export function Navbar() {
               <Link to="/wellness-store" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">WELLNESS STORE</Link>
               <Link to="/wellness-hub" onClick={() => setMobile(false)} className="py-2.5 min-h-[44px] flex items-center font-medium uppercase tracking-widest text-xs">WELLNESS HUB</Link>
               <button onClick={() => { setMobile(false); openBooking(); }} className="mt-2 bg-gold text-white rounded-full py-3 text-xs tracking-widest uppercase hover:bg-[#00747B]">Book Consultation</button>
->>>>>>> 400c92d48d38acec7b58ac33bf9abdc739442a70
             </div>
           </motion.div>
         )}
