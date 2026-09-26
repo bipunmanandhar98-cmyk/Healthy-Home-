@@ -24,6 +24,31 @@ label {
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
 }
+
+/* Entrance for the mobile drawer's service accordion. Done in CSS rather than a
+   nested AnimatePresence: a height animation nested inside the drawer (which
+   also animates height) never completed its unmount, leaving collapsed
+   sub-service links mounted and in the tab order. */
+@keyframes hh-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hh-drop-in {
+  animation: hh-drop-in 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hh-drop-in {
+    animation: none;
+  }
+}
 /*
  * Combined height of the sticky TopBar + Navbar. The hero subtracts this from
  * 100svh so its CTAs sit inside the viewport instead of below the fold.
