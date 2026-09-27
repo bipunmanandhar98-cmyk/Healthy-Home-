@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 const fadeUp = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } as const;
 
-/** Sub-services featured in the "What We Do" grid, in display order. */
+/** Sub-services featured in the "What  Do" grid, in display order. */
 const FEATURED_SUB_IDS = [
   'bca-testing',
   'weight-loss',
@@ -36,7 +36,7 @@ export default function Home() {
     const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
     window.scrollTo({ top, behavior: 'smooth' });
   };
-  const brands = ['BCA TESTING', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL', 'LASER HAIR REMOVAL', 'LAB TEST'];
+  const brands = ['BCA TESTING', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL', 'TEST', 'LAB TEST'];
   const instagramReels = [
     {
       image: '/images/site/hero-main.jpg',
