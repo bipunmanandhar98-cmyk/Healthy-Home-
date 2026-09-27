@@ -36,7 +36,7 @@ export default function Home() {
     const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
     window.scrollTo({ top, behavior: 'smooth' });
   };
-  const brands = ['BCA', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL','TEST'];
+  const brands = ['BCA TEST', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL','LAB TEST'];
   const instagramReels = [
     {
       image: '/images/site/hero-main.jpg',
