@@ -67,10 +67,16 @@ const reqClass = 'text-red-600';
 function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) {
   const formRef = useRef<HTMLFormElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+  const resumeRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState('');
   const [err, setErr] = useState('');
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<SendResult | null>(null);
+  const [dragOver, setDragOver] = useState(false);
+  /* dragenter/dragleave also fire when the pointer crosses the child elements
+     inside the drop zone, so a plain boolean flickers. Counting enter/leave
+     events instead keeps the highlight steady until the drag really leaves. */
+  const dragDepth = useRef(0);
 
   /* A fresh form per opening, and no stale error or filename left over. */
   useEffect(() => {
@@ -80,6 +86,8 @@ function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) 
     setErr('');
     setResult(null);
     setSending(false);
+    setDragOver(false);
+    dragDepth.current = 0;
     nameRef.current?.focus();
   }, [job]);
 
@@ -98,6 +106,22 @@ function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) 
   }, [job, onClose]);
 
   if (!job) return null;
+
+  /* Single place where a resume gets accepted, whether it arrived through the
+     file picker or a drop, so both paths validate identically and the input's
+     own FileList is kept in sync — that is what FormData reads on submit. */
+  const attachResume = (file: File | null) => {
+    setFileName(file ? file.name : '');
+    setErr(validateResume(file) ?? '');
+    const input = resumeRef.current;
+    if (!input) return;
+    if (!file) { input.value = ''; return; }
+    // A dropped file never populates the input on its own, so copy it across.
+    // Without this the drop would look attached but submit nothing.
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -249,36 +273,65 @@ function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) 
                 </div>
 
                 <div>
-                  <label htmlFor="apply-resume" className={labelClass}>
+                  {/* Not a <label>: the drop zone below is the control that
+                      targets this input, and a second <label for> would make
+                      assistive tech announce the field name twice. The input
+                      gets its name from aria-labelledby instead. */}
+                  <span id="apply-resume-label" className={labelClass}>
                     Upload Resume<span className={reqClass}>*</span>
                     <span className="font-normal text-stone2 text-xs ml-1.5">(Below 2MB, Format: pdf/docx/jpg)</span>
-                  </label>
-                  <div className="rounded-xl border border-linen bg-sand/50 px-3 py-2.5 flex items-center gap-3 flex-wrap">
-                    <label
-                      htmlFor="apply-resume"
-                      className="inline-flex items-center gap-2 cursor-pointer bg-white border border-linen rounded-lg px-4 py-2 text-sm font-medium text-ink hover:border-gold transition shrink-0"
+                  </span>
+                  {/* The whole zone is a <label> for the file input, so a click
+                      anywhere opens the picker while the input stays a real
+                      focusable control for keyboard and screen-reader users.
+                      Drag-and-drop is layered on top of that. */}
+                  <label
+                    htmlFor="apply-resume"
+                    onDragEnter={e => { e.preventDefault(); dragDepth.current += 1; setDragOver(true); }}
+                    onDragOver={e => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; setDragOver(true); }}
+                    onDragLeave={e => {
+                      e.preventDefault();
+                      dragDepth.current = Math.max(0, dragDepth.current - 1);
+                      if (dragDepth.current === 0) setDragOver(false);
+                    }}
+                    onDrop={e => {
+                      e.preventDefault();
+                      dragDepth.current = 0;
+                      setDragOver(false);
+                      // Ignore a drop of anything that is not a file (a dragged
+                      // link or plain text) rather than clearing the selection.
+                      const file = e.dataTransfer.files?.[0] ?? null;
+                      if (file) attachResume(file);
+                    }}
+                    className={`mt-1.5 rounded-xl border-2 border-dashed px-3 py-4 flex items-center gap-3 flex-wrap transition-colors ${
+                      dragOver
+                        ? 'border-gold bg-gold/10'
+                        : 'border-linen bg-sand/50 hover:border-gold/50'
+                    }`}
+                  >
+                    <span
+                      className={`inline-flex items-center gap-2 bg-white border rounded-lg px-4 py-2 text-sm font-medium text-ink transition shrink-0 ${
+                        dragOver ? 'border-gold' : 'border-linen'
+                      }`}
                     >
                       <Upload size={15} className="text-gold" />
                       Choose File
-                    </label>
-                    <span className="text-sm text-mocha truncate min-w-0">
-                      {fileName || 'No file chosen'}
                     </span>
-                    {/* Kept visually hidden rather than display:none, which would
-                        make the input un-focusable and break the label's
-                        click-to-open behaviour and screen readers. */}
-                    <input
-                      id="apply-resume" name="applicant_resume" type="file"
-                      accept={RESUME_ACCEPT}
-                      className="sr-only"
-                      onChange={e => {
-                        const f = e.target.files?.[0] ?? null;
-                        setFileName(f ? f.name : '');
-                        const problem = validateResume(f);
-                        setErr(problem ?? '');
-                      }}
-                    />
-                  </div>
+                    <span className={`text-sm truncate min-w-0 ${fileName ? 'text-ink font-medium' : 'text-mocha'}`}>
+                      {fileName || 'No file chosen — or drag & drop here'}
+                    </span>
+                  </label>
+                  {/* Visually hidden rather than display:none, which would make
+                      the input un-focusable and break the label's click-to-open
+                      behaviour and assistive technology. */}
+                  <input
+                    ref={resumeRef}
+                    id="apply-resume" name="applicant_resume" type="file"
+                    aria-labelledby="apply-resume-label"
+                    accept={RESUME_ACCEPT}
+                    className="sr-only"
+                    onChange={e => attachResume(e.target.files?.[0] ?? null)}
+                  />
                 </div>
 
                 {/* Carried through to the email template so the team knows the
