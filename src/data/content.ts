@@ -113,19 +113,32 @@ export type SubService = {
   faqs: { q: string; a: string }[];
 };
 
+/* Sub-service copy.
+ *
+ * `description`, `overview` and `process` were imported from the live
+ * healthyhome.com.np service pages (the "Overview"/"About" prose and the
+ * "Our Method" steps, tidied for the web). The live site has no equivalent of
+ * `duration`, `expectedResults` or `faqs` — nothing there to copy — so those
+ * three still hold the original hand-written values and have never been
+ * verified against healthyhome.com.np. Treat any clinical claim in those
+ * fields as unsourced.
+ *
+ * `benefits` was also left alone: the live site only publishes a benefits list
+ * for HydraFacial, so sourcing them per-service would mean inventing 15 of 16. */
 export const subServices: SubService[] = [
   // ── Weight Management (7) ──
   {
     id: 'bca-testing', parentId: 'weight-management', name: 'BCA Testing',
-    description: 'Body Composition Analysis — muscle, fat, water and metabolic insights in minutes.',
-    overview: 'BCA Testing is the starting point of every Healthy Home weight journey. A quick, non-invasive scan breaks your body into muscle, fat, water and metabolic rate — so coaching and shaping decisions are based on data, not the scale alone.',
+    description: 'A precise, science-backed look at your body’s internal health — not just your weight.',
+    overview: 'At Healthy Home, our Body Composition Analysis (BCA) Testing offers a precise, science-backed evaluation of your body’s internal health—not just your weight. Using an advanced Body Composition Analyzer (BCA) machine, we measure critical health parameters that provide a complete picture of your physical condition. Unlike traditional BMI tests that only consider height and weight, BCA testing delivers in-depth insights into how your body is structured and functioning, helping you make smarter decisions about your health, fitness, and lifestyle. We also provide advanced BMI (Body Mass Index) testing through the same state-of-the-art analyzer. This comprehensive assessment goes beyond traditional BMI measurements to give you a detailed insight into your body composition, including body fat percentage, muscle mass, hydration levels, and mineral content. By understanding these key health indicators, you gain a clear picture of your overall wellness, enabling you to make informed decisions about your fitness and weight management journey. Whether you are starting a new fitness plan, monitoring your progress, or simply curious about your body’s condition, this test serves as a scientific foundation for personalized health recommendations.',
     image: IMG.service.bcaTesting, duration: '20-30 min',
     benefits: ['Accurate muscle vs fat breakdown', 'Visceral-fat and water insights', 'Trackable progress baseline', 'Personalized targets from real data'],
     suitableFor: ['Anyone starting weight loss or gain', 'Clients stuck at a plateau', 'Coaching + shaping candidates'],
     process: [
-      { title: 'Scan', desc: 'Stand-on BCA scan takes a few minutes — no preparation needed.' },
-      { title: 'Review', desc: 'Specialist walks through muscle, fat, water and metabolic age.' },
-      { title: 'Plan', desc: 'Targets and next steps feed into your weight plan.' },
+      { title: 'Accurate Height & Weight Measurement', desc: 'Precise measurement of height and weight to calculate your BMI accurately for a clear health baseline.' },
+      { title: 'Body Fat Percentage Analysis', desc: 'Advanced tools measure fat versus muscle ratio to provide deeper insight beyond BMI numbers.' },
+      { title: 'Lifestyle & Health Evaluation', desc: 'Assessment of diet, activity, and medical history to contextualize BMI results and tailor recommendations.' },
+      { title: 'Personalized Health Guidance', desc: 'Customized advice based on your BMI and overall health to guide weight management or wellness plans.' },
     ],
     expectedResults: 'A clear baseline report plus targets from day one; re-tests show measurable change within weeks.',
     faqs: [
@@ -135,15 +148,18 @@ export const subServices: SubService[] = [
   },
   {
     id: 'weight-loss', parentId: 'weight-management', name: 'Weight Loss',
-    description: 'Coach-guided fat-loss programs with nutrition, activity and progress tracking.',
-    overview: 'Weight Loss at Healthy Home is a structured program — not a crash diet. After BCA testing, your coach builds nutrition, activity and habit targets, then reviews progress at every visit.',
+    description: 'Coach-guided fat loss built on real body data — not crash diets or extreme workouts.',
+    overview: 'Healthy Home’s weight loss program is designed for individuals seeking a healthier, more confident version of themselves without relying on crash diets or extreme workouts. Our approach focuses on natural, non-invasive methods that promote effective fat loss, muscle toning, improved metabolism, and visible inch loss through advanced body shaping and targeted fat loss treatments. Through expert consultations, personalized diet plans, and supportive therapies, we address the root causes of weight gain, including hormonal imbalances, stress, poor lifestyle habits, and slow metabolic function. Instead of temporary fixes, our program works on correcting internal imbalances to deliver consistent and sustainable progress—an approach widely supported by global health authorities like the WHO, which emphasizes long-term lifestyle-based weight management.',
     image: IMG.service.weightLoss, duration: '45-60 min',
     benefits: ['Personalized nutrition targets', 'Activity + habit coaching', 'Regular weigh-ins and BCA reviews', 'Non-extreme, sustainable pace'],
     suitableFor: ['Adults wanting steady fat loss', 'Post-assessment coaching candidates', 'Home-package companions'],
     process: [
-      { title: 'Assess', desc: 'BCA + lifestyle review sets your start point.' },
-      { title: 'Coach', desc: 'Nutrition and activity targets, plus habit check-ins.' },
-      { title: 'Track', desc: 'Weigh-ins, measurements and re-tests keep you on track.' },
+      { title: 'Body Composition Analysis', desc: 'Detailed assessment of fat, muscle, and water to tailor your weight loss program precisely to your body’s needs.' },
+      { title: 'Fat-Melting Therapy', desc: 'Non-invasive treatment targeting stubborn fat cells to break them down and aid natural elimination by the body.' },
+      { title: 'Inch Loss Treatment', desc: 'Specialized techniques focused on reducing body circumference in key areas like belly, thighs, and arms for visible shaping.' },
+      { title: 'Detox & Metabolism Boost', desc: 'Natural detox therapies and herbal teas cleanse your system and enhance metabolism for faster, healthier weight loss.' },
+      { title: 'Nutrition & Lifestyle Coaching', desc: 'Personalized guidance on diet and habits to create sustainable changes that complement treatments and prevent weight regain.' },
+      { title: 'Regular Progress Tracking', desc: 'Weekly evaluations ensure your plan’s effectiveness and allow adjustments to keep your weight loss steady and on target.' },
     ],
     expectedResults: 'Steady, trackable loss from weeks 3–4, with coaching milestones along the way.',
     faqs: [
@@ -153,15 +169,16 @@ export const subServices: SubService[] = [
   },
   {
     id: 'coolsculpting', parentId: 'weight-management', name: 'CoolSculpting',
-    description: 'Non-invasive body contouring that targets stubborn fat areas.',
-    overview: 'CoolSculpting targets stubborn fat pockets — abdomen, flanks, arms, thighs — with controlled cooling. Non-invasive, no anesthesia, no downtime: you relax during the session and return to routine after.',
+    description: 'Non-invasive body contouring that freezes and permanently eliminates stubborn fat cells.',
+    overview: 'CoolSculpting at Healthy Home is a clinically proven, non-invasive fat reduction treatment that uses advanced controlled cooling (Cryolipolysis) technology to target and permanently eliminate stubborn fat cells. This FDA-cleared fat-freezing procedure is designed to contour the body safely and effectively—without surgery, needles, anesthesia, or downtime. CoolSculpting works by freezing fat cells in targeted areas, causing them to break down and be naturally eliminated by the body over time. Unlike traditional weight-loss methods that only shrink fat cells, this treatment permanently destroys fat cells, leading to long-lasting and natural-looking body contouring results. With no downtime, minimal discomfort, and visible results over time, CoolSculpting has become one of the most popular non-surgical body contouring solutions worldwide. At Healthy Home, each treatment is customized to your body goals, ensuring safe, effective, and aesthetically pleasing results. If you’re looking for a surgery-free way to sculpt your body and reduce stubborn fat, CoolSculpting offers a scientifically backed, long-term solution.',
     image: IMG.service.coolsculpting, duration: '35-60 min',
     benefits: ['Targets stubborn fat pockets', 'Non-invasive, no anesthesia', 'No downtime', 'Pairs with coaching + BCA tracking'],
     suitableFor: ['Clients near goal weight with stubborn areas', 'Non-surgical shaping seekers', 'Coaching-program companions'],
     process: [
-      { title: 'Map', desc: 'Specialist maps applicator placement to your goals.' },
-      { title: 'Treat', desc: 'Controlled-cooling session while you relax.' },
-      { title: 'Review', desc: 'Follow-ups track contour change over weeks.' },
+      { title: 'Targeted Fat Freezing', desc: 'Precisely cools stubborn fat cells in problem areas without harming surrounding tissues for effective fat reduction.' },
+      { title: 'Natural Fat Elimination', desc: 'Body gradually processes and removes frozen fat cells over weeks, resulting in lasting contour improvement.' },
+      { title: 'Non-Invasive Treatment', desc: 'No surgery or needles involved—safe, painless, and requires no downtime for quick recovery.' },
+      { title: 'Customized Treatment Plans', desc: 'Personalized sessions designed to target specific areas based on individual body shape and fat distribution.' },
     ],
     expectedResults: 'Visible contour refinement over 4–12 weeks as treated fat cells are naturally cleared.',
     faqs: [
@@ -171,15 +188,16 @@ export const subServices: SubService[] = [
   },
   {
     id: 'breast-reduction-wm', parentId: 'weight-management', name: 'Breast Reduction',
-    description: 'Consultation-led reduction support plans with clinical guidance.',
-    overview: 'Breast Reduction at Healthy Home starts with a private consultation: assessment, weight and posture review, and a clinician-guided support plan — including shaping, coaching and referral guidance where needed.',
+    description: 'A natural, non-surgical approach to reducing breast size and improving comfort.',
+    overview: 'Breast Reduction at Healthy Home offers a natural, non-surgical approach to reducing breast size and improving comfort. Large or heavy breasts can often lead to physical discomfort, poor posture, and self-consciousness. Our treatment focuses on breaking down excess fat tissues using advanced non-invasive technology combined with therapeutic techniques similar to our body shaping and skin tightening programs. This safe and personalized method helps in reshaping and firming the breast area without any surgical intervention, scarring, or downtime. Ideal for those seeking relief from back or shoulder pain or simply aiming for a more proportionate body shape, our program promotes both physical ease and body confidence. For clients seeking overall transformation, this treatment can also be combined with our non-invasive weight loss solutions or a customized weight loss home package for enhanced results.',
     image: IMG.service.breastReduction, duration: '45-60 min',
     benefits: ['Private consultation first', 'Weight + posture review', 'Shaping and support planning', 'Clear referral guidance if needed'],
     suitableFor: ['Clients seeking reduction guidance', 'Posture/back-comfort concerns', 'Weight-linked support candidates'],
     process: [
-      { title: 'Consult', desc: 'Private assessment and goal discussion.' },
-      { title: 'Plan', desc: 'Support plan across weight, shaping and care.' },
-      { title: 'Support', desc: 'Follow-ups plus referral guidance where appropriate.' },
+      { title: 'Fat Dissolving Therapy', desc: 'Non-invasive treatments target and break down excess fat in the breast area to reduce volume naturally.' },
+      { title: 'Skin Firming Techniques', desc: 'Stimulates collagen to tighten skin and improve breast shape without surgery or scarring.' },
+      { title: 'Lymphatic Drainage Massage', desc: 'Promotes fluid removal and reduces swelling, enhancing comfort and contour after treatment.' },
+      { title: 'Personalized Care Plans', desc: 'Customized programs designed to meet individual needs and ensure safe, effective breast reduction results.' },
     ],
     expectedResults: 'A clear, respectful plan with comfort and proportion goals tracked over visits.',
     faqs: [
@@ -189,15 +207,18 @@ export const subServices: SubService[] = [
   },
   {
     id: 'body-shaping', parentId: 'weight-management', name: 'Body Shaping',
-    description: 'Shaping and toning sessions for abdomen, arms, thighs and more.',
-    overview: 'Body Shaping tones and defines — abdomen, arms, thighs, flanks — through guided sessions paired with coaching. Ideal after initial fat loss or alongside BCA-tracked programs.',
+    description: 'Sculpt and refine specific areas of the body for a more toned, contoured appearance.',
+    overview: 'Healthy Home’s Body Shaping Treatment is designed to sculpt and refine specific areas of the body for a more toned and contoured appearance. Unlike general weight loss, this treatment targets localized fat deposits in areas such as the abdomen, thighs, and arms, helping you achieve a more defined body shape. Utilizing advanced, non-invasive technology, our painless and side-effect-free approach effectively breaks down stubborn fat, delivering visible results within just a few sessions. Whether you’re looking to enhance your natural curves or achieve a more balanced physique, our customized treatments help you reach your body goals with precision and ease.',
     image: IMG.service.bodyShaping, duration: '30-60 min',
     benefits: ['Targets abdomen, arms, thighs', 'Toning + definition focus', 'No downtime', 'Stacks with weight-loss coaching'],
     suitableFor: ['Post-loss toning', 'Event-ready definition', 'Coaching companions'],
     process: [
-      { title: 'Map', desc: 'Target areas mapped to your goals.' },
-      { title: 'Shape', desc: 'Guided shaping sessions per area.' },
-      { title: 'Track', desc: 'Measurements and photos track definition.' },
+      { title: 'Targeted Fat Reduction', desc: 'Non-invasive techniques focus on melting stubborn fat deposits to sculpt and slim specific body areas effectively.' },
+      { title: 'Skin Tightening Technology', desc: 'Uses radiofrequency and ultrasound to stimulate collagen production, improving skin firmness and elasticity.' },
+      { title: 'Muscle Toning Therapy', desc: 'Advanced treatments help strengthen and define muscles for a more toned and contoured appearance.' },
+      { title: 'Customized Treatment Plans', desc: 'Personalized programs tailored to your body type and goals for optimal shaping results.' },
+      { title: 'Nutritional Guidance', desc: 'Dietary advice supports fat loss and muscle toning, enhancing overall body shaping effects.' },
+      { title: 'Regular Progress Monitoring', desc: 'Continuous assessments to track changes and adjust treatment plans for maximum effectiveness.' },
     ],
     expectedResults: 'Firmer, more defined contours over a short series, maintained with coaching.',
     faqs: [
@@ -207,15 +228,16 @@ export const subServices: SubService[] = [
   },
   {
     id: 'weight-gain', parentId: 'weight-management', name: 'Weight Gain',
-    description: 'Healthy, supervised weight-gain plans with nutrition and strength guidance.',
-    overview: 'Weight Gain at Healthy Home is healthy weight done right: BCA-guided muscle-first targets, nutrition surplus plans and strength guidance — supervised, trackable and sustainable.',
+    description: 'Healthy, balanced weight gain through safe, natural, muscle-first methods.',
+    overview: 'Healthy Home’s Weight Gain program is designed to help individuals achieve a healthy and balanced increase in body weight through safe and natural methods. Whether you struggle with low appetite, metabolic issues, or underlying health concerns, our customized approach focuses on building lean muscle mass and improving overall nutrition. We combine expert guidance, specialized therapies, and lifestyle modifications to ensure gradual and sustainable weight gain. This program not only enhances your physique but also boosts energy levels and supports overall well-being, helping you gain weight in a healthy and controlled manner.',
     image: IMG.service.weightGain, duration: '45-60 min',
     benefits: ['Muscle-first gain targets', 'Nutrition surplus planning', 'Strength guidance', 'BCA-tracked progress'],
     suitableFor: ['Underweight adults', 'Muscle-building beginners', 'Post-illness recovery support'],
     process: [
-      { title: 'Assess', desc: 'BCA + nutrition review sets targets.' },
-      { title: 'Build', desc: 'Surplus meal plans plus strength guidance.' },
-      { title: 'Track', desc: 'Re-tests confirm muscle — not just scale — gain.' },
+      { title: 'Nutritional Counseling', desc: 'Personalized diet plans to increase calorie intake healthily, focusing on balanced nutrition and muscle-building foods.' },
+      { title: 'High-Calorie Formula', desc: 'Rich blend of nutrients designed to help increase daily calorie intake for effective weight gain.' },
+      { title: 'Easily Digestible', desc: 'Formulated for optimal absorption, minimizing digestive discomfort and maximizing nutrient uptake.' },
+      { title: 'Convenient Usage', desc: 'Simple preparation for daily consumption, making it easy to incorporate into your routine.' },
     ],
     expectedResults: 'Steady, healthy gain focused on muscle, reviewed every few weeks.',
     faqs: [
@@ -225,15 +247,17 @@ export const subServices: SubService[] = [
   },
   {
     id: 'weight-loss-home-package', parentId: 'weight-management', name: 'Weight Loss Home Package',
-    description: 'At-home weight-loss kit with guides, teas and remote coaching support.',
-    overview: 'The Weight Loss Home Package brings Healthy Home to your door: BCA baseline in-branch, then teas, guides, meal frameworks and remote coaching — ideal for busy schedules or clients outside the Valley.',
+    description: 'A curated diet plan and product mix for safe, sustainable weight loss — from the comfort of home.',
+    overview: 'At Healthy Home, we believe that distance should never hinder your journey to achieving your fitness goals. That’s why we offer the Weight Loss Home Package, a comprehensive solution designed for clients who want to lose weight effectively from the comfort of their own homes. This package includes a carefully curated weight loss diet plan, along with our premium Healthy Home products, all designed to support healthy and sustainable weight loss. By combining expert guidance with our Non-Surgical Body Shaping services, this package allows clients to achieve an average of 3–5 kg weight loss per month. Whether you’re looking to shed those extra pounds or simply want to embrace a healthier lifestyle, our Weight Loss Home Package offers all the tools you need to succeed in the comfort of your home, providing the guidance, personalized care and support you need. For improving skin elasticity and overall appearance during your weight loss journey, you may benefit from our Skin Tightening Treatment, which helps maintain firm and youthful-looking skin conveniently from your home. To ensure your health is fully supported, consider a Derma Consultation alongside your package — our experts can provide personalized guidance to address skin concerns, ensuring your weight loss journey is safe, effective, and holistic.',
     image: IMG.service.weightLossHomePackage, duration: 'Home-based',
     benefits: ['At-home teas + guides', 'Remote coaching check-ins', 'Meal frameworks that fit Nepali kitchens', 'In-center BCA reviews'],
     suitableFor: ['Busy professionals', 'Clients outside Kathmandu Valley', 'Coaching-program companions'],
     process: [
-      { title: 'Baseline', desc: 'In-center BCA + consult sets your kit.' },
-      { title: 'Home routine', desc: 'Teas, guides and meal frameworks at home.' },
-      { title: 'Remote reviews', desc: 'Coach check-ins plus in-branch re-tests.' },
+      { title: 'Customized Diet Plans', desc: 'Personalized nutrition guidance designed to suit your lifestyle and promote effective, healthy weight loss at home.' },
+      { title: 'Herbal & Natural Product Mix', desc: 'A carefully crafted blend of herbal and natural supplements designed to boost metabolism and support safe weight loss.' },
+      { title: 'Green Tea Support', desc: 'Rich in antioxidants, green tea enhances fat burning and detoxification naturally, helping you shed pounds gently.' },
+      { title: 'Time-Based Supplement Schedule', desc: 'Products are taken at specific times to maximize absorption and effectiveness throughout the day.' },
+      { title: 'Regular Follow-Ups', desc: 'Consistent check-ins to monitor progress, adjust the plan, and ensure steady, sustainable weight loss results.' },
     ],
     expectedResults: 'Steady home-based progress with accountability from your remote coach.',
     faqs: [
@@ -244,15 +268,18 @@ export const subServices: SubService[] = [
   // ── Dermatology (8) ──
   {
     id: 'hydrafacial-treatment', parentId: 'dermatology', name: 'HydraFacial Treatment',
-    description: 'Deep cleanse, exfoliation and hydration for instant glow.',
-    overview: 'HydraFacial Treatment is our signature glow facial: cleanse, gentle exfoliation, painless extractions and antioxidant hydration — finished in under an hour with zero downtime.',
+    description: 'Vortex technology that deep-cleanses, exfoliates, extracts and hydrates — instant glow, no downtime.',
+    overview: 'Healthy Home’s HydraFacial Treatment is a non-invasive skincare solution designed to deeply cleanse, exfoliate, and hydrate the skin. Using advanced vortex technology, this treatment effectively removes dead skin cells, unclogs pores, and infuses the skin with nourishing serums tailored to your specific needs. Whether you’re dealing with dryness, dullness, or uneven skin tone, our HydraFacial delivers instant, visible results, leaving your skin refreshed, smooth, and glowing. Unlike traditional facials, HydraFacial provides instant results with no downtime, making it a safe and effective solution for all skin types, including sensitive skin.',
     image: IMG.service.hydrafacial, duration: '30-45 min',
     benefits: ['Instant glow, zero downtime', 'Clears congestion gently', 'Hydrates and evens tone', 'Safe before events'],
     suitableFor: ['Dull or congested skin', 'Pre-event glow', 'First-time facial clients'],
     process: [
-      { title: 'Cleanse', desc: 'Deep cleanse + gentle exfoliation.' },
-      { title: 'Extract', desc: 'Painless extractions clear pores.' },
-      { title: 'Hydrate', desc: 'Antioxidant infusion seals the glow.' },
+      { title: 'Deep Cleansing', desc: 'Gently removes dirt, oil, and impurities from the skin’s surface for a fresh, clean base.' },
+      { title: 'Exfoliation', desc: 'Uses gentle abrasion to slough off dead skin cells, revealing smoother, brighter skin underneath.' },
+      { title: 'Pore Extraction', desc: 'Pain-free vacuum technology clears clogged pores and removes blackheads and debris.' },
+      { title: 'Hydration Infusion', desc: 'Delivers nourishing serums packed with antioxidants, peptides, and hyaluronic acid to deeply hydrate and protect skin.' },
+      { title: 'Skin Protection', desc: 'Antioxidants and peptides help strengthen skin’s barrier and combat environmental damage.' },
+      { title: 'Custom Serum Application', desc: 'Tailored serums address specific skin concerns such as acne, pigmentation, or aging for targeted results.' },
     ],
     expectedResults: 'Camera-ready glow immediately; tone and texture improve over a short series.',
     faqs: [
@@ -262,15 +289,18 @@ export const subServices: SubService[] = [
   },
   {
     id: 'laser-hair-removal', parentId: 'dermatology', name: 'Laser Hair Removal',
-    description: 'Safe, lasting hair reduction for face and body.',
-    overview: 'Laser Hair Removal offers lasting smoothness for upper lip, chin, underarms, arms, legs and bikini — with settings matched to your skin tone and hair type.',
+    description: 'Medical-grade diode laser that targets follicles for long-lasting reduction on all skin types.',
+    overview: 'Laser Hair Reduction at Healthy Home is a safe and effective solution to permanently reduce unwanted hair from different parts of the body. Using advanced medical-grade laser technology, the treatment precisely targets hair follicles to inhibit future hair growth while protecting the surrounding skin. This non-invasive procedure is suitable for all skin tones and hair types, offering a long-lasting, convenient and pain-free alternative to traditional hair removal methods such as waxing, shaving, or threading. With minimal discomfort and no downtime, our customized laser sessions help you achieve smooth, hair-free skin across face and body areas — boosting confidence and saving valuable time in your daily grooming routine.',
     image: IMG.service.laserHairRemoval, duration: '15-45 min',
     benefits: ['Lasting hair reduction', 'Face + body areas', 'Settings matched to skin tone', 'Quick sessions'],
     suitableFor: ['Unwanted facial/body hair', 'Shaving/waxing alternatives', 'Maintenance seekers'],
     process: [
-      { title: 'Assess', desc: 'Skin + hair review sets safe settings.' },
-      { title: 'Treat', desc: 'Quick laser passes per area.' },
-      { title: 'Series', desc: 'Sessions spaced weeks apart for full reduction.' },
+      { title: 'Advanced Diode Laser Technology', desc: 'Uses the latest diode laser for deeper, faster, and more effective hair follicle targeting with minimal discomfort.' },
+      { title: 'Skin Cooling System', desc: 'Integrated cooling minimizes pain and protects skin during treatment for a comfortable experience.' },
+      { title: 'Multi-Session Treatment Plan', desc: 'Customized schedule ensures gradual, permanent hair reduction by targeting hair in different growth cycles.' },
+      { title: 'Suitable for All Skin Types', desc: 'New technology safely treats a wide range of skin tones, providing effective results for everyone.' },
+      { title: 'Precision Targeting', desc: 'Handheld device allows precise treatment of small or sensitive areas for tailored hair removal.' },
+      { title: 'No Downtime Recovery', desc: 'Non-invasive procedure with minimal redness, allowing clients to resume daily activities immediately.' },
     ],
     expectedResults: 'Progressive reduction over a series; maintenance keeps areas smooth.',
     faqs: [
@@ -280,15 +310,18 @@ export const subServices: SubService[] = [
   },
   {
     id: 'skin-tightening', parentId: 'dermatology', name: 'Skin Tightening',
-    description: 'Firming sessions for face, neck and body laxity.',
-    overview: 'Skin Tightening firms early laxity on face, neck, arms and abdomen with gentle, non-invasive sessions that stimulate firmer-looking skin over time.',
+    description: 'Radiofrequency and ultrasound that tighten loose skin and boost collagen — no surgery, no downtime.',
+    overview: 'As we age, our skin naturally loses its firmness and elasticity due to the breakdown of collagen and elastin—two essential proteins that keep the skin tight and youthful. At Healthy Home, we offer a non-invasive Skin Tightening Treatment using advanced Radiofrequency (RF) technology, designed to lift, tone, and rejuvenate your skin without the need for surgery or downtime. Our clinically proven RF treatment gently heats the deeper layers of your skin, stimulating collagen and elastin production, which helps tighten loose skin, smooth out fine lines and wrinkles, and enhance overall skin tone. Whether you’re targeting sagging around the eyes, cheeks, jawline, or body areas like the abdomen, thighs, or arms, our customized RF sessions can bring back a firm and refreshed appearance. This treatment is ideal for those seeking a natural, safe, and long-lasting solution to aging or loose skin—without needles, scars, or recovery time.',
     image: IMG.service.skinTightening, duration: '30-60 min',
     benefits: ['Firms face, neck + body', 'Non-invasive, no downtime', 'Gradual natural-looking firmness', 'Pairs with facials + lifting'],
     suitableFor: ['Early laxity concerns', 'Post-weight-loss firming', 'Maintenance seekers'],
     process: [
-      { title: 'Map', desc: 'Laxity mapped per area.' },
-      { title: 'Firm', desc: 'Gentle firming sessions.' },
-      { title: 'Track', desc: 'Photos track firmness over weeks.' },
+      { title: 'Radiofrequency Therapy', desc: 'Uses controlled radiofrequency waves to heat deep skin layers, stimulating collagen and elastin for firmer skin.' },
+      { title: 'Ultrasound Treatment', desc: 'Focused ultrasound energy penetrates deep tissues, promoting natural skin tightening and lifting effects without surgery.' },
+      { title: 'Collagen Boost Stimulation', desc: 'Activates the skin’s natural collagen production to restore elasticity and reduce wrinkles over time.' },
+      { title: 'Non-Invasive Procedure', desc: 'Safe, painless treatments that require no downtime, making it convenient for all lifestyles.' },
+      { title: 'Targeted Treatment Areas', desc: 'Customizable to address loose skin on face, neck, arms, abdomen, and other body parts.' },
+      { title: 'Regular Follow-Up Sessions', desc: 'Periodic treatments ensure lasting results by maintaining collagen levels and skin firmness.' },
     ],
     expectedResults: 'Gradual firmness over weeks, improving across a short series.',
     faqs: [
@@ -298,15 +331,16 @@ export const subServices: SubService[] = [
   },
   {
     id: 'face-lifting', parentId: 'dermatology', name: 'Face Lifting',
-    description: 'Non-surgical lifting for a firmer, lifted look.',
-    overview: 'Face Lifting lifts brow, cheeks, jawline and neck with non-surgical sessions — definition without needles or downtime.',
+    description: 'Non-surgical lifting for brow, cheeks, jawline and neck — definition without needles or downtime.',
+    overview: 'At Healthy Home, we believe facial rejuvenation should be natural, safe, and non-invasive. Our Facelifting Treatment is designed to enhance your facial features and restore youthful skin without surgery or downtime. Using a powerful combination of Radiofrequency (RF) technology and vacuum therapy, this treatment lifts, tones, and redefines your facial structure while promoting healthy skin regeneration from within. The goal is to stimulate collagen and elastin production, improve skin elasticity, and enhance facial contour—all without the use of chemicals or invasive techniques. Whether you’re concerned about sagging skin, dullness, or early signs of aging, our facelifting solution helps you achieve a refreshed, youthful glow through science-backed methods and personalized care.',
     image: IMG.service.faceLifting, duration: '45-60 min',
     benefits: ['Lifts brow, cheeks, jawline', 'Non-surgical, no needles', 'Natural-looking definition', 'Single + series options'],
     suitableFor: ['Early jowls or soft jawline', 'Brow heaviness', 'Pre-event definition'],
     process: [
-      { title: 'Assess', desc: 'Facial mapping sets lift targets.' },
-      { title: 'Lift', desc: 'Targeted lifting session.' },
-      { title: 'Review', desc: 'Follow-ups refine definition.' },
+      { title: 'Radiofrequency Tightening', desc: 'Uses radiofrequency energy to stimulate collagen, tighten skin, and lift facial contours naturally.' },
+      { title: 'Collagen Induction Therapy', desc: 'Enhances skin firmness by boosting collagen and elastin production through micro-channeling techniques.' },
+      { title: 'Skin Firming Massage', desc: 'Manual or machine-assisted lifting massage improves blood flow and promotes tighter, lifted skin.' },
+      { title: 'Jawline & Cheek Sculpting', desc: 'Non-invasive contouring techniques target sagging areas to define jawline and lift cheeks.' },
     ],
     expectedResults: 'Lifted, defined look building over weeks after sessions.',
     faqs: [
@@ -316,15 +350,16 @@ export const subServices: SubService[] = [
   },
   {
     id: 'breast-tightening', parentId: 'dermatology', name: 'Breast Tightening',
-    description: 'Consultation-led firming support plans.',
-    overview: 'Breast Tightening at Healthy Home is consultation-led: private assessment plus firming support plans across care, posture and shaping guidance.',
+    description: 'Consultation-led firming and lifting for sagging breast tissue — a safe alternative to surgery.',
+    overview: 'Breast Tightening at Healthy Home is a non-invasive treatment designed to firm and lift sagging breast tissue, restoring a youthful and toned appearance. Using advanced technologies like radiofrequency and ultrasound, this procedure stimulates collagen production to enhance skin elasticity and improve breast contour. Ideal for women experiencing mild sagging due to aging, weight changes, or post-pregnancy effects, breast tightening offers a safe alternative to surgery without downtime or scars. Our personalized approach helps improve breast firmness and boosts confidence with natural-looking results.',
     image: IMG.service.breastTightening, duration: '30-45 min',
     benefits: ['Private consultation first', 'Firming support planning', 'Posture + care guidance', 'Respectful, discreet care'],
     suitableFor: ['Firmness concerns', 'Post-weight-change support', 'Guidance seekers'],
     process: [
-      { title: 'Consult', desc: 'Private assessment and goals.' },
-      { title: 'Plan', desc: 'Firming support plan written for you.' },
-      { title: 'Support', desc: 'Follow-ups track comfort and firmness.' },
+      { title: 'Lipolysis Therapy', desc: 'Non-invasive fat melting technology targets excess fat and firms the breast area naturally.' },
+      { title: 'Skin Tightening Radiofrequency', desc: 'Stimulates collagen production using RF energy to tighten loose skin and improve breast contour.' },
+      { title: 'Vacuum Lifting Technique', desc: 'Applies suction to tone underlying tissues and enhance firmness without surgery.' },
+      { title: 'Customized Firming Protocol', desc: 'Treatment plans tailored to breast shape and skin condition for optimal tightening results.' },
     ],
     expectedResults: 'A clear support plan with comfort goals tracked over visits.',
     faqs: [
@@ -334,15 +369,15 @@ export const subServices: SubService[] = [
   },
   {
     id: 'stretch-mark-removal', parentId: 'dermatology', name: 'Stretch Mark Removal',
-    description: 'Fading and smoothing sessions for stretch marks.',
-    overview: 'Stretch Mark Removal fades and smooths marks on abdomen, thighs, hips and arms through gentle resurfacing sessions matched to mark age and skin tone.',
+    description: 'Radiofrequency and microneedling that fade stretch marks and smooth skin texture.',
+    overview: 'At Healthy Home, we offer an advanced Stretch Mark Removal Treatment that uses Radio Frequency (RF) technology combined with specialized topical creams to effectively reduce the appearance of stretch marks. Stretch marks often develop due to rapid skin stretching, commonly during pregnancy, weight fluctuations, or growth spurts, and can affect confidence. Our treatment is designed to regenerate the skin and diminish the appearance of these marks with non-invasive, safe, and effective methods. Using RF technology, we stimulate the skin’s natural healing process, encouraging collagen and elastin production. This leads to improved skin texture, firmness, and elasticity, gradually reducing the visibility of stretch marks. By combining this technology with nourishing creams, our treatment provides a comprehensive solution for smoother, clearer skin.',
     image: IMG.service.stretchMarkRemoval, duration: '30-60 min',
     benefits: ['Fades new + older marks', 'Smooths texture', 'Abdomen, thighs, hips, arms', 'Plan matched to skin tone'],
     suitableFor: ['Post-pregnancy marks', 'Post-weight-change marks', 'Texture concerns'],
     process: [
-      { title: 'Assess', desc: 'Mark age, tone and texture reviewed.' },
-      { title: 'Treat', desc: 'Resurfacing sessions per area.' },
-      { title: 'Track', desc: 'Photos track fading over weeks.' },
+      { title: 'Radiofrequency Therapy', desc: 'Uses heat energy to stimulate collagen and elastin, improving skin texture and reducing stretch mark visibility.' },
+      { title: 'Microneedling Treatment', desc: 'Creates micro-injuries to trigger skin repair, boosting collagen production and smoothing stretch marks over time.' },
+      { title: 'Customized Skin Repair Plan', desc: 'Tailored treatments based on skin type, mark depth, and duration for optimal stretch mark fading.' },
     ],
     expectedResults: 'Progressive fading and smoothing across a series.',
     faqs: [
@@ -352,15 +387,19 @@ export const subServices: SubService[] = [
   },
   {
     id: 'chemical-peeling', parentId: 'dermatology', name: 'Chemical Peeling',
-    description: 'Medical-grade peels for spots, scars and dullness.',
-    overview: 'Chemical Peeling renews tone and texture: medical-grade peels lift spots, soften acne marks and brighten dullness — matched to your skin tone and calendar.',
+    description: 'Medical-grade peels for spots, acne scars, pigmentation and uneven tone.',
+    overview: 'Chemical Peeling at Healthy Home is a skin rejuvenation treatment that uses specially formulated solutions to exfoliate and remove dead skin cells, revealing smoother, brighter, and healthier skin underneath. This procedure helps reduce acne scars, pigmentation, fine lines, and uneven skin tone. Suitable for various skin types, chemical peels stimulate skin renewal by encouraging collagen production and improving texture. Whether you want to address specific skin concerns or simply refresh your complexion, this safe and effective treatment offers noticeable results with minimal downtime.',
     image: IMG.service.chemicalPeeling, duration: '30-45 min',
     benefits: ['Fades spots + acne marks', 'Brightens dull tone', 'Smooths texture', 'Depth matched to schedule'],
     suitableFor: ['Spots and uneven tone', 'Acne marks', 'Dull, rough texture'],
     process: [
-      { title: 'Prep', desc: 'Skin review sets peel depth.' },
-      { title: 'Peel', desc: 'In-center peel application.' },
-      { title: 'Recover', desc: 'Aftercare kit + check-in.' },
+      { title: 'Superficial Peels', desc: 'Gentle exfoliation using mild acids to treat dull skin, uneven tone, and mild pigmentation.' },
+      { title: 'Medium Depth Peels', desc: 'Targets deeper layers to reduce acne scars, fine lines, and uneven texture effectively.' },
+      { title: 'Acne Control Peels', desc: 'Formulated with salicylic or glycolic acids to clear clogged pores and reduce active acne.' },
+      { title: 'Anti-Pigmentation Peels', desc: 'Designed to lighten dark spots, melasma, and sun damage for a more even skin tone.' },
+      { title: 'Brightening & Glow Peels', desc: 'Refreshes the skin with radiance-boosting ingredients, leaving it smoother and glowing.' },
+      { title: 'Customized Peel Plans', desc: 'Peels are chosen based on skin type, concern, and sensitivity for safe and visible results.' },
+      { title: 'Derma Infusion', desc: 'Delivers active serums deep into the skin to hydrate, heal, and lighten stretch marks effectively.' },
     ],
     expectedResults: 'Brighter, evener tone in days; deeper correction across a series.',
     faqs: [
@@ -371,14 +410,15 @@ export const subServices: SubService[] = [
   {
     id: 'derma-consultation', parentId: 'dermatology', name: 'Derma Consultation',
     description: 'One-on-one skin analysis and treatment planning with our derma team.',
-    overview: 'Derma Consultation is where every skin journey should start: analysis, honest recommendations and a written plan with exact sequencing — no pressure, no guesswork.',
+    overview: 'At Healthy Home, we offer expert Derma Consultation Services to help you achieve healthy, glowing skin. Whether you’re struggling with acne, pigmentation, signs of aging, or other skin concerns, our experienced dermatologists are here to guide you with personalized, effective solutions. During your consultation, our professionals conduct a thorough skin analysis to assess your skin type, identify underlying issues, and recommend the most suitable treatments for your unique needs. We take a holistic approach, considering not only in-clinic treatments but also at-home skincare regimens and lifestyle changes to promote long-term skin health.',
     image: IMG.service.dermaConsultation, duration: '20-30 min',
     benefits: ['Full skin analysis', 'Written treatment plan', 'Honest sequencing + pricing'],
     suitableFor: ['First-time clients', 'Confused-by-options clients', 'Plan-before-spend seekers'],
     process: [
-      { title: 'Analyze', desc: 'Skin type, concerns and history reviewed.' },
-      { title: 'Plan', desc: 'Written sequence with honest pricing.' },
-      { title: 'Begin', desc: 'Book your first service when ready.' },
+      { title: 'Skin Analysis with Expert', desc: 'In-depth examination by a skin specialist to understand your skin type, concerns, and underlying conditions.' },
+      { title: 'Personalized Treatment Planning', desc: 'Customized skincare and treatment roadmap designed to match your specific skin needs and goals.' },
+      { title: 'Product Guidance', desc: 'Recommendations on suitable skincare products to support your treatment and maintain long-term skin health.' },
+      { title: 'Progress Monitoring', desc: 'Regular follow-ups to assess improvements, make adjustments, and ensure visible, lasting results.' },
     ],
     expectedResults: 'A clear written plan you can start immediately — or take home.',
     faqs: [
@@ -389,15 +429,16 @@ export const subServices: SubService[] = [
   // ── Lab Tests (1) ──
   {
     id: 'whole-body-lab-test', parentId: 'lab-tests', name: 'Whole Body Lab Test',
-    description: 'Comprehensive whole-body lab panel — the right start for any program.',
-    overview: 'The Whole Body Lab Test is one comprehensive panel covering key health markers — reviewed by our care team with an actionable next-step plan that feeds directly into weight and skin programs.',
+    description: 'A comprehensive health screening panel with expert interpretation and a personalized action plan.',
+    overview: 'Whole Body Lab Test at Healthy Home offers a comprehensive health screening to assess your overall wellness and detect potential issues early. This extensive panel includes tests for blood sugar, cholesterol, liver and kidney function, hormones, vitamins, and more. Our detailed analysis helps identify imbalances or deficiencies that may affect your health and vitality. With expert interpretation of results, we provide personalized recommendations to address any concerns and guide you toward optimal well-being. Regular whole body testing empowers you to take proactive steps for a healthier life.',
     image: IMG.service.wholeBodyLabTest, duration: '30-45 min',
     benefits: ['Comprehensive whole-body panel', 'Clinician-reviewed results', 'Action plan included', 'Feeds any weight/skin plan'],
     suitableFor: ['Program starters', 'Yearly-baseline seekers', 'Fatigue/weight/skin concerns'],
     process: [
-      { title: 'Sample', desc: 'Quick in-branch collection.' },
-      { title: 'Analyze', desc: 'Certified lab processing.' },
-      { title: 'Review', desc: 'Results walk-through + next steps.' },
+      { title: 'Comprehensive Health Screening', desc: 'Covers major body systems including liver, kidney, thyroid, lipid, sugar, and vitamin levels for a full health profile.' },
+      { title: 'Accurate Diagnostic Reports', desc: 'Tests conducted through certified labs ensure precise and reliable results you can trust.' },
+      { title: 'Early Detection Support', desc: 'Helps identify potential health risks early, enabling timely lifestyle or medical interventions.' },
+      { title: 'Expert Review & Guidance', desc: 'Our in-house consultant reviews your reports and offers personalized advice for improved health and wellness.' },
     ],
     expectedResults: 'Clear baselines plus a written action plan within a few working days.',
     faqs: [
