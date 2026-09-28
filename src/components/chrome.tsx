@@ -377,9 +377,11 @@ export function Navbar() {
             ceiling on how much room the right nav gets at 1024. */}
         <nav className="flex items-center justify-end gap-7 2xl:gap-8 text-[12px] tracking-[0.07em] uppercase font-medium">
           <div className="relative" onMouseEnter={openDrop} onMouseLeave={closeDrop}>
-            <button onClick={() => navigate('/services')} className="flex items-center gap-1 py-5">
+            {/* No chevron here: the hover panel still opens, but the label now
+                reads as plain nav text. The keyboard/touch paths are unchanged —
+                focus still opens the menu, and the link goes to /services. */}
+            <button onClick={() => navigate('/services')} className="py-5">
               <span className={navUnderline}>SERVICES</span>
-              <ChevronDown size={13} />
             </button>
           </div>
           <Link to="/locations" className={navUnderline}>LOCATION</Link>
