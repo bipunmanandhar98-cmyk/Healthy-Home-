@@ -1,13 +1,47 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Quote, Star, ExternalLink } from 'lucide-react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, ChevronDown, Quote, Star, ExternalLink } from 'lucide-react';
 import { testimonials, centers, type Testimonial } from '../data/content';
 
 function initials(name: string) {
   return name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]!.toUpperCase()).join('');
 }
 
+const CLAMP = 'line-clamp-5';
+
 function Card({ t, i }: { t: Testimonial; i: number }) {
   const branch = centers.find(c => c.id === t.branchId);
+  const quoteRef = useRef<HTMLQuoteElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  /* Whether this review is long enough to be cut off. Measured rather than
+     guessed from character count, because the clamp point moves with the card
+     width and the same review fits on a desktop and overflows on a phone. */
+  const [clamped, setClamped] = useState(false);
+
+  /* These are real Google reviews, several of them long, and the old card
+     clamped them to 5 lines with no way to read the rest. The toggle reveals
+     the full text, but only appears when something is actually hidden. */
+  useLayoutEffect(() => {
+    const el = quoteRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      // Compare against the CLAMPED height in both states. Once expanded the
+      // clamp class is gone, so measuring as-is would report no overflow and
+      // the "Read less" control would vanish the moment it was used.
+      const had = el.classList.contains(CLAMP);
+      el.classList.add(CLAMP);
+      const overflows = el.scrollHeight > el.clientHeight + 1;
+      el.classList.toggle(CLAMP, had);
+      setClamped(overflows);
+    };
+
+    measure();
+    // The clamp point shifts with the viewport, so re-measure on resize.
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [t.text]);
+
   return (
     <figure
       data-card
@@ -29,7 +63,28 @@ function Card({ t, i }: { t: Testimonial; i: number }) {
         <Quote size={18} className="text-gold/25 shrink-0" aria-hidden="true" />
       </div>
 
-      <blockquote className="text-sm text-mocha leading-relaxed grow mt-3 line-clamp-5">{t.text}</blockquote>
+      <blockquote
+        ref={quoteRef}
+        className={`text-sm text-mocha leading-relaxed grow mt-3 ${expanded ? '' : CLAMP}`}
+      >
+        {t.text}
+      </blockquote>
+
+      {clamped && (
+        <button
+          type="button"
+          onClick={() => setExpanded(v => !v)}
+          aria-expanded={expanded}
+          className="self-start -mt-1 mb-1 inline-flex items-center gap-1 min-h-[32px] text-[11px] font-medium text-golddark hover:text-ink transition"
+        >
+          {expanded ? 'Read less' : 'Read more'}
+          <ChevronDown
+            size={13}
+            aria-hidden="true"
+            className={`transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}
+          />
+        </button>
+      )}
 
       <figcaption className="flex items-center gap-3 mt-5 pt-4 border-t border-linen">
         <span
