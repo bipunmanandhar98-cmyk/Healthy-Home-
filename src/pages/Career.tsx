@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Briefcase, MapPin, Calendar, Clock, ArrowRight, Check, ChevronDown, ChevronUp, Search, Filter, Star, Heart, Award, Users, GraduationCap, Stethoscope, BarChart2, Shield, Sparkles } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { Briefcase, MapPin, Calendar, Clock, ArrowRight, Check, ChevronDown, ChevronUp, Search, Filter, Star, Heart, Award, Users, GraduationCap, Stethoscope, BarChart2, Shield, Sparkles, X, Upload } from 'lucide-react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useBooking } from '../components/chrome';
 import { SectionHead, CtaBanner } from '../components/shared';
 import { IMG } from '../data/images';
+import {
+  careersEmailConfigured,
+  sendJobApplication,
+  validateResume,
+  RESUME_ACCEPT,
+  type SendResult,
+} from '../lib/applicationEmail';
 
 const fadeUp = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } as const;
 
@@ -278,8 +285,270 @@ const benefits = [
   { icon: Star, title: 'Staff Perks', desc: 'Referral bonuses, wellness retreats, product discounts, flexible schedules' },
 ];
 
+/* ── Apply modal ─────────────────────────────────────────────────────────
+   Single-column applicant form opened by a job's "Apply Now". Follows the
+   booking modal's shell (same overlay, panel, scroll lock, Escape-to-close)
+   but uses a one-pass layout rather than steps, since an application is short
+   enough to take in one go. */
+const fieldClass =
+  'w-full bg-white border border-linen rounded-xl px-4 py-3 text-sm focus:border-gold transition';
+const labelClass = 'block text-sm font-medium text-ink mb-1.5';
+const reqClass = 'text-red-600';
+
+function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = useState('');
+  const [err, setErr] = useState('');
+  const [sending, setSending] = useState(false);
+  const [result, setResult] = useState<SendResult | null>(null);
+
+  /* A fresh form per opening, and no stale error or filename left over. */
+  useEffect(() => {
+    if (!job) return;
+    formRef.current?.reset();
+    setFileName('');
+    setErr('');
+    setResult(null);
+    setSending(false);
+    nameRef.current?.focus();
+  }, [job]);
+
+  /* Stop the page scrolling behind the panel while it is open. */
+  useEffect(() => {
+    if (!job) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, [job]);
+
+  useEffect(() => {
+    if (!job) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [job, onClose]);
+
+  if (!job) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget as HTMLFormElement);
+    const name = String(data.get('applicant_name') ?? '').trim();
+    const email = String(data.get('applicant_email') ?? '').trim();
+    const phone = String(data.get('applicant_phone') ?? '').trim();
+    const address = String(data.get('applicant_address') ?? '').trim();
+
+    if (!name || !email || !phone || !address) {
+      setErr('Please fill in your name, email, phone number and address.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      setErr('That email address does not look right.');
+      return;
+    }
+    const fileError = validateResume((data.get('applicant_resume') as File) ?? null);
+    if (fileError) { setErr(fileError); return; }
+
+    setErr('');
+    setSending(true);
+    const outcome = await sendJobApplication(formRef.current as HTMLFormElement);
+    setSending(false);
+    setResult(outcome);
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-[95] flex items-end sm:items-center justify-center p-0 sm:p-6"
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      >
+        <div className="absolute inset-0 bg-ink/45 backdrop-blur-sm" onClick={onClose} />
+
+        <motion.div
+          initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }}
+          role="dialog" aria-modal="true" aria-labelledby="apply-title"
+          className="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl max-h-[92vh] flex flex-col"
+        >
+          <button
+            onClick={onClose}
+            aria-label="Close application form"
+            className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full flex items-center justify-center text-stone2 hover:text-ink hover:bg-sand transition"
+          >
+            <X size={18} />
+          </button>
+
+          {result ? (
+            <div className="p-8 text-center overflow-y-auto">
+              <div className="w-16 h-16 mx-auto rounded-full bg-gold/15 text-golddark flex items-center justify-center">
+                <Check size={28} />
+              </div>
+              <h2 id="apply-title" className="font-display text-3xl mt-4">
+                Application received
+              </h2>
+
+              {result === 'sent' ? (
+                <p className="text-mocha mt-2 text-sm">
+                  Thanks, {nameRef.current?.value.split(' ')[0] || 'there'} — your application and resume for{' '}
+                  <span className="font-semibold text-ink">{job.title}</span> have been sent to our hiring team.
+                  We'll be in touch at the email you gave us.
+                </p>
+              ) : (
+                <p className="text-mocha mt-2 text-sm">
+                  Your application for <span className="font-semibold text-ink">{job.title}</span> could not be
+                  emailed from this site right now, so please send it to us directly at{' '}
+                  <a href="mailto:recruit@healthyhome.com.np" className="text-golddark underline">recruit@healthyhome.com.np</a>{' '}
+                  with your name and resume attached.
+                </p>
+              )}
+
+              <div className="mt-5 bg-sand rounded-2xl p-5 text-left text-sm grid gap-3">
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-stone2">Role</p>
+                  <p className="font-medium">{job.title}</p>
+                </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-stone2">Location</p>
+                  <p className="font-medium">{job.location}</p>
+                </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-widest text-stone2">Apply before</p>
+                  <p className="font-medium">{new Date(job.deadline).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                </div>
+              </div>
+
+              <button onClick={onClose} className="mt-6 bg-gold text-white px-8 py-3 rounded-full text-sm tracking-widest uppercase hover:bg-[#00747B]">
+                Done
+              </button>
+            </div>
+          ) : (
+            <form ref={formRef} onSubmit={handleSubmit} noValidate className="overflow-y-auto grow">
+              <div className="px-6 pt-8 pb-1 sm:px-8 text-center">
+                <h2 id="apply-title" className="font-display text-3xl sm:text-4xl text-ink">
+                  Start Your Career Today
+                </h2>
+                <p className="text-sm text-mocha mt-2">
+                  Please fill in your information to apply for the job.
+                </p>
+                <p className="text-[11px] text-stone2 mt-1">
+                  {job.title} · {job.location}
+                </p>
+              </div>
+
+              <div className="px-6 sm:px-8 py-5 grid gap-4">
+                <div>
+                  <label htmlFor="apply-name" className={labelClass}>
+                    Applicant's Name<span className={reqClass}>*</span>
+                  </label>
+                  <input
+                    ref={nameRef} id="apply-name" name="applicant_name" type="text" autoComplete="name"
+                    placeholder="Your full name"
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="apply-email" className={labelClass}>
+                    Email Address<span className={reqClass}>*</span>
+                  </label>
+                  <input
+                    id="apply-email" name="applicant_email" type="email" autoComplete="email"
+                    placeholder="you@example.com"
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="apply-phone" className={labelClass}>
+                    Contact Number<span className={reqClass}>*</span>
+                  </label>
+                  <input
+                    id="apply-phone" name="applicant_phone" type="tel" autoComplete="tel"
+                    placeholder="98XXXXXXXX"
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="apply-address" className={labelClass}>
+                    Current Address<span className={reqClass}>*</span>
+                  </label>
+                  <textarea
+                    id="apply-address" name="applicant_address" rows={2}
+                    placeholder="Where are you based right now?"
+                    className={`${fieldClass} resize-none`}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="apply-resume" className={labelClass}>
+                    Upload Resume<span className={reqClass}>*</span>
+                    <span className="font-normal text-stone2 text-xs ml-1.5">(Below 2MB, Format: pdf/docx/jpg)</span>
+                  </label>
+                  <div className="rounded-xl border border-linen bg-sand/50 px-3 py-2.5 flex items-center gap-3 flex-wrap">
+                    <label
+                      htmlFor="apply-resume"
+                      className="inline-flex items-center gap-2 cursor-pointer bg-white border border-linen rounded-lg px-4 py-2 text-sm font-medium text-ink hover:border-gold transition shrink-0"
+                    >
+                      <Upload size={15} className="text-gold" />
+                      Choose File
+                    </label>
+                    <span className="text-sm text-mocha truncate min-w-0">
+                      {fileName || 'No file chosen'}
+                    </span>
+                    {/* Kept visually hidden rather than display:none, which would
+                        make the input un-focusable and break the label's
+                        click-to-open behaviour and screen readers. */}
+                    <input
+                      id="apply-resume" name="applicant_resume" type="file"
+                      accept={RESUME_ACCEPT}
+                      className="sr-only"
+                      onChange={e => {
+                        const f = e.target.files?.[0] ?? null;
+                        setFileName(f ? f.name : '');
+                        const problem = validateResume(f);
+                        setErr(problem ?? '');
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Carried through to the email template so the team knows the
+                    role without cross-referencing the sender. */}
+                <input type="hidden" name="job_title" value={job.title} />
+                <input type="hidden" name="job_location" value={job.location} />
+                <input type="hidden" name="job_department" value={job.department} />
+
+                {err && (
+                  <p role="alert" className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
+                    {err}
+                  </p>
+                )}
+
+                {!careersEmailConfigured && (
+                  <p className="text-xs text-stone2 bg-sand rounded-xl px-4 py-2.5">
+                    Applications can't be emailed from this site yet. Submitting will show you how to send it directly.
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="w-full bg-gold hover:bg-[#00747B] text-white rounded-xl py-3.5 text-sm font-semibold tracking-wide transition disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {sending ? 'Sending…' : 'Apply Now'}
+                </button>
+              </div>
+            </form>
+          )}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export default function Career() {
   const { openBooking } = useBooking();
+  const [applying, setApplying] = useState<Job | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDept, setSelectedDept] = useState('All');
   const [selectedLoc, setSelectedLoc] = useState('All');
@@ -304,7 +573,7 @@ export default function Career() {
   };
 
   const handleApply = (job: Job) => {
-    openBooking({ treatment: job.department.toLowerCase().replace(' ', '-') });
+    setApplying(job);
   };
 
   return (
@@ -507,6 +776,8 @@ export default function Career() {
           <CtaBanner />
         </div>
       </div>
+
+      <ApplyModal job={applying} onClose={() => setApplying(null)} />
     </div>
   );
 }
