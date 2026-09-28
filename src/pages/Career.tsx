@@ -5,6 +5,13 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { useBooking } from '../components/chrome';
 import { SectionHead, CtaBanner } from '../components/shared';
 import { IMG } from '../data/images';
+/* Job listings and the filter options live in src/data/jobs.ts, which records
+   exactly which fields came from the "Job tittle.xlsx" sheet and which were
+   AI-drafted and still need review before these go live. See the header there.
+   This page renders `publishedJobs` — all 32 roles are kept there as the full
+   record, but only the advertised subset (one per department, no CEO and no
+   Manager/Head-level role) is shown publicly. */
+import { publishedJobs as jobs, departments, locations, jobTypes, type Job, LEAVE_POLICY } from '../data/jobs';
 import {
   careersEmailConfigured,
   sendJobApplication,
@@ -14,244 +21,6 @@ import {
 } from '../lib/applicationEmail';
 
 const fadeUp = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } as const;
-
-type Job = {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: 'Full-time' | 'Part-time' | 'Contract';
-  experience: string;
-  description: string;
-  responsibilities: string[];
-  requirements: string[];
-  benefits: string[];
-  postedDate: string;
-  deadline: string;
-};
-
-const jobs: Job[] = [
-  {
-    id: 'physiotherapist-001',
-    title: 'Physiotherapist',
-    department: 'Weight Management',
-    location: 'Thapathali, Kathmandu',
-    type: 'Full-time',
-    experience: '2+ years',
-    description: 'Join our Weight Management team as a Physiotherapist. You will work closely with clinicians and wellness coaches to design personalized movement and rehabilitation programs for clients undergoing weight loss, body shaping, and post-treatment recovery.',
-    responsibilities: [
-      'Conduct initial physical assessments and movement screenings for new clients',
-      'Design individualized exercise and rehabilitation programs',
-      'Guide clients through supervised sessions (mobility, strength, posture correction)',
-      'Collaborate with physicians and coaches to adjust programs based on progress',
-      'Document session notes and progress reports in client records',
-      'Educate clients on home exercise routines and injury prevention',
-      'Support pre/post CoolSculpting and body shaping treatment protocols'
-    ],
-    requirements: [
-      'Bachelor\'s degree in Physiotherapy (BPT) or equivalent',
-      'Valid Nepal Health Professional Council (NHPC) registration',
-      'Minimum 2 years clinical experience (weight management/sports rehab preferred)',
-      'Strong manual therapy and exercise prescription skills',
-      'Excellent communication skills in Nepali and English',
-      'Ability to work in a multidisciplinary team environment'
-    ],
-    benefits: [
-      'Competitive salary with performance bonuses',
-      'Health insurance for self + dependents',
-      'Continuing education allowance (Rs. 50,000/year)',
-      'Free Healthy Home services for self + 50% off for family',
-      'Professional development and mentorship program',
-      'Paid leave: 18 days annual + 12 days sick + public holidays'
-    ],
-    postedDate: '2026-01-15',
-    deadline: '2026-02-28'
-  },
-  {
-    id: 'dermatology-nurse-002',
-    title: 'Dermatology Nurse',
-    department: 'Dermatology',
-    location: 'Baneshwor, Kathmandu',
-    type: 'Full-time',
-    experience: '1+ year',
-    description: 'We are seeking a compassionate Dermatology Nurse to assist our specialists in delivering world-class skin treatments including HydraFacial, laser procedures, chemical peels, and skin tightening.',
-    responsibilities: [
-      'Prepare treatment rooms and ensure sterile field for all procedures',
-      'Assist dermatologists during laser, peel, and injectable treatments',
-      'Conduct pre-treatment skin assessments and document findings',
-      'Provide post-treatment care instructions and follow-up calls',
-      'Manage inventory of consumables, serums, and single-use items',
-      'Maintain equipment (laser, HydraFacial, RF devices) per protocols',
-      'Support client education on home care regimens and product usage'
-    ],
-    requirements: [
-      'PCL Nursing or B.Sc. Nursing from recognized institution',
-      'Valid Nepal Nursing Council registration',
-      'Minimum 1 year experience in dermatology, aesthetics, or plastic surgery unit',
-      'Knowledge of laser safety protocols and skin physiology',
-      'Calm, professional demeanor with excellent client interaction skills',
-      'Willingness to train on advanced aesthetic devices'
-    ],
-    benefits: [
-      'Competitive salary with quarterly incentives',
-      'Health insurance for self + dependents',
-      'Free dermatology treatments for self',
-      'Advanced aesthetic training certification sponsorship',
-      'Flexible shift options (day/evening)',
-      'Paid leave: 18 days annual + 12 days sick + public holidays'
-    ],
-    postedDate: '2026-01-20',
-    deadline: '2026-03-15'
-  },
-  {
-    id: 'wellness-coach-003',
-    title: 'Wellness Coach',
-    department: 'Weight Management',
-    location: 'Pulchowk, Lalitpur',
-    type: 'Full-time',
-    experience: '1+ year',
-    description: 'As a Wellness Coach, you will be the primary guide for clients on their weight management journey — providing nutrition counseling, habit coaching, and motivational support through in-person and virtual sessions.',
-    responsibilities: [
-      'Conduct weekly coaching sessions (in-person and virtual)',
-      'Create personalized nutrition plans based on BCA results and dietary preferences',
-      'Track client progress through weekly weigh-ins, measurements, and check-ins',
-      'Adjust plans based on progress, lifestyle changes, and client feedback',
-      'Facilitate group workshops on meal prep, mindful eating, and behavior change',
-      'Coordinate with physiotherapists and physicians for integrated care',
-      'Maintain detailed coaching logs and progress reports'
-    ],
-    requirements: [
-      'Bachelor\'s in Nutrition, Dietetics, Public Health, or related field',
-      'Certification in Health Coaching (NBHWC, ACE, or equivalent) preferred',
-      'Minimum 1 year experience in weight management, clinical nutrition, or wellness coaching',
-      'Strong motivational interviewing and behavior change counseling skills',
-      'Proficiency in Nepali and English (Newari a plus)',
-      'Comfortable using digital coaching platforms and body composition analyzers'
-    ],
-    benefits: [
-      'Competitive salary with client outcome bonuses',
-      'Health insurance for self + dependents',
-      'Free Weight Management program for self + family discount',
-      'Annual wellness retreat sponsorship',
-      'Continuing education budget (Rs. 30,000/year)',
-      'Paid leave: 18 days annual + 12 days sick + public holidays'
-    ],
-    postedDate: '2026-01-25',
-    deadline: '2026-03-31'
-  },
-  {
-    id: 'lab-technician-004',
-    title: 'Lab Technician',
-    department: 'Lab Tests',
-    location: 'Thapathali, Kathmandu',
-    type: 'Full-time',
-    experience: '2+ years',
-    description: 'Join our Lab Tests team to perform high-quality sample collection, processing, and analysis for our Whole Body Lab Test panel. You will ensure accuracy, timely reporting, and exceptional client experience.',
-    responsibilities: [
-      'Perform venipuncture and capillary blood collection with minimal discomfort',
-      'Process samples (centrifugation, aliquoting, labeling) per SOPs',
-      'Operate and maintain automated analyzers (biochemistry, hematology, immunoassay)',
-      'Perform quality control checks and document results',
-      'Ensure proper sample storage, transport, and chain-of-custody',
-      'Collaborate with pathologists for result verification and critical value alerts',
-      'Maintain lab accreditation documentation and participate in proficiency testing'
-    ],
-    requirements: [
-      'B.Sc. Medical Laboratory Technology (BMLT) or equivalent',
-      'Valid Nepal Health Professional Council registration as Lab Technologist',
-      'Minimum 2 years experience in clinical laboratory (automated analyzers preferred)',
-      'Strong knowledge of pre-analytical, analytical, and post-analytical phases',
-      'Attention to detail and commitment to quality assurance',
-      'Ability to work early morning shifts for fasting sample collection'
-    ],
-    benefits: [
-      'Competitive salary with shift differential',
-      'Health insurance for self + dependents',
-      'Free annual Whole Body Lab Test for self + family',
-      'Professional development: ASCP/IFCC certification support',
-      'Modern, climate-controlled lab with latest analyzers',
-      'Paid leave: 18 days annual + 12 days sick + public holidays'
-    ],
-    postedDate: '2026-02-01',
-    deadline: '2026-03-31'
-  },
-  {
-    id: 'front-desk-005',
-    title: 'Front Desk Coordinator',
-    department: 'Operations',
-    location: 'Jamal, Kathmandu',
-    type: 'Full-time',
-    experience: '1+ year',
-    description: 'Be the first point of contact for clients at our flagship branch. Manage appointments, client inquiries, billing, and ensure a seamless check-in/check-out experience.',
-    responsibilities: [
-      'Greet clients warmly and manage check-in/check-out flow',
-      'Schedule and confirm appointments across multiple specialists',
-      'Handle phone, email, and walk-in inquiries about services and pricing',
-      'Process payments, generate invoices, and manage insurance claims',
-      'Maintain client records and update CRM with accurate information',
-      'Coordinate with clinical team for smooth client transitions',
-      'Manage waitlist and optimize daily schedule utilization'
-    ],
-    requirements: [
-      'Bachelor\'s degree in any discipline (Hospitality/Health Admin preferred)',
-      'Minimum 1 year front desk experience (healthcare, hospitality, or spa)',
-      'Excellent communication skills in Nepali and English',
-      'Proficient in clinic management software / CRM / MS Office',
-      'Strong organizational skills and ability to multitask under pressure',
-      'Professional appearance and client-first mindset'
-    ],
-    benefits: [
-      'Competitive salary with performance incentives',
-      'Health insurance for self + dependents',
-      'Free Healthy Home services for self (Rs. 25,000/year credit)',
-      'Career growth path to Center Supervisor / Operations Manager',
-      'Paid leave: 18 days annual + 12 days sick + public holidays',
-      'Staff discounts on all products and family services'
-    ],
-    postedDate: '2026-02-05',
-    deadline: '2026-03-15'
-  },
-  {
-    id: 'marketing-associate-006',
-    title: 'Marketing Associate',
-    department: 'Marketing',
-    location: 'Thapathali, Kathmandu (Hybrid)',
-    type: 'Full-time',
-    experience: '1+ year',
-    description: 'Drive brand awareness and client acquisition through digital marketing, content creation, social media, and community events. Work closely with the marketing lead to execute campaigns across all 6 branch.',
-    responsibilities: [
-      'Create and schedule social media content (Instagram, Facebook, TikTok)',
-      'Write blog posts, email newsletters, and SMS campaigns',
-      'Coordinate influencer collaborations and client testimonial videos',
-      'Manage Google Ads, Meta Ads, and local SEO efforts',
-      'Plan and execute monthly wellness events at branches',
-      'Track and report on KPIs: reach, engagement, leads, conversions',
-      'Support referral program and loyalty campaign execution'
-    ],
-    requirements: [
-      'Bachelor\'s in Marketing, Communications, or related field',
-      'Minimum 1 year digital marketing experience (healthcare/wellness a plus)',
-      'Strong copywriting skills in English (Nepali a plus)',
-      'Proficient in Canva, Meta Business Suite, Google Analytics, Mailchimp',
-      'Creative eye for visual content and basic video editing (CapCut/Reels)',
-      'Data-driven mindset with ability to optimize campaigns'
-    ],
-    benefits: [
-      'Competitive salary with campaign performance bonuses',
-      'Health insurance for self + dependents',
-      'Free Healthy Home services for self + family discount',
-      'Marketing conference/training budget (Rs. 50,000/year)',
-      'Flexible hybrid work (3 days office / 2 days remote)',
-      'Paid leave: 18 days annual + 12 days sick + public holidays'
-    ],
-    postedDate: '2026-02-10',
-    deadline: '2026-03-31'
-  }
-];
-
-const departments = ['All', 'Weight Management', 'Dermatology', 'Lab Tests', 'Operations', 'Marketing'];
-const locations = ['All', 'Thapathali, Kathmandu', 'Baneshwor, Kathmandu', 'Pulchowk, Lalitpur', 'Jamal, Kathmandu'];
-const jobTypes = ['All', 'Full-time', 'Part-time', 'Contract'];
 
 const values = [
   { icon: Heart, title: 'Client-First Culture', desc: 'Every decision starts with "what\'s best for the client?" — honest care over upselling.' },
@@ -280,7 +49,7 @@ const benefits = [
   { icon: Heart, title: 'Health Insurance', desc: 'Comprehensive coverage for you + dependents (medical, dental, vision)' },
   { icon: GraduationCap, title: 'Learning Budget', desc: 'Rs. 30,000–50,000/year for courses, certifications, conferences' },
   { icon: Sparkles, title: 'Free Wellness Credits', desc: 'Rs. 25,000+ annual credits for Healthy Home services (self + family discounts)' },
-  { icon: Calendar, title: 'Generous Leave', desc: '18 days annual + 12 days sick + all public holidays + birthday off' },
+  { icon: Calendar, title: 'Generous Leave', desc: `${LEAVE_POLICY.replace('Paid leave: ', '')} + birthday off` },
   { icon: Shield, title: 'Career Growth', desc: 'Clear promotion paths, mentorship, internal transfers across 6 branch' },
   { icon: Star, title: 'Staff Perks', desc: 'Referral bonuses, wellness retreats, product discounts, flexible schedules' },
 ];
