@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
+import { IMG } from '../data/images';
 
-/** Change this if you swap the creative. */
-const IMAGE = '/images/site/popup.jpeg';
+/* Swap the creative by overwriting /public/images/promo/popup.jpg, or repoint
+   `IMG.promo.popup` at a different file in src/data/images.ts. */
+const IMAGE = IMG.promo.popup;
 const ALT = 'Hydrafacial special offer — 5 sessions at Rs. 15,000. Festive season offer from Healthy Home.';
 
 /**

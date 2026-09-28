@@ -3,6 +3,7 @@ import { Search, MapPin, Star, Phone, Clock, Navigation, Mail } from 'lucide-rea
 import { centers, openCenters } from '../data/content';
 import { useBooking } from '../components/chrome';
 import { SectionHead, Stars } from '../components/shared';
+import { IMG } from '../data/images';
 
 export default function Locations() {
   const [q, setQ] = useState('');
@@ -17,7 +18,7 @@ export default function Locations() {
   return (
     <div>
       <section className="bg-white text-ink border-b border-linen relative overflow-hidden">
-        <img src="/images/site/bg-locations.jpg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
+        <img src={IMG.bg.locations} alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Our Locations</p>

@@ -5,6 +5,7 @@ import { Star, ArrowRight, Clock, ShieldCheck } from 'lucide-react';
 import type { Treatment } from '../data/content';
 import { getSubServices, slugify, googleRating } from '../data/content';
 import { useBooking } from './chrome';
+import { IMG } from '../data/images';
 
 export function Stars({ n = 5, size = 13 }: { n?: number; size?: number }) {
   return <span className="inline-flex gap-0.5">{Array.from({ length: n }).map((_, i) => <Star key={i} size={size} className="fill-gold text-gold" />)}</span>;
@@ -101,7 +102,7 @@ export function CtaBanner() {
   const { openBooking } = useBooking();
   return (
     <section className="relative overflow-hidden bg-espresso text-white">
-      <img src="/images/site/bg-cta.jpg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" />
+      <img src={IMG.bg.cta} alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" />
       <div className="absolute inset-0 bg-gradient-to-r from-espresso via-espresso/90 to-espresso/60" />
       <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 grid lg:grid-cols-2 gap-8 items-center">
         <div>

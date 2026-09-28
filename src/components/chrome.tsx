@@ -5,6 +5,7 @@ import { Menu, X, MapPin, ChevronDown, Calendar, Star, ArrowRight, Check, Sparkl
 import { treatments, subServices, centers, openCenters, googleRating } from '../data/content';
 import { sendBookingConfirmation, type SendResult } from '../lib/bookingEmail';
 import { slugify } from '../data/content';
+import { IMG } from '../data/images';
 
 type BookingState = {
   open: boolean;
@@ -264,17 +265,20 @@ export function TopBar() {
   );
 }
 
+/* Nav-menu thumbnails. These are deliberately NOT the same files as
+   `IMG.treatment.*` (the wide service cards) — the menu wants a square crop,
+   so each is free to differ. */
 const serviceLinks = [
   {
-    label: 'Weight Management', id: 'weight-management', image: '/images/site/svc-weight-management.jpg',
+    label: 'Weight Management', id: 'weight-management', image: IMG.nav.weightManagement,
     subs: ['BCA Testing', 'Weight Loss', 'CoolSculpting', 'Breast Reduction', 'Body Shaping', 'Weight Gain', 'Weight Loss Home Package'],
   },
   {
-    label: 'Dermatology', id: 'dermatology', image: '/images/site/svc-dermatology.jpg',
+    label: 'Dermatology', id: 'dermatology', image: IMG.nav.dermatology,
     subs: ['HydraFacial Treatment', 'Laser Hair Removal', 'Skin Tightening', 'Face Lifting', 'Breast Tightening', 'Stretch Mark Removal', 'Chemical Peeling', 'Derma Consultation'],
   },
   {
-    label: 'Lab Tests', id: 'lab-tests', image: '/images/site/svc-lab-tests.jpg',
+    label: 'Lab Tests', id: 'lab-tests', image: IMG.nav.labTests,
     subs: ['Whole Body Lab Test'],
   },
 ];
@@ -392,7 +396,7 @@ export function Navbar() {
             hands 40px back to the two nav cells - which is what pays for
             gap-7. px-6 was tried and measured 0px slack at 1280. */}
         <Link to="/" className="flex items-center justify-center shrink-0 px-3">
-          <img src="/uploads/healthy-home-logo.png" alt="Healthy Home logo" className="h-12 w-auto object-contain" />
+          <img src={IMG.brand.logoHeader} alt="Healthy Home logo" className="h-12 w-auto object-contain" />
         </Link>
 
         {/* Right Navigation - All caps, in one line.
@@ -480,7 +484,7 @@ export function Navbar() {
       {/* Mobile / tablet bar: logo left, menu right */}
       <div className="max-w-7xl mx-auto px-4 h-[68px] flex lg:hidden items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2.5 shrink-0">
-          <img src="/uploads/healthy-home-logo.png" alt="Healthy Home logo" className="h-11 w-auto object-contain" />
+          <img src={IMG.brand.logoMobile} alt="Healthy Home logo" className="h-11 w-auto object-contain" />
         </Link>
         <div className="flex items-center gap-2">
           <button onClick={() => openBooking()} className="hidden sm:flex items-center gap-2 bg-gold text-white text-xs tracking-[0.15em] uppercase px-5 py-2.5 rounded-full hover:bg-[#00747B] transition shadow-md shadow-[#00919A]/25"><Calendar size={14} /> Book Now</button>
@@ -568,7 +572,7 @@ export function Footer() {
         <div className="grid lg:grid-cols-[1.3fr_1fr_1fr_1.2fr] gap-10">
           <div>
             <div className="flex items-center gap-2.5">
-              <img src="/uploads/healthy-home-logo.png" alt="Healthy Home logo" className="h-12 w-auto object-contain brightness-0 invert" />
+              <img src={IMG.brand.logoFooter} alt="Healthy Home logo" className="h-12 w-auto object-contain brightness-0 invert" />
             </div>
             <p className="text-mist text-sm mt-4 leading-relaxed max-w-xs">Healthy Home — Weight Management, Dermatology and Lab Tests across 6 Nepal branch.</p>
             <div className="flex items-center gap-1.5 mt-4 text-sm"><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><span className="text-mist ml-1">{googleRating.average} · {googleRating.total.toLocaleString()} Google reviews</span></div>

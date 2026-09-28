@@ -4,6 +4,7 @@ import { Briefcase, MapPin, Calendar, Clock, ArrowRight, Check, ChevronDown, Che
 import { useState, useMemo } from 'react';
 import { useBooking } from '../components/chrome';
 import { SectionHead, CtaBanner } from '../components/shared';
+import { IMG } from '../data/images';
 
 const fadeUp = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } as const;
 
@@ -255,10 +256,10 @@ const values = [
 ];
 
 const testimonials = [
-  { name: 'Dr. Priya Sharma', role: 'Senior Physiotherapist', location: 'Thapathali', tenure: '3 years', text: 'I\'ve grown from a junior physio to leading the Weight Management rehabilitation program. The mentorship here is real — senior physicians invest time in your development. Plus, seeing clients transform their lives is incredibly rewarding.', avatar: '/images/site/team-1.jpg' },
-  { name: 'Sanjana Thapa', role: 'Dermatology Nurse', location: 'Baneshwor', tenure: '2 years', text: 'The training on advanced laser and RF devices gave me skills I couldn\'t get elsewhere. Management sponsors certifications, and the team feels like family. I\'ve also used my staff credits for treatments — my skin has never looked better!', avatar: '/images/site/team-2.jpg' },
-  { name: 'Rajan KC', role: 'Wellness Coach', location: 'Pulchowk', tenure: '1.5 years', text: 'What I love is the autonomy to design coaching plans that actually work for Nepali lifestyles. No cookie-cutter diets. The outcome-based bonuses motivate me, and the hybrid schedule lets me pursue my master\'s degree part-time.', avatar: '/images/site/team-3.jpg' },
-  { name: 'Anita Gurung', role: 'Front Desk Supervisor', location: 'Jamal', tenure: '4 years', text: 'Started as a coordinator, now supervising the flagship branch\'s front desk. The career path is clear — they promote from within. Health insurance for my family and free services for me are huge perks. Proud to be part of Healthy Home\'s growth.', avatar: '/images/site/team-4.jpg' },
+  { name: 'Dr. Priya Sharma', role: 'Senior Physiotherapist', location: 'Thapathali', tenure: '3 years', text: 'I\'ve grown from a junior physio to leading the Weight Management rehabilitation program. The mentorship here is real — senior physicians invest time in your development. Plus, seeing clients transform their lives is incredibly rewarding.', avatar: IMG.staff.career1 },
+  { name: 'Sanjana Thapa', role: 'Dermatology Nurse', location: 'Baneshwor', tenure: '2 years', text: 'The training on advanced laser and RF devices gave me skills I couldn\'t get elsewhere. Management sponsors certifications, and the team feels like family. I\'ve also used my staff credits for treatments — my skin has never looked better!', avatar: IMG.staff.career2 },
+  { name: 'Rajan KC', role: 'Wellness Coach', location: 'Pulchowk', tenure: '1.5 years', text: 'What I love is the autonomy to design coaching plans that actually work for Nepali lifestyles. No cookie-cutter diets. The outcome-based bonuses motivate me, and the hybrid schedule lets me pursue my master\'s degree part-time.', avatar: IMG.staff.career3 },
+  { name: 'Anita Gurung', role: 'Front Desk Supervisor', location: 'Jamal', tenure: '4 years', text: 'Started as a coordinator, now supervising the flagship branch\'s front desk. The career path is clear — they promote from within. Health insurance for my family and free services for me are huge perks. Proud to be part of Healthy Home\'s growth.', avatar: IMG.staff.career4 },
 ];
 
 const stats = [

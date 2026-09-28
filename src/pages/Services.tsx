@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Clock, ArrowRight, ChevronDown, LayoutGrid } from 'lucide-react';
 import { treatments, getSubServices, slugify } from '../data/content';
 import { SectionHead, TreatmentCard } from '../components/shared';
+import { IMG } from '../data/images';
 
 export default function Services() {
   const [q, setQ] = useState('');
@@ -25,7 +26,7 @@ export default function Services() {
         <span className="text-ink font-medium">Services</span>
       </div>
       <section className="bg-white text-ink border-b border-linen relative overflow-hidden">
-        <img src="/images/site/bg-services.jpg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
+        <img src={IMG.bg.services} alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-14 sm:py-16 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Services Menu</p>

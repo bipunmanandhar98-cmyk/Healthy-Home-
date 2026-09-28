@@ -10,6 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { ChevronDown, Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { IMG } from '../data/images';
 
 const fadeUp = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } as const;
 
@@ -37,24 +38,26 @@ export default function Home() {
     window.scrollTo({ top, behavior: 'smooth' });
   };
   const brands = ['BCA TEST', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL','LAB TEST'];
+  /* Reel covers are their own files (IMG.home.reel1-4) rather than reusing the
+     hero slides, so a square reel thumbnail can differ from the wide hero shot. */
   const instagramReels = [
     {
-      image: '/images/site/hero-main.jpg',
+      image: IMG.home.reel1,
       title: 'Your Healthy Home journey starts here',
       url: 'https://www.instagram.com/reel/DdJY3Jky8Vp/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
     },
     {
-      image: '/images/site/svc-weight-management.jpg',
+      image: IMG.home.reel2,
       title: 'Small steps. Big transformation.',
       url: 'https://www.instagram.com/reel/DdOzsISKmoR/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
     },
     {
-      image: '/images/site/svc-dermatology.jpg',
+      image: IMG.home.reel3,
       title: 'Healthy skin, confident you',
       url: 'https://www.instagram.com/reel/DcXZF2LSgOM/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
     },
     {
-      image: '/images/site/home-experience.jpg',
+      image: IMG.home.reel4,
       title: 'Experience care you can trust',
       url: 'https://www.instagram.com/reel/DbvRFyTyUsU/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
     }
@@ -62,7 +65,7 @@ export default function Home() {
 
   const heroSlides = [
     {
-      image: '/images/site/hero-main.jpg',
+      image: IMG.home.hero1,
       eyebrow: 'Healthy Home',
       title: <>Look <em className="gold-text not-italic font-semibold">Radiant.</em><br />Feel <em className="italic font-medium">Unstoppable.</em></>,
       description: 'Healthy Home Weight Management, Dermatology and Lab Tests, all under one caring roof.',
@@ -70,7 +73,7 @@ export default function Home() {
       type: 'booking'
     },
     {
-      image: '/images/site/svc-weight-management.jpg',
+      image: IMG.home.hero2,
       eyebrow: 'Weight Management',
       title: <>Your <em className="gold-text not-italic">Healthier</em><br />Chapter Starts Here.</>,
       description: 'Personalized weight management programs designed around your goals.',
@@ -79,7 +82,7 @@ export default function Home() {
       link: '/services/weight-management'
     },
     {
-      image: '/images/site/svc-dermatology.jpg',
+      image: IMG.home.hero3,
       eyebrow: 'Dermatology',
       title: <>Healthy Skin.<br /><em className="gold-text not-italic">Confident You.</em></>,
       description: 'Advanced dermatology and aesthetic treatments tailored to you.',
@@ -88,7 +91,7 @@ export default function Home() {
       link: '/services/dermatology'
     },
     {
-      image: '/images/site/home-experience.jpg',
+      image: IMG.home.hero4,
       eyebrow: 'The Healthy Home Experience',
       title: <>Luxury You Feel.<br />Service You Can <em className="gold-text not-italic">Trust.</em></>,
       description: 'Expert care, personalized plans and a better wellness experience under one roof.',
@@ -288,7 +291,7 @@ export default function Home() {
                 className="inline-flex items-center gap-5 min-h-[44px] leading-none hover:text-golddark transition-colors duration-300"
               >
                 <span>{b}</span>
-                <img loading="lazy" decoding="async" src="/images/site/Leaf.png" alt="" className="w-5 h-5 object-contain shrink-0" />
+                <img loading="lazy" decoding="async" src={IMG.brand.leaf} alt="" className="w-5 h-5 object-contain shrink-0" />
               </button>
             </span>
           ))}
@@ -403,9 +406,9 @@ export default function Home() {
           <Link to="/about" className="inline-flex items-center gap-2 mt-8 min-h-[44px] border border-golddark/50 text-golddark px-7 py-3 rounded-full text-xs tracking-[0.2em] uppercase hover:bg-gold hover:text-white hover:border-gold transition">Our Story <ArrowRight size={14} /></Link>
         </motion.div>
         <motion.div {...fadeUp} className="grid grid-cols-2 gap-4">
-          <img loading="lazy" decoding="async" src="/images/site/home-experience.jpg" alt="Healthy Home medical professional with client" className="rounded-xl h-64 w-full object-cover col-span-2" />
-          <img loading="lazy" decoding="async" src="/images/site/svc-dermatology.jpg" alt="Dermatology service" className="rounded-xl h-52 w-full object-cover" />
-          <img loading="lazy" decoding="async" src="/images/site/svc-weight-management.jpg" alt="Weight management service" className="rounded-xl h-52 w-full object-cover" />
+          <img loading="lazy" decoding="async" src={IMG.home.experienceMain} alt="Healthy Home medical professional with client" className="rounded-xl h-64 w-full object-cover col-span-2" />
+          <img loading="lazy" decoding="async" src={IMG.home.experienceDerma} alt="Dermatology service" className="rounded-xl h-52 w-full object-cover" />
+          <img loading="lazy" decoding="async" src={IMG.home.experienceWeight} alt="Weight management service" className="rounded-xl h-52 w-full object-cover" />
         </motion.div>
       </div>
     </section>
@@ -450,16 +453,16 @@ export default function Home() {
         />
         <div className="grid sm:grid-cols-2 gap-5 lg:gap-6 mt-12">
           <BeforeAfter
-            before="/images/site/result-weight-before.jpg"
-            after="/images/site/result-weight-after.jpg"
+            before={IMG.result.weightBefore}
+            after={IMG.result.weightAfter}
             beforeLabel="Before"
             afterLabel="After"
             alt="Weight management result"
             aspect="aspect-[4/3]"
           />
           <BeforeAfter
-            before="/images/site/result-skin-before.jpg"
-            after="/images/site/result-skin-after.jpg"
+            before={IMG.result.skinBefore}
+            after={IMG.result.skinAfter}
             beforeLabel="Before"
             afterLabel="After"
             alt="Dermatology result"

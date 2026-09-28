@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Check, Crown, Gift, Percent, CalendarDays, Sparkles, ArrowRight, BadgeCheck, Star } from 'lucide-react';
 import { useBooking } from '../components/chrome';
 import { SectionHead } from '../components/shared';
+import { IMG } from '../data/images';
 
 const benefits = [
   { icon: Star, title: '10 Bonus Points', desc: '+ Skin Consultation on joining' },
@@ -21,7 +22,7 @@ export default function Membership() {
   return (
     <div>
       <section className="bg-white text-ink border-b border-linen relative overflow-hidden">
-        <img loading="lazy" decoding="async" src="/images/site/bg-membership.jpg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
+        <img loading="lazy" decoding="async" src={IMG.bg.membership} alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Healthy Home Membership</p>

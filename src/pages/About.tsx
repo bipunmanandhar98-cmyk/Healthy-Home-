@@ -4,12 +4,15 @@ import { Award, HeartHandshake, Microscope, ArrowRight, Quote } from 'lucide-rea
 import { useBooking } from '../components/chrome';
 import { SectionHead, CtaBanner } from '../components/shared';
 import { googleRating } from '../data/content';
+import { IMG } from '../data/images';
 
+/* Clinical team. These four files are separate from the Career page's staff
+   photos (IMG.staff.*) — different people, independently replaceable. */
 const team = [
-  { name: 'Dr. Daniel Taheri, MD', role: 'Medical Director · Weight & Wellness', img: '/images/site/team-1.jpg', note: '20+ yrs · 50k+ consultations' },
-  { name: 'Sarah Mitchell, NP-C', role: 'Lead Weight-Loss Clinician', img: '/images/site/team-2.jpg', note: 'Obesity care & nutrition' },
-  { name: 'Jessica Alvarez, RN', role: 'Lead Aesthetic Specialist', img: '/images/site/team-3.jpg', note: '8 yrs · skin & wellness care' },
-  { name: 'Dr. Priya Nair, MD', role: 'Wellness & Screening Physician', img: '/images/site/team-4.jpg', note: 'Screening + lifestyle medicine' },
+  { name: 'Dr. Daniel Taheri, MD', role: 'Medical Director · Weight & Wellness', img: IMG.team.about1, note: '20+ yrs · 50k+ consultations' },
+  { name: 'Sarah Mitchell, NP-C', role: 'Lead Weight-Loss Clinician', img: IMG.team.about2, note: 'Obesity care & nutrition' },
+  { name: 'Jessica Alvarez, RN', role: 'Lead Aesthetic Specialist', img: IMG.team.about3, note: '8 yrs · skin & wellness care' },
+  { name: 'Dr. Priya Nair, MD', role: 'Wellness & Screening Physician', img: IMG.team.about4, note: 'Screening + lifestyle medicine' },
 ];
 
 const values = [
@@ -23,7 +26,7 @@ export default function About() {
   return (
     <div>
       <section className="bg-white text-ink border-b border-linen relative overflow-hidden">
-        <img loading="lazy" decoding="async" src="/images/site/bg-about.jpg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
+        <img loading="lazy" decoding="async" src={IMG.bg.about} alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-24 grid lg:grid-cols-2 gap-10 items-center">
           <div>

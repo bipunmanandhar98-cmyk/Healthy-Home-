@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useBooking } from '../components/chrome';
 import { SectionHead, CtaBanner } from '../components/shared';
+import { IMG } from '../data/images';
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -211,7 +212,7 @@ export default function Franchise() {
 
       {/* Hero */}
       <section className="bg-white text-ink border-b border-linen relative overflow-hidden">
-        <img loading="lazy" decoding="async" src="/images/site/bg-cta.jpg" alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
+        <img loading="lazy" decoding="async" src={IMG.bg.ctaFranchise} alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-24 grid lg:grid-cols-2 gap-10 items-center">
           <div>
@@ -469,7 +470,7 @@ export default function Franchise() {
               non-negotiable. We broke even in month 14."
             </p>
             <div className="flex items-center justify-center gap-3 mt-6">
-              <img loading="lazy" decoding="async" src="/images/site/avatar-1.jpg" alt="" className="w-12 h-12 rounded-full object-cover" />
+              <img loading="lazy" decoding="async" src={IMG.franchise.reviewAvatar} alt="" className="w-12 h-12 rounded-full object-cover" />
               <div className="text-left">
                 <p className="font-medium text-sm">Rajan Karki</p>
                 <p className="text-xs text-stone2">Signature Centre Franchisee &middot; Pokhara</p>
