@@ -73,8 +73,9 @@ const registry = {
     hero4: '/images/home/hero-slide-4.jpg',
 
     /* ── Home: Instagram reel tiles ──────────────────────────────────────
-       Square thumbnails linking out to the reel. Separate from the hero
-       slides above, since a reel cover is cropped square. */
+       Cover image for each reel card on the landing page, shown until the
+       visitor clicks through to Instagram. Separate files from the hero
+       slides so a reel cover can be cropped 9:13 without touching them. */
     reel1: '/images/home/reel-1.jpg',
     reel2: '/images/home/reel-2.jpg',
     reel3: '/images/home/reel-3.jpg',

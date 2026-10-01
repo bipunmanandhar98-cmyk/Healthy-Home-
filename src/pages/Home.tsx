@@ -39,7 +39,9 @@ export default function Home() {
   };
   const brands = ['BCA TEST', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL','LAB TEST'];
   /* Reel covers are their own files (IMG.home.reel1-4) rather than reusing the
-     hero slides, so a square reel thumbnail can differ from the wide hero shot. */
+     hero slides, so a 9:13 reel cover can differ from the wide hero shot.
+     The URLs are the current reels on @healthyhome_nepal. Reels 2 and 3
+     previously pointed at different posts and have been corrected. */
   const instagramReels = [
     {
       image: IMG.home.reel1,
@@ -49,17 +51,17 @@ export default function Home() {
     {
       image: IMG.home.reel2,
       title: 'Small steps. Big transformation.',
-      url: 'https://www.instagram.com/reel/DdOzsISKmoR/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
+      url: 'https://www.instagram.com/reel/Dc_FpTsiWk6/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
     },
     {
       image: IMG.home.reel3,
       title: 'Healthy skin, confident you',
-      url: 'https://www.instagram.com/reel/DcXZF2LSgOM/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
+      url: 'https://www.instagram.com/reel/DbvRFyTyUsU/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
     },
     {
       image: IMG.home.reel4,
       title: 'Experience care you can trust',
-      url: 'https://www.instagram.com/reel/DbvRFyTyUsU/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
+      url: 'https://www.instagram.com/reel/DbVhFmCyk-b/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
     }
   ];
 
