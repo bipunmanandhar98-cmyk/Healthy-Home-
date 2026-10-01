@@ -8,7 +8,7 @@ type Props = {
   beforeLabel?: string;
   afterLabel?: string;
   alt: string;
-  /** Tailwind aspect class for the frame, e.g. 'aspect-[4/3]'. */
+  /** Tailwind aspect class for the frame, e.g. 'aspect-[9/16]'. */
   aspect?: string;
 };
 
@@ -25,7 +25,7 @@ export default function BeforeAfter({
   beforeLabel = 'Before',
   afterLabel = 'After',
   alt,
-  aspect = 'aspect-[4/3]',
+  aspect = 'aspect-[9/16]',
 }: Props) {
   const [pos, setPos] = useState(50);
   const [dragging, setDragging] = useState(false);
@@ -79,9 +79,13 @@ export default function BeforeAfter({
   // Shown until the real photos exist, so the section reads as deliberate
   // rather than broken. Never ship a mismatched stand-in pair as a "result".
   // Kept after every hook so hook order stays stable across renders.
+  //
+  // No max-height here: the caller constrains the frame by width, so the height
+  // follows from the requested ratio. A max-h would cap the height on short
+  // screens and quietly change the aspect the caller asked for.
   if (!ready) {
     return (
-      <div className={`relative ${aspect} w-full max-h-[70vh] overflow-hidden rounded-3xl bg-sand border border-dashed border-linen grid place-items-center px-6 text-center`}>
+      <div className={`relative ${aspect} w-full overflow-hidden rounded-3xl bg-sand border border-dashed border-linen grid place-items-center px-6 text-center`}>
         <div>
           <MoveHorizontal size={22} className="mx-auto text-stone2/70" />
           <p className="text-sm font-medium mt-3">{alt}</p>
@@ -94,11 +98,18 @@ export default function BeforeAfter({
   return (
     <div
       ref={frame}
-      className={`relative ${aspect} w-full max-h-[70vh] overflow-hidden rounded-3xl bg-linen select-none`}
+      className={`relative ${aspect} w-full overflow-hidden rounded-3xl bg-linen select-none`}
       onPointerDown={e => { e.preventDefault(); setDragging(true); setFromClientX(e.clientX); }}
     >
+      {/* Neither image is lazy-loaded. The before photo sits inside the
+          clip-path container, and Chrome does not count clipped content as
+          visible, so `loading="lazy"` left it permanently unfetched - the
+          divider then revealed an empty panel. A comparison is also
+          meaningless with only one half loaded, so both load eagerly once this
+          component decides it is ready (it probes `after` first). */}
+
       {/* After sits underneath and is always fully painted. */}
-      <img loading="lazy" decoding="async"
+      <img decoding="async"
         src={after}
         alt={`${alt} — after`}
         draggable={false}
@@ -107,7 +118,7 @@ export default function BeforeAfter({
 
       {/* Before is revealed from the left up to the divider. */}
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
-        <img loading="lazy" decoding="async"
+        <img decoding="async"
           src={before}
           alt={`${alt} — before`}
           draggable={false}

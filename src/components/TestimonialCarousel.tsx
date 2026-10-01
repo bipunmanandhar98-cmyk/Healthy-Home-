@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, ChevronDown, Quote, Star, ExternalLink } from 'lucide-react';
-import { testimonials, centers, type Testimonial } from '../data/content';
+/* Only the three featured reviews are shown; data/content.ts keeps all ten as
+   the record. See featuredTestimonials for how to change the selection. */
+import { featuredTestimonials as testimonials, centers, type Testimonial } from '../data/content';
 
 function initials(name: string) {
   return name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0]!.toUpperCase()).join('');

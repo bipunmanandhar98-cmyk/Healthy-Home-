@@ -581,6 +581,29 @@ export const testimonials: Testimonial[] = [
   },
 ];
 
+/**
+ * The three reviews shown in the landing page carousel.
+ *
+ * All ten remain in `testimonials` above: they are quoted verbatim from real
+ * Google Business Profiles, so the full set is the record and is kept even
+ * though only three are displayed. Re-order or swap this list to change what
+ * appears — nothing else has to be edited.
+ *
+ * Chosen to cover three different branches and both service lines, so the
+ * carousel does not read as three testimonials from the same clinic:
+ *   Apekshya Giri   - Baneshwor, the only Dermatology review
+ *   Kaushal Raj G.  - Jamal, the most specific result (91kg to 79kg)
+ *   Ganesh Gurung  - Pokhara, so the franchise branch is represented
+ *
+ * Selected by name rather than by index, so reordering the array above cannot
+ * silently change which reviews are featured.
+ */
+const FEATURED_REVIEW_NAMES = ['Apekshya Giri', 'Kaushal Raj Gnyawali', 'Ganesh Gurung'];
+
+export const featuredTestimonials: Testimonial[] = FEATURED_REVIEW_NAMES
+  .map(name => testimonials.find(t => t.name === name))
+  .filter((t): t is Testimonial => t !== undefined);
+
 /* Products sold at the branch and online. This array is the single source of
    truth for /wellness-store: the category filter chips and the grid are both
    derived from it, so adding a product needs no other edits.

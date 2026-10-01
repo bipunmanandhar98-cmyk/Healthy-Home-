@@ -453,14 +453,18 @@ export default function Home() {
           title={<>Before & After <em className="gold-text not-italic">Treatment</em></>}
           sub="Drag the handle to compare. Every result varies by individual — these are shared with client consent."
         />
-        <div className="grid sm:grid-cols-2 gap-5 lg:gap-6 mt-12">
+        {/* Constrained to max-w-3xl on purpose. At the full max-w-7xl a 9:16 frame
+            would be 620px wide and 1100px tall, which overflows the screen. Each
+            comparison is ~358px wide by 636px here — portrait, and short enough
+            to sit on screen without scrolling. */}
+        <div className="grid sm:grid-cols-2 gap-5 lg:gap-6 mt-12 max-w-3xl mx-auto">
           <BeforeAfter
             before={IMG.result.weightBefore}
             after={IMG.result.weightAfter}
             beforeLabel="Before"
             afterLabel="After"
             alt="Weight management result"
-            aspect="aspect-[4/3]"
+            aspect="aspect-[9/16]"
           />
           <BeforeAfter
             before={IMG.result.skinBefore}
@@ -468,7 +472,7 @@ export default function Home() {
             beforeLabel="Before"
             afterLabel="After"
             alt="Dermatology result"
-            aspect="aspect-[4/3]"
+            aspect="aspect-[9/16]"
           />
         </div>
         <p className="text-xs text-stone2 text-center mt-6 max-w-2xl mx-auto">
