@@ -616,7 +616,16 @@ export function Footer() {
         <div className="gold-line my-8 opacity-40" />
         <div className="flex flex-col sm:flex-row justify-between gap-3 text-xs text-mist/70">
           <p>© 2026 Healthy Home. All rights reserved.</p>
-          <p className="flex gap-4"><span>Privacy</span><span>Terms</span><span>Accessibility</span><span>HIPAA Notice</span></p>
+          <p className="flex flex-wrap gap-x-4 gap-y-2">
+            {/* Real page, so this is a link rather than dead text. */}
+            <Link to="/privacy-policy" className="hover:text-white transition">Privacy Policy</Link>
+            {/* Kept as plain text: these pages do not exist yet. Wrapping them in
+                Links would just resolve to the home page via the catch-all
+                route, which reads as a broken page rather than a missing one. */}
+            <span>Terms</span>
+            <span>Accessibility</span>
+            <span>HIPAA Notice</span>
+          </p>
         </div>
       </div>
     </footer>

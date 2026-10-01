@@ -14,6 +14,7 @@ import WellnessStore from './pages/WellnessStore';
 import { Navigate } from './router';
 import Career from './pages/Career';
 import Franchise from './pages/Franchise';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 export default function App() {
   return (
@@ -42,6 +43,9 @@ export default function App() {
             <Route path="/skin-quiz" element={<Navigate to="/wellness-hub#skin" replace />} />
             <Route path="/career" element={<Career />} />
             <Route path="/franchise" element={<Franchise />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            {/* Short form, so an old or hand-typed /privacy link still lands here */}
+            <Route path="/privacy" element={<Navigate to="/privacy-policy" replace />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
