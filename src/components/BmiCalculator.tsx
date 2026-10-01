@@ -2,11 +2,11 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Calculator, Check, Info, Calendar, ArrowRight, RotateCcw,
+  Calculator, Check, Info, Calendar, ArrowRight, RotateCcw, Clock,
   Mars, Venus, User, Minus, Plus, Activity,
 } from 'lucide-react';
 import { BMI_BANDS, BMI_MIN, BMI_MAX, bandForBmi } from '../data/bmiBands';
-import { treatments, getSubServices } from '../data/content';
+import { treatments, subServices, type SubService, type Treatment } from '../data/content';
 import { useBooking } from './chrome';
 
 type Unit = 'metric' | 'imperial';
@@ -22,10 +22,69 @@ function bmiCategory(bmi: number) {
   return { label: 'Severely Obese', color: BMI_BANDS[4]!.color, headline: 'Your BMI is very well above the healthy range.', desc: 'Please book a consultation so we can plan clinician-led support around you.' };
 }
 
-function servicesForBmi(bmi: number) {
-  if (bmi < 18.5) return ['weight-management', 'lab-tests', 'dermatology'];
-  if (bmi < 25) return ['lab-tests', 'dermatology', 'weight-management'];
-  return ['weight-management', 'lab-tests', 'dermatology'];
+/**
+ * Which sub-services to suggest, per band, in priority order.
+ *
+ * Why sub-services and not the three parent treatments: the parents are so
+ * broad that the old list showed the same three tiles in a different order for
+ * every reading, which told the visitor nothing about *their* result. Naming
+ * the specific programme (BCA Testing, Weight Loss, CoolSculpting) is the thing
+ * they would actually book.
+ *
+ * Ordered per band because the sensible first step genuinely differs: an
+ * underweight visitor should not be shown a fat-loss programme first, and a
+ * healthy visitor should not be pushed straight into intensive shaping. Each
+ * entry is (sub-service id, why it is on the list). Every `why` is a statement
+ * about the service, not a clinical claim about the visitor.
+ */
+const BAND_PICKS: Record<string, { subId: string; why: string }[]> = {
+  underweight: [
+    { subId: 'weight-gain', why: 'Structured weight-gain coaching for adults who are below the healthy range' },
+    { subId: 'bca-testing', why: 'Separates muscle from fat, so a gain plan adds the right tissue' },
+    { subId: 'whole-body-lab-test', why: 'Checks for anything contributing to low weight before you change your diet' },
+  ],
+  healthy: [
+    { subId: 'bca-testing', why: 'A body-composition baseline, so you can track what actually changes' },
+    { subId: 'weight-loss', why: 'Maintenance programmes and steady, sustainable fat loss' },
+    { subId: 'derma-consultation', why: 'Skin changes that come and go with weight get assessed early' },
+  ],
+  overweight: [
+    { subId: 'weight-loss', why: 'The core step for a reading in this range, with coaching rather than a diet alone' },
+    { subId: 'bca-testing', why: 'Sets a measurable starting point before you begin' },
+    { subId: 'whole-body-lab-test', why: 'A full screening to guide a plan built around your numbers' },
+  ],
+  obese: [
+    { subId: 'weight-loss', why: 'Clinician-led programme for this range, paced around your starting point' },
+    { subId: 'whole-body-lab-test', why: 'Screening first — the plan should follow your results, not a generic one' },
+    { subId: 'bca-testing', why: 'Tracks fat versus muscle so progress is not judged on the scale alone' },
+  ],
+  severe: [
+    { subId: 'whole-body-lab-test', why: 'A full health assessment before anything else, to plan safely' },
+    { subId: 'weight-loss', why: 'Clinician-led support, started once your baseline results are in' },
+    { subId: 'bca-testing', why: 'Gives your clinician the body-composition detail behind your plan' },
+  ],
+};
+
+/**
+ * Builds the suggestion list for a reading.
+ *
+ * Every sub-service id is looked up rather than trusted: if content.ts ever
+ * drops or renames one, that tile is skipped instead of rendering a broken
+ * link, and the band simply shows fewer suggestions rather than none.
+ */
+function suggestionsForBmi(bmi: number) {
+  const band = bandForBmi(bmi);
+  if (!band) return [];
+  const picks = BAND_PICKS[band.key] ?? BAND_PICKS.overweight!;
+  return picks
+    .map((p) => {
+      const sub = subServices.find((s) => s.id === p.subId);
+      if (!sub) return null;
+      const parent = treatments.find((t) => t.id === sub.parentId);
+      if (!parent) return null;
+      return { sub, parent, why: p.why };
+    })
+    .filter((x): x is { sub: SubService; parent: Treatment; why: string } => x !== null);
 }
 
 /* ------------------------------------------------------------- result parts */
@@ -169,7 +228,7 @@ export default function BmiCalculator({ compact = false }: { compact?: boolean }
 
   const rounded = bmi != null ? Math.round(bmi * 10) / 10 : null;
   const cat = rounded != null ? bmiCategory(rounded) : null;
-  const suggested = rounded != null ? servicesForBmi(rounded).map((id) => treatments.find((t) => t.id === id)!).filter(Boolean) : [];
+  const suggested = rounded != null ? suggestionsForBmi(rounded) : [];
 
   /* Adult BMI cut-offs do not apply to children, who are measured against
      age- and sex-specific percentiles instead. Rather than print a number that
@@ -455,45 +514,74 @@ export default function BmiCalculator({ compact = false }: { compact?: boolean }
                       </p>
                     )}
 
-                    {/* Suggestions — kept, because the page copy promises the
-                        calculator maps a BMI to a service. */}
+                    {/* Suggestions — kept, because the page copy promises the calculator
+                        maps a BMI to a service. Each tile names the specific
+                        sub-service and links straight to it, and says why it
+                        is on the list, so the ranking is not a mystery. */}
                     <div className="mt-8 pt-7 border-t border-linen">
-                      <p className="text-[11px] tracking-[0.3em] uppercase text-golddark font-semibold">
-                        Suggested services for you
-                      </p>
-                      <div className="grid gap-2.5 mt-4">
-                        {suggested.map((t, i) => {
-                          const subs = getSubServices(t.id);
-                          return (
-                            <div key={t.id} className="border border-linen rounded-2xl p-3.5 flex gap-3 items-center hover:shadow-md transition">
-                              <img src={t.image} alt={t.name} className="w-14 h-14 rounded-xl object-cover shrink-0" loading="lazy" />
-                              <div className="min-w-0 grow">
-                                <p className="text-[10px] tracking-[0.2em] uppercase text-golddark">
-                                  #{i + 1} Recommended · {t.name}
-                                </p>
-                                <p className="font-medium text-[15px] leading-snug mt-0.5">
-                                  {i === 0 ? t.tagline : subs[0]?.name ?? t.tagline}
-                                </p>
-                                <p className="text-xs text-stone2 mt-0.5 line-clamp-1">
-                                  {i === 0 ? `${subs.length} sub-services available` : subs[1]?.name ?? subs[0]?.description ?? ''}
-                                </p>
-                              </div>
-                              <Link
-                                to={`/services/${t.id}`}
-                                className="shrink-0 bg-[#00919A] hover:bg-[#00747B] text-white rounded-full px-4 py-2 text-[10px] tracking-[0.15em] uppercase font-medium transition"
-                              >
-                                Open
-                              </Link>
-                            </div>
-                          );
-                        })}
+                      <div className="flex items-baseline justify-between gap-3">
+                        <p className="text-[11px] tracking-[0.3em] uppercase text-golddark font-semibold">
+                          Suggested services for you
+                        </p>
+                        <p className="text-[11px] text-stone2">in the order we would start</p>
                       </div>
+
+                      <div className="grid gap-2.5 mt-4">
+                        {suggested.map(({ sub, parent, why }, i) => (
+                          <div
+                            key={sub.id}
+                            className={`border rounded-2xl p-3.5 sm:p-4 flex gap-3 sm:gap-4 items-start hover:shadow-md transition ${
+                              i === 0 ? 'border-gold bg-cream/60' : 'border-linen'
+                            }`}
+                          >
+                            <img
+                              src={sub.image} alt=""
+                              className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl object-cover shrink-0"
+                              loading="lazy"
+                            />
+                            <div className="min-w-0 grow">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span
+                                  className={`text-[10px] tracking-[0.15em] uppercase font-semibold px-2 py-0.5 rounded-full ${
+                                    i === 0 ? 'bg-gold text-white' : 'bg-sand text-stone2'
+                                  }`}
+                                >
+                                  {i === 0 ? 'Start here' : `Step ${i + 1}`}
+                                </span>
+                                <span className="text-[10px] tracking-[0.15em] uppercase text-stone2 truncate">
+                                  {parent.name}
+                                </span>
+                                {/* duration is real data from content.ts, so it
+                                    answers "how long will this take" up front. */}
+                                <span className="text-[10px] text-stone2 inline-flex items-center gap-1 shrink-0">
+                                  <Clock size={10} /> {sub.duration}
+                                </span>
+                              </div>
+
+                              <p className="font-medium text-[15px] leading-snug mt-1.5">{sub.name}</p>
+                              <p className="text-xs text-mocha mt-1 leading-relaxed">{why}</p>
+                            </div>
+
+                            <Link
+                              to={`/services/${parent.id}/${sub.id}`}
+                              className="shrink-0 bg-[#00919A] hover:bg-[#00747B] text-white rounded-full px-4 py-2 text-[10px] tracking-[0.15em] uppercase font-medium transition min-h-[40px] inline-flex items-center"
+                            >
+                              View
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+
                       <button
-                        onClick={() => openBooking({ treatment: suggested[0]?.id })}
+                        onClick={() => openBooking({ treatment: suggested[0]?.parent.id })}
                         className="mt-5 w-full border border-[#00919A] text-[#00747B] hover:bg-[#00919A] hover:text-white rounded-xl py-3.5 text-xs tracking-[0.2em] uppercase font-medium transition flex items-center justify-center gap-2 min-h-[48px]"
                       >
                         <Calendar size={14} /> Book Consult for BMI {rounded}
                       </button>
+                      <p className="text-[11px] text-stone2 mt-2.5 text-center">
+                        Suggestions are based on your BMI band only. A clinician confirms the
+                        right plan at your consultation.
+                      </p>
                     </div>
                   </>
                 )}

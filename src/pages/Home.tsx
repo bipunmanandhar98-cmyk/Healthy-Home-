@@ -6,6 +6,7 @@ import { useBooking } from '../components/chrome';
 import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared';
 import BeforeAfter from '../components/BeforeAfter';
 import TestimonialCarousel from '../components/TestimonialCarousel';
+import WhatsAppWidget from '../components/WhatsAppWidget';
 import { Link as RouterLink } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { ChevronDown, Clock } from 'lucide-react';
@@ -596,6 +597,10 @@ export default function Home() {
     </section>
 
     <CtaBanner />
+
+      {/* Floating WhatsApp entry point. Home only — see WhatsAppWidget for why
+          this is a deep link rather than an inline chat widget. */}
+      <WhatsAppWidget />
     </div>
   );
 }
