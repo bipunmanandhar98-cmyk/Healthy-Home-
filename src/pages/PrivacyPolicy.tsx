@@ -304,17 +304,21 @@ const SECTIONS: Section[] = [
   },
 ];
 
-/**
- * Clauses that cannot be signed off from the codebase alone. Each one is
- * something the business has to confirm or supply before this policy is
- * authoritative — not placeholder text to publish.
+/*
+ * Not settled from the codebase alone — confirm with the business before this
+ * policy is treated as authoritative. Deliberately kept out of the rendered
+ * page: these are open questions, not copy for visitors.
+ *
+ *   1. Whether the clinic is registered with Nepal's Office of the Data
+ *      Controller under the Data Protection Act 2023, and whether that
+ *      registration should be cited in Section 2.
+ *   2. Retention periods in Section 11 are described qualitatively. If Nepali
+ *      law sets a minimum period for clinical or accounting records, state it.
+ *   3. Whether the email delivery service used for confirmations is covered by
+ *      a data processing agreement permitting the transfer in Section 6.
+ *   4. A Data Protection Officer should be named only if one is formally
+ *      appointed. This policy must not imply that one exists if it does not.
  */
-const NEEDS_REVIEW: string[] = [
-  'Whether the clinic is registered with Nepal’s Office of the Data Controller under the Data Protection Act 2023, and whether that registration should be cited here.',
-  'Retention periods in Section 11 are described qualitatively. If Nepali law sets a minimum period for clinical or accounting records, state it explicitly.',
-  'Whether the email delivery service used for confirmations is covered by a data processing agreement that permits the international transfer described in Section 6.',
-  'A Data Protection Officer should be named here only if one is formally appointed. If Healthy Home has not appointed a DPO, this policy must not imply that it has.',
-];
 
 export default function PrivacyPolicy() {
   return (
@@ -447,7 +451,7 @@ export default function PrivacyPolicy() {
 
         <div className="gold-line my-12 opacity-50" />
 
-        <motion.section {...fadeUp} id="section-changes" className="scroll-mt-24">
+        <motion.section {...fadeUp} id="section-contact" className="scroll-mt-24">
           <h2 className="font-display text-2xl sm:text-3xl leading-tight flex items-baseline gap-2.5">
             <span className="text-golddark text-lg font-sans tabular-nums shrink-0">16.</span>
             <span>Contact Us</span>
@@ -478,22 +482,7 @@ export default function PrivacyPolicy() {
           </div>
         </motion.section>
 
-        {/* Published-page callout for what still needs a decision. Strip this
-            block before launch once the list in NEEDS_REVIEW is resolved. */}
-        {false && (
-          <motion.section {...fadeUp} className="mt-12 bg-sand border border-gold/40 rounded-3xl p-7">
-            <h2 className="font-display text-xl text-golddark">Pre-launch checklist</h2>
-            <ul className="grid gap-2 mt-3">
-              {NEEDS_REVIEW.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-mocha leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-golddark shrink-0 mt-2.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.section>
-        )}
-      </div>
+        </div>
     </div>
   );
 }
