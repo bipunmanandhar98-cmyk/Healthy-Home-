@@ -360,7 +360,9 @@ export default function PrivacyPolicy() {
         >
           <p className="text-[11px] tracking-[0.25em] uppercase text-stone2 mb-3">On this page</p>
           <ol className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm">
-            {SECTIONS.map((s) => (
+            {/* 15 and 16 are rendered separately below the section list, so they
+                are appended here rather than being part of SECTIONS. */}
+            {[...SECTIONS, { n: '15', title: 'Changes to This Policy' }, { n: '16', title: 'Contact Us' }].map((s) => (
               <li key={s.n} className="flex gap-2 min-w-0">
                 <span className="text-golddark shrink-0 tabular-nums">{s.n}.</span>
                 <a href={`#section-${s.n.replace('.', '-')}`} className="text-mocha hover:text-ink transition truncate">
@@ -436,7 +438,7 @@ export default function PrivacyPolicy() {
           ))}
 
           {/* Changes */}
-          <motion.section {...fadeUp} id="section-changes" className="scroll-mt-24">
+          <motion.section {...fadeUp} id="section-15" className="scroll-mt-24">
             <h2 className="font-display text-2xl sm:text-3xl leading-tight flex items-baseline gap-2.5">
               <span className="text-golddark text-lg font-sans tabular-nums shrink-0">15.</span>
               <span>Changes to This Policy</span>
@@ -451,7 +453,7 @@ export default function PrivacyPolicy() {
 
         <div className="gold-line my-12 opacity-50" />
 
-        <motion.section {...fadeUp} id="section-contact" className="scroll-mt-24">
+        <motion.section {...fadeUp} id="section-16" className="scroll-mt-24">
           <h2 className="font-display text-2xl sm:text-3xl leading-tight flex items-baseline gap-2.5">
             <span className="text-golddark text-lg font-sans tabular-nums shrink-0">16.</span>
             <span>Contact Us</span>
