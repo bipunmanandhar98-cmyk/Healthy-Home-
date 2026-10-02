@@ -1,27 +1,24 @@
-import emailjs from '@emailjs/browser';
+import { postToApi, type SendResult } from './api';
 
 /**
- * Job application emails via EmailJS.
+ * Job applications via Resend, through the serverless function at /api/send.
  *
- * Reuses the same EmailJS account as the booking confirmation but points at a
- * *separate* template, because a careers template needs its own merge fields
- * (including an attachment slot for the resume) and you would not want an
- * application rendered through the booking template.
+ * The signature is unchanged: callers still hand over the form element, and the
+ * resume still travels as a real attachment rather than as text in the body.
+ * The difference is that the file is read here, base64-encoded into JSON, and
+ * validated again on the server - the browser's checks are a convenience for
+ * the applicant, not a control, since the endpoint is directly callable.
  *
- * Configure alongside the booking vars in `.env`:
- *   VITE_EMAILJS_CAREERS_TEMPLATE_ID=template_xxxxxxx
- *   (VITE_EMAILJS_SERVICE_ID and VITE_EMAILJS_PUBLIC_KEY are shared)
+ * Validate with Resend on Vercel (never in the browser):
+ *   RESEND_API_KEY, RESEND_TO_EMAIL, RESEND_FROM
  *
- * Until the careers template id is set, `careersEmailConfigured` is false and
- * the UI says the application was not sent rather than claiming it was.
+ * `careersEmailConfigured` is retained for compatibility. Configuration moved
+ * server-side, so the browser cannot know; the API's own 'not-configured'
+ * response is what drives the honest fallback copy in the form.
  */
-const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined;
-const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_CAREERS_TEMPLATE_ID as string | undefined;
-const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined;
+export const careersEmailConfigured = true;
 
-export const careersEmailConfigured = Boolean(SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY);
-
-export type SendResult = 'sent' | 'not-configured' | 'failed';
+export type { SendResult };
 
 /** Resume ceiling enforced before the file is ever read, matching the form copy. */
 export const MAX_RESUME_BYTES = 2 * 1024 * 1024;
@@ -41,17 +38,43 @@ export function validateResume(file: File | null): string | null {
 }
 
 /**
- * Sends the application. Uses `sendForm` rather than `send` so the resume
- * input is uploaded as an attachment instead of being flattened into a text
- * field. Never throws — the caller decides how to surface a failure.
+ * Reads the resume out of the form and posts the application.
+ *
+ * The job fields are read from the form's named inputs rather than passed in,
+ * so the caller stays a one-argument call exactly as it was.
  */
 export async function sendJobApplication(form: HTMLFormElement): Promise<SendResult> {
-  if (!careersEmailConfigured) return 'not-configured';
-  try {
-    await emailjs.sendForm(SERVICE_ID as string, TEMPLATE_ID as string, form, { publicKey: PUBLIC_KEY as string });
-    return 'sent';
-  } catch (e) {
-    console.error('[careers] application email failed', e);
-    return 'failed';
+  const field = (name: string) => String(new FormData(form).get(name) ?? '').trim();
+
+  const fileInput = form.querySelector<HTMLInputElement>('input[name="applicant_resume"]');
+  const file = fileInput?.files?.[0] ?? null;
+
+  let resume: { filename: string; base64: string } | undefined;
+  if (file) {
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = '';
+      // Chunked so a large CV cannot blow the argument limit on String.fromCharCode.
+      const CHUNK = 0x8000;
+      for (let i = 0; i < bytes.length; i += CHUNK) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK));
+      }
+      resume = { filename: file.name, base64: btoa(binary) };
+    } catch (e) {
+      console.error('[careers] could not read the resume file', e);
+      return 'failed';
+    }
   }
+
+  return postToApi({
+    kind: 'career',
+    applicant_name: field('applicant_name'),
+    applicant_email: field('applicant_email'),
+    applicant_phone: field('applicant_phone'),
+    applicant_address: field('applicant_address'),
+    job_title: field('job_title'),
+    job_location: field('job_location'),
+    job_department: field('job_department'),
+    resume,
+  });
 }

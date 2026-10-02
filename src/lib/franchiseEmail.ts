@@ -1,36 +1,29 @@
-import emailjs from '@emailjs/browser';
+import { postToApi, type SendResult } from './api';
 
 /**
- * Franchise inquiry emails via EmailJS.
+ * Franchise enquiry emails via Resend, through /api/send.
  *
- * Reuses the same Email Service and Public Key as the booking and careers
- * emails, but points at a *separate* template: the franchise desk fields are
- * nothing like the booking or application ones, and you would not want a
- * franchise lead rendered through a booking receipt.
+ * The recipient is chosen server-side from RESEND_TO_EMAIL. `FRANCHISE_INBOX`
+ * is kept because the form renders it in its own fallback copy and its contact
+ * panel, so removing it would have meant editing the page.
  *
- * Configure in `.env` at the project root alongside the other three:
- *   VITE_EMAILJS_FRANCHISE_TEMPLATE_ID=template_xxxxxxx
- *   (VITE_EMAILJS_SERVICE_ID and VITE_EMAILJS_PUBLIC_KEY are shared)
+ * Configure with Resend on Vercel (never in the browser):
+ *   RESEND_API_KEY, RESEND_TO_EMAIL, RESEND_FROM
  *
- * Until that id is set, `franchiseEmailConfigured` is false and the form tells
- * the enquirer to write to franchise@healthyhome.com.np instead of claiming the
- * inquiry was sent.
+ * `franchiseEmailConfigured` is retained for compatibility. Configuration moved
+ * server-side so the browser cannot know; the API's own 'not-configured'
+ * response is what drives the honest fallback copy.
  */
-const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined;
-const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_FRANCHISE_TEMPLATE_ID as string | undefined;
-const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined;
-
-/** Where a franchise lead is sent. Shown to the enquirer as the fallback. */
 export const FRANCHISE_INBOX = 'franchise@healthyhome.com.np';
 
-export const franchiseEmailConfigured = Boolean(SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY);
+export const franchiseEmailConfigured = true;
 
-export type SendResult = 'sent' | 'not-configured' | 'failed';
+export type { SendResult };
 
 /**
- * Field names double as the EmailJS merge fields the template must declare.
- * `reply_to` is set to the enquirer's own address so a direct reply from the
- * franchise desk reaches them.
+ * Field names are unchanged from the EmailJS version so the calling form keeps
+ * the same shape. `reply_to` carries the enquirer's own address, so replying to
+ * the notification reaches them.
  */
 export type FranchiseInquiry = {
   to_email: string;
@@ -48,19 +41,19 @@ export type FranchiseInquiry = {
 };
 
 /**
- * Sends the inquiry to the franchise desk. Uses `send` rather than `sendForm`
- * because there is no file to attach, so the values can be sent as typed.
- *
- * Never throws — the caller decides how to surface a failure, and a failed
- * email must not leave the enquirer thinking they are still mid-submit.
+ * Sends the enquiry to the franchise desk. Never throws - a failed email must
+ * not leave the enquirer thinking they are still mid-submit.
  */
 export async function sendFranchiseInquiry(details: FranchiseInquiry): Promise<SendResult> {
-  if (!franchiseEmailConfigured) return 'not-configured';
-  try {
-    await emailjs.send(SERVICE_ID as string, TEMPLATE_ID as string, details, { publicKey: PUBLIC_KEY as string });
-    return 'sent';
-  } catch (e) {
-    console.error('[franchise] inquiry email failed', e);
-    return 'failed';
-  }
+  return postToApi({
+    kind: 'franchise',
+    enquirer_name: details.enquirer_name,
+    enquirer_email: details.enquirer_email,
+    enquirer_phone: details.enquirer_phone,
+    enquirer_phone_country: details.enquirer_phone_country,
+    enquirer_location: details.enquirer_location,
+    enquirer_city: details.enquirer_city,
+    investment_range: details.investment_range,
+    enquirer_notes: details.enquirer_notes,
+  });
 }

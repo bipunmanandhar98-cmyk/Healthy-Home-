@@ -1,0 +1,10 @@
+{
+  "name": "healthy-home-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Vercel serverless function. Dependencies live here rather than in the root package.json so the Resend SDK is never bundled into the browser.",
+  "dependencies": {
+    "resend": "^4.0.1"
+  }
+}

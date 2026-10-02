@@ -56,10 +56,14 @@ export default function Locations() {
                      appointment the branch cannot keep, so this routes to the
                      waitlist instead. */
                   <button onClick={() => document.getElementById('branch-waitlist')?.scrollIntoView({ behavior: 'smooth' })} className="flex-1 h-11 rounded-full bg-sand text-ink/70 hover:bg-gold hover:text-white transition text-[11px] tracking-[0.18em] uppercase font-medium">Notify Me When Open</button>
-                ) : c.id !== 'thapathali' ? (
+                ) : !c.noBooking ? (
                   <button onClick={() => openBooking({ center: c.id })} className="flex-1 bg-gold text-white rounded-full py-2.5 text-[11px] tracking-[0.18em] uppercase hover:bg-[#00747B]">Book Here</button>
-                ) : null}
-                <a href={c.mapUrl ?? `https://maps.google.com/?q=${encodeURIComponent(c.address + ' ' + c.city)}`} target="_blank" rel="noreferrer" className={`${c.id === 'thapathali' && !c.openingSoon ? 'flex-1' : 'w-11'} h-11 rounded-full border border-linen flex items-center justify-center hover:border-gold hover:text-[#007C83]`} title="Directions"><Navigation size={15} /></a>
+                ) : (
+                  /* Trading, but not a patient-facing clinic — say why instead
+                     of leaving the card with no way to act on it. */
+                  <p className="flex-1 self-center text-[11px] tracking-[0.12em] uppercase text-stone2 text-center">{c.noBookingNote ?? 'Appointments not available'}</p>
+                )}
+                <a href={c.mapUrl ?? `https://maps.google.com/?q=${encodeURIComponent(c.address + ' ' + c.city)}`} target="_blank" rel="noreferrer" className={`${c.noBooking ? 'flex-1' : 'w-11'} h-11 rounded-full border border-linen flex items-center justify-center hover:border-gold hover:text-[#007C83]`} title="Directions"><Navigation size={15} /></a>
               </div>
             </div>
           ))}

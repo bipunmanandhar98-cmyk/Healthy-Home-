@@ -553,8 +553,12 @@ export default function Home() {
             <p className="text-xs text-stone2 mt-1">{c.locationLine ?? <>{c.address}<br />{c.city}, {c.state}</>}</p>
             {c.rating ? <p className="flex items-center gap-1 text-xs mt-2"><Star size={12} className="fill-gold text-gold" /> {c.rating} ({c.reviews?.toLocaleString()} Google reviews)</p> : null}
             <p className="text-xs text-mocha mt-1">{c.phone ? c.phone : c.email ?? ''}</p>
-            {c.id !== 'thapathali' && (
+            {/* Head office is a corporate site and cannot take appointments, so
+                it gets no booking button here either. */}
+            {!c.noBooking ? (
               <button onClick={() => openBooking({ center: c.id })} className="mt-auto pt-4 w-full bg-sand hover:bg-gold hover:text-white transition rounded-full py-2.5 text-[11px] tracking-[0.2em] uppercase font-medium">Book Here</button>
+            ) : (
+              <p className="mt-auto pt-4 text-[11px] text-stone2">{c.noBookingNote ?? 'Appointments not available'}</p>
             )}
           </div>
         ))}

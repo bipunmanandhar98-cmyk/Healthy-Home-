@@ -467,6 +467,16 @@ export type Center = {
    */
   openingSoon?: boolean;
   /**
+   * Trading normally, but does not take appointments. The head office is a
+   * corporate/academy site rather than a patient-facing clinic, so it is still
+   * listed on the Locations page but is shown greyed out and unselectable in
+   * the booking flow. This is separate from `openingSoon`: that flag means the
+   * branch does not exist yet, this one means it does but cannot serve patients.
+   */
+  noBooking?: boolean;
+  /** Shown in place of the service summary on a branch that can't be booked. */
+  noBookingNote?: string;
+  /**
    * Google Maps rating and review count. Omit for branches with no listing —
    * the UI hides the row entirely rather than showing a placeholder.
    */
@@ -486,7 +496,7 @@ export type Center = {
 };
 
 export const centers: Center[] = [
-  { id: 'thapathali', name: 'Healthy Home Thapathali (HO)', address: 'Thapathali', city: 'Kathmandu', state: 'Bagmati', locationLine: 'Thapathali, Kathmandu', mapUrl: 'https://maps.app.goo.gl/9ogCGPACohPJZCWbA', phone: '01-5335763', email: 'admin@healthyhome.com.np', hours: 'Sun-Fri 9am-6pm', rating: 5, reviews: 2, flagship: true, tag: 'Corporate' },
+  { id: 'thapathali', name: 'Healthy Home Thapathali (HO)', address: 'Thapathali', city: 'Kathmandu', state: 'Bagmati', locationLine: 'Thapathali, Kathmandu', mapUrl: 'https://maps.app.goo.gl/9ogCGPACohPJZCWbA', phone: '01-5335763', email: 'admin@healthyhome.com.np', hours: 'Sun-Fri 9am-6pm', rating: 5, reviews: 2, flagship: true, tag: 'Corporate', noBooking: true, noBookingNote: 'Head office — appointments not taken here' },
   { id: 'baneshwor', name: 'Healthy Home Baneshwor', address: 'Baneshwor', city: 'Kathmandu', state: 'Bagmati', locationLine: 'Mid-Baneshwor, Kathmandu', mapUrl: 'https://maps.app.goo.gl/q1rcc8DovmeFUEiR8', phone: '01-4590575', email: 'baneshwor@healthyhome.com.np', hours: 'Sun-Fri 9am-6pm', rating: 4.8, reviews: 180 },
   { id: 'jamal', name: 'Healthy Home Jamal', address: 'Jamal', city: 'Kathmandu', state: 'Bagmati', locationLine: 'Jamal, Kathmandu', mapUrl: 'https://maps.app.goo.gl/ZdxX8pigNibXbvBk9', phone: '01-5363219', email: 'jamal@healthyhome.com.np', hours: 'Sun-Fri 9am-6pm', rating: 4.8, reviews: 191 },
   { id: 'chhaya', name: 'Healthy Home Chhaya Center', address: 'Chhaya Center', city: 'Kathmandu', state: 'Bagmati', locationLine: 'Chhaya Center, Kathmandu', phone: '', hours: 'Sun-Fri 9am-6pm', tag: 'Mini', services: ['bca-testing', 'derma-consultation'] },
@@ -499,6 +509,12 @@ export const centers: Center[] = [
 
 /** Branches currently trading. Opening-soon branches are excluded. */
 export const openCenters = centers.filter(c => !c.openingSoon);
+
+/**
+ * Branches a visitor can actually book at: trading, and patient-facing.
+ * Excludes opening-soon branches and any flagged `noBooking` (the head office).
+ */
+export const bookableCenters = openCenters.filter(c => !c.noBooking);
 
 /** Aggregate of the real per-branch Google metrics above. Branches with no
  *  listing (e.g. Chhaya) are excluded from the average but add 0 to the total. */

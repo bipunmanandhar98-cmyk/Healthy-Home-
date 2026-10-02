@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState, type R
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, MapPin, ChevronDown, Calendar, Star, ArrowRight, Check, Sparkles } from 'lucide-react';
-import { treatments, subServices, centers, openCenters, googleRating } from '../data/content';
+import { treatments, subServices, centers, bookableCenters, googleRating } from '../data/content';
 import { sendBookingConfirmation, type SendResult } from '../lib/bookingEmail';
 import { slugify } from '../data/content';
 import { IMG } from '../data/images';
@@ -50,10 +50,11 @@ function BookingModal() {
   useEffect(() => {
     if (open) {
       setStep(0); setDone(null); setErr(''); setEmailResult(null); setSending(false);
-      // Never preselect a branch that isn't trading yet, even if a caller
-      // passes one — it isn't in the location list to be corrected.
-      const requested = centers.find(c => c.id === preset.center);
-      const target = requested && !requested.openingSoon ? requested : openCenters[0];
+      // Never preselect a branch that can't take a booking — not one that isn't
+      // trading yet, and not the head office. Such a branch isn't selectable in
+      // the location list, so there'd be nothing for the visitor to correct.
+      const requested = bookableCenters.find(c => c.id === preset.center);
+      const target = requested ?? bookableCenters[0];
       const targetId = target.id;
       // Default to something this branch actually offers, otherwise the modal
       // would open already out of scope. An explicit preset still wins, and is
@@ -118,7 +119,7 @@ function BookingModal() {
 
     const result: SendResult = await sendBookingConfirmation({
       to_email: email.trim(),
-      reply_to: center?.email ?? import.meta.env.VITE_EMAILJS_REPLY_TO ?? 'admin@healthyhome.com.np',
+      reply_to: center?.email ?? 'admin@healthyhome.com.np',
       client_name: name.trim(),
       booking_code: code,
       service_name: activeService?.name ?? '',
@@ -180,8 +181,8 @@ function BookingModal() {
                 <div className="p-6 overflow-y-auto grow">
                   {step === 0 && (
                     <div className="grid sm:grid-cols-2 gap-3">
-                      {openCenters.map(c => (
-                        <button key={c.id} onClick={() => setCenterId(c.id)} className={`text-left rounded-2xl border p-4 transition ${centerId === c.id ? 'border-gold bg-white shadow-md' : 'border-linen bg-white/60 hover:border-gold/50'}`}>
+                      {bookableCenters.map(c => (
+                        <button key={c.id} onClick={() => setCenterId(c.id)} aria-pressed={centerId === c.id} className={`text-left rounded-2xl border p-4 transition ${centerId === c.id ? 'border-gold bg-white shadow-md' : 'border-linen bg-white/60 hover:border-gold/50'}`}>
                           <span className="flex items-center gap-1.5 font-medium text-sm"><MapPin size={14} className="text-gold" /> {c.name}{c.flagship && <span className="text-[10px] bg-gold text-white px-2 py-0.5 rounded-full ml-1">FLAGSHIP</span>}</span>
                           <span className="block text-xs text-stone2 mt-1">{c.locationLine ?? `${c.address}, ${c.city}, ${c.state}`}</span>
                           {c.rating || c.phone ? <span className="flex items-center gap-1 text-xs mt-1.5 text-mocha">{c.rating ? <><Star size={12} className="fill-gold text-gold" /> {c.rating} ({c.reviews?.toLocaleString()} Google reviews)</> : null}{c.rating && c.phone ? ' · ' : ''}{c.phone ?? ''}</span> : null}
@@ -191,6 +192,27 @@ function BookingModal() {
                               : 'All services available'}
                           </span>
                         </button>
+                      ))}
+
+                      {/* Head office: real branch, but not a patient-facing clinic.
+                          Shown greyed out and non-interactive so the visitor can see
+                          it exists and understand why it can't be picked. */}
+                      {centers.filter(c => c.noBooking).map(c => (
+                        <div
+                          key={c.id}
+                          role="group"
+                          aria-disabled="true"
+                          className="text-left rounded-2xl border border-dashed border-linen bg-sand/40 p-4 opacity-60 cursor-not-allowed select-none"
+                        >
+                          <span className="flex items-center gap-1.5 font-medium text-sm text-stone2">
+                            <MapPin size={14} className="shrink-0" />
+                            {c.name}
+                            <span className="text-[10px] bg-linen text-stone2 px-2 py-0.5 rounded-full ml-1">HEAD OFFICE</span>
+                          </span>
+                          <span className="block text-xs text-stone2 mt-1">{c.locationLine ?? `${c.address}, ${c.city}, ${c.state}`}</span>
+                          {c.phone ? <span className="block text-xs mt-1.5 text-stone2">{c.phone}</span> : null}
+                          <span className="block text-[11px] mt-1.5 text-stone2">{c.noBookingNote ?? 'Appointments not available at this branch'}</span>
+                        </div>
                       ))}
                     </div>
                   )}
