@@ -301,16 +301,77 @@ export default function Home() {
         </div>
       </div>
 
-    {/* STATS */}
-    <section className="max-w-7xl mx-auto px-4 py-14 lg:py-16">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-        {[[<Building2 key="b" size={20} />, '6', 'Branch across Nepal', false], [<Users key="u" size={20} />, '50K+', 'Sessions Received', true], [<Award key="a" size={20} />, '21+', 'Years of expertise', false], [<Star key="s" size={20} />, String(googleRating.average), 'Google rating', false]].map(([icon, n, l, animated], i) => (
-          <motion.div key={i} {...fadeUp} className="bg-white border border-linen rounded-3xl p-6 text-center">
-            <div className="text-gold mx-auto w-fit">{icon}</div>
-            <p className="font-display text-4xl mt-2">{animated ? <CountUp to={50} suffix="K+" /> : <>{n}</>}</p>
-            <p className="text-xs tracking-widest uppercase text-stone2 mt-1">{l}</p>
-          </motion.div>
-        ))}
+    {/* STATS — "Why Trust" band.
+        Full-bleed rather than max-w-7xl, so the arc runs off both edges and the
+        band does not read as a stray box floating in the page. The ground is a
+        flat bg-espresso rather than a gradient: the figures are light text on a
+        dark ground, so a single even colour keeps their contrast consistent
+        across the whole width instead of varying left to right. The heading is a
+        real h2, so the band is reachable by keyboard and screen readers rather
+        than being decoration. */}
+    <section className="relative overflow-hidden bg-espresso">
+      {/* Faint arc bleeding off the right edge. */}
+      <div
+        aria-hidden="true"
+        className="absolute -right-[18%] -top-[120%] w-[46%] aspect-square rounded-full border border-goldlight/15"
+      />
+
+      {/* Padding and figure size are tuned so the band lands near 1900x325 at a
+          wide desktop: it is a banner, not a block of cards, and the height is
+          content-driven rather than a fixed aspect. */}
+      <div className="relative max-w-7xl mx-auto px-4 py-12 lg:py-16">
+        <div className="grid lg:grid-cols-[0.92fr_1.45fr] gap-10 lg:gap-16 items-center">
+
+          {/* Left: heading and standfirst */}
+          <div className="max-w-md">
+            <span aria-hidden="true" className="block h-px w-14 bg-goldlight mb-4" />
+            <h2 className="font-display text-4xl sm:text-5xl leading-[1.05] text-cream">
+              Why Trust
+              <span className="block italic text-goldlight">Healthy Home?</span>
+            </h2>
+            <p className="text-[15px] leading-relaxed text-mist mt-4">
+              Your wellness journey, backed by experience, expertise and a growing community.
+            </p>
+          </div>
+
+          {/* Right: the four figures, 2 x 2.
+              A badge, a hairline rule and the figure read left to right, so the
+              eye lands on the number without the label competing with it. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7 lg:gap-x-12 lg:gap-y-8">
+            {([
+              { badge: <Building2 size={22} />, value: '6', label: 'Branch across Nepal', animated: false },
+              { badge: <Users size={22} />, value: '50K+', label: 'Sessions received', animated: true },
+              { badge: <Award size={22} />, value: '21+', label: 'Years of expertise', animated: false },
+              /* A lettered G rather than a star: this figure is Google's own
+                 rating, and the mark now has to stand on its own on a dark
+                 ground where a filled star would read as another statistic. */
+              { badge: <span className="font-display text-[22px] leading-none pt-0.5">G</span>, value: String(googleRating.average), label: 'Google rating', animated: false },
+            ]).map((s, i) => (
+              <motion.div
+                key={s.label}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.06 }}
+                className="flex items-center gap-4"
+              >
+                <span
+                  aria-hidden="true"
+                  className="w-12 h-12 shrink-0 rounded-full grid place-items-center bg-white/[0.06] border border-goldlight/25 text-[#7FD6DC]"
+                >
+                  {s.badge}
+                </span>
+                <span aria-hidden="true" className="w-px h-10 shrink-0 bg-white/15" />
+                <div className="min-w-0">
+                  <p className="font-display text-4xl sm:text-5xl leading-none text-cream">
+                    {s.animated ? <CountUp to={50} suffix="K+" /> : s.value}
+                  </p>
+                  <p className="text-[11px] tracking-[0.22em] uppercase text-mist mt-2">
+                    {s.label}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
 

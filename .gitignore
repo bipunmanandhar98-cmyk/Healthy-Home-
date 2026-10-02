@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# Environment files.
+#
+# `.env` holds the EmailJS service id, template ids and public key. The public
+# key is designed to be shipped to the browser, but the rest of the file should
+# never be committed, and there is no reason to risk it. `.env.example` IS
+# committed, and is the template for it.
+.env
+.env.local
+.env.*.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

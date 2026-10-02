@@ -226,11 +226,11 @@ const faqList = [
   },
   {
     q: 'What is the total investment required?',
-    a: 'Investment ranges from Rs. 35 Lakh for an Express Centre to Rs. 2.5 Crore for a Flagship Destination. This covers the franchise fee, interiors, equipment, initial inventory, licensing and pre-opening training. We recommend keeping an additional 3–4 months of operating capital as a working-capital buffer, which is not included in the figure.',
+    a: 'Investment starts at around Rs. 2 Crore, with a larger regional centre sitting at the upper end of that scale. This covers the franchise fee, interiors, equipment, initial inventory, licensing and pre-opening training. We recommend keeping an additional 3-4 months of operating capital as a working-capital buffer, which is not included in the figure.',
   },
   {
     q: 'Is there a franchise fee and ongoing royalty?',
-    a: 'Yes. A one-time franchise fee is charged on signing, with a structured payment plan available. The ongoing royalty is a percentage of monthly net revenue and decreases with format size — 6% for Express, 5% for Signature and 4% for Flagship. Marketing contributions are bundled into the royalty; there is no separate ad-levy.',
+    a: 'Yes. A one-time franchise fee is charged on signing, with a structured payment plan available. The ongoing royalty is a percentage of monthly net revenue and decreases with the size of the centre you open - 6% for a smaller centre, 5% for a mid-size centre and 4% for a large regional one. Marketing contributions are bundled into the royalty; there is no separate ad-levy.',
   },
   {
     q: 'Do I need a healthcare or medical background?',
@@ -242,7 +242,7 @@ const faqList = [
   },
   {
     q: 'How long before my centre breaks even?',
-    a: 'Signature and Flagship branches typically reach monthly break-even between month 9 and month 18, depending on location, format and how early the branch opens. We will walk you through a conservative financial projection using your specific site data during the discovery call — and we will tell you honestly if a location is not viable.',
+    a: 'Larger branches typically reach monthly break-even between month 9 and month 18, depending on location, the size of the centre and how early it opens. We will walk you through a conservative financial projection using your specific site data during the discovery call - and we will tell you honestly if a location is not viable.',
   },
   {
     q: 'What training is provided before opening?',
@@ -803,7 +803,7 @@ export default function Franchise() {
               <img loading="lazy" decoding="async" src={IMG.franchise.reviewAvatar} alt="" className="w-12 h-12 rounded-full object-cover" />
               <div className="text-left">
                 <p className="font-medium text-sm">Rajan Karki</p>
-                <p className="text-xs text-stone2">Signature Centre Franchisee &middot; Pokhara</p>
+                <p className="text-xs text-stone2">Franchisee &middot; Pokhara</p>
               </div>
             </div>
           </div>
