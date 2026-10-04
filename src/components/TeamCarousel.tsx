@@ -35,11 +35,6 @@ import TeamAvatar from './TeamAvatar';
 const W_ACTIVE = 'w-[200px] sm:w-[250px]';
 const W_REST = 'w-[118px] sm:w-[140px]';
 
-/** How long a tile takes to resize between selected and neighbour. Applied as an
- *  inline style rather than a `duration-*` class so the centring pass below can
- *  reuse the same number and the two cannot drift apart. */
-const TILE_MS = 500;
-
 export default function TeamCarousel() {
   const [index, setIndex] = useState(0);
   const active = team[index]!;
@@ -56,28 +51,18 @@ export default function TeamCarousel() {
      offsetLeft resolves against a further ancestor and comes back far too small,
      which silently collapses this calculation. Assigning scrollLeft rather than
      calling scrollTo() is the form that reliably takes effect; the smooth
-     animation comes from the `scroll-smooth` class.
-
-     This runs twice on purpose. Tiles animate their width, so measuring
-     immediately after the selection changes catches a tile mid-resize and centres
-     on the wrong width — the tile landed 8-55px off depending on where in the row
-     it sat. The second pass runs once the resize has settled. */
+     animation comes from the `scroll-smooth` class. */
   useEffect(() => {
     const strip = stripRef.current;
     const tile = strip?.querySelector<HTMLElement>('[aria-current="true"]');
     if (!strip || !tile) return;
     const max = strip.scrollWidth - strip.clientWidth;
     if (max <= 0) return;
-    const centre = () => {
-      const stripBox = strip.getBoundingClientRect();
-      const tileBox = tile.getBoundingClientRect();
-      const offsetWithinStrip = strip.scrollLeft + (tileBox.left - stripBox.left);
-      const left = offsetWithinStrip - (strip.clientWidth - tileBox.width) / 2;
-      strip.scrollLeft = Math.min(max, Math.max(0, left));
-    };
-    centre();
-    const settle = window.setTimeout(centre, TILE_MS + 20);
-    return () => window.clearTimeout(settle);
+    const stripBox = strip.getBoundingClientRect();
+    const tileBox = tile.getBoundingClientRect();
+    const offsetWithinStrip = strip.scrollLeft + (tileBox.left - stripBox.left);
+    const left = offsetWithinStrip - (strip.clientWidth - tileBox.width) / 2;
+    strip.scrollLeft = Math.min(max, Math.max(0, left));
   }, [index]);
 
   return (
@@ -99,10 +84,21 @@ export default function TeamCarousel() {
             onClick={() => setIndex(i)}
             aria-label={`Show ${m.name}`}
             aria-current={i === index}
-            className={`shrink-0 overflow-hidden rounded-xl transition-all ease-out ${
+            /* Suppress the focus that mousedown would otherwise place on the
+               tile. Focusing one scrolls it into view, and this site sets
+               `html { scroll-behavior: smooth }`, so the browser's scroll was
+               animated — the whole page glided a little on every click, which
+               read as a bounce. The click still selects; keyboard users are
+               unaffected because Tab still focuses and :focus-visible still
+               draws the ring. */
+            onMouseDown={(e) => e.preventDefault()}
+            /* Only opacity animates. The width step is instant: animating it made
+               the row's content width change for the duration of the transition
+               while the strip was also scrolling to re-centre, and those two
+               fighting each other is the other half of the wobble. */
+            className={`shrink-0 overflow-hidden rounded-xl transition-opacity duration-500 ease-out ${
               i === index ? W_ACTIVE : `${W_REST} opacity-45 hover:opacity-75`
             }`}
-            style={{ transitionDuration: `${TILE_MS}ms` }}
           >
             <TeamAvatar
               m={m}
