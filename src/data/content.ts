@@ -620,29 +620,41 @@ export const featuredTestimonials: Testimonial[] = FEATURED_REVIEW_NAMES
   .map(name => testimonials.find(t => t.name === name))
   .filter((t): t is Testimonial => t !== undefined);
 
-/* Clinical leadership, shown in two places: the four-card grid on /about and the
+/* Clinical leadership, shown in two places: the card grid on /about and the
    carousel on the landing page. Both read this array, so a change here updates
    both and the two can never drift apart.
 
-   These four files are separate from the Career page's staff photos
-   (IMG.staff.*) — different people, independently replaceable.
+   ORDER MATTERS: this is the order the landing page carousel cycles through, and
+   it opens on the first person. The clinical leadership comes first, then the
+   entries that predate it.
 
-   `note` is deliberately a short, factual credential line rather than a
-   paragraph. These are named, identifiable clinicians, so nothing here should
+   `img` is optional and deliberately left unset for anyone without a confirmed
+   photograph. TeamAvatar falls back to an initials tile in that case, because
+   reusing another clinician's picture would put a real, named person's face
+   against a different real, named colleague — worse than showing no face at all.
+   Add a file under /public/images/team/ and a registry key when the photo is ready.
+
+   `note` is optional too, and is a short factual line only — nothing here should
    read as a clinical claim about a specific person's qualifications beyond what
-   the clinic has confirmed. If you want the longer write-ups the carousel
-   layout can hold, add them as a separate confirmed field. */
+   the clinic has confirmed. */
 export type TeamMember = {
   id: string;
   name: string;
   role: string;
   /** Short credential/ focus line, e.g. '20+ yrs · 50k+ consultations'. */
-  note: string;
+  note?: string;
   /** Path from `IMG.team.*` — never a literal, so it stays swappable. */
-  img: string;
+  img?: string;
 };
 
 export const team: TeamMember[] = [
+  { id: 'rana', name: 'Dr. Arnija Rana', role: 'Dermatologist' },
+  { id: 'pokhrel', name: 'Dr. Kavita Pokhrel', role: 'Dermatologist' },
+  { id: 'sapkota', name: 'Dr. Nabin Sapkota', role: 'Chief Medical Officer' },
+  { id: 'bhattarai', name: 'Urika Bhattarai', role: 'Nutrition Consultant' },
+  { id: 'chabegu', name: 'Eksa Chabegu', role: 'Nutrition Consultant' },
+  { id: 'poudel', name: 'Sandhya Poudel', role: 'Nutrition Consultant' },
+  { id: 'joshi', name: 'Preeti Baba Joshi', role: 'Nutrition Consultant' },
   { id: 'taheri', name: 'Dr. Daniel Taheri, MD', role: 'Medical Director · Weight & Wellness', img: IMG.team.about1, note: '20+ yrs · 50k+ consultations' },
   { id: 'mitchell', name: 'Sarah Mitchell, NP-C', role: 'Lead Weight-Loss Clinician', img: IMG.team.about2, note: 'Obesity care & nutrition' },
   { id: 'alvarez', name: 'Jessica Alvarez, RN', role: 'Lead Aesthetic Specialist', img: IMG.team.about3, note: '8 yrs · skin & wellness care' },

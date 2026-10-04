@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { team } from '../data/content';
+import TeamAvatar from './TeamAvatar';
 
 /* Leadership carousel for the landing page.
  *
@@ -45,11 +46,10 @@ export default function TeamCarousel() {
                   : 'opacity-55 hover:opacity-90'
               }`}
             >
-              <img
-                src={m.img}
-                alt=""
-                loading="lazy"
-                decoding="async"
+              <TeamAvatar
+                m={m}
+                decorative
+                initialsClass="text-xl sm:text-2xl"
                 className="w-full aspect-[4/5] object-cover"
               />
             </button>
@@ -59,18 +59,19 @@ export default function TeamCarousel() {
         {/* Featured portrait */}
         <div className="order-1 lg:order-2 relative">
           <AnimatePresence mode="wait" initial={false}>
-            <motion.img
+            <motion.div
               key={active.id}
-              src={active.img}
-              alt={active.name}
-              loading="lazy"
-              decoding="async"
               initial={{ opacity: 0, x: 14 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -14 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="w-full aspect-[4/5] object-cover rounded-lg"
-            />
+            >
+              <TeamAvatar
+                m={active}
+                initialsClass="text-6xl sm:text-7xl"
+                className="w-full aspect-[4/5] object-cover rounded-lg"
+              />
+            </motion.div>
           </AnimatePresence>
         </div>
 
@@ -86,7 +87,7 @@ export default function TeamCarousel() {
             >
               <p className="font-display italic text-3xl sm:text-4xl leading-tight">{active.name}</p>
               <p className="text-golddark mt-1.5">{active.role}</p>
-              <p className="text-mocha italic leading-relaxed mt-4">{active.note}</p>
+              {active.note && <p className="text-mocha italic leading-relaxed mt-4">{active.note}</p>}
             </motion.div>
           </AnimatePresence>
 

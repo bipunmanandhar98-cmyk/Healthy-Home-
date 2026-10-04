@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Award, HeartHandshake, Microscope, ArrowRight, Quote } from 'lucide-react';
 import { useBooking } from '../components/booking';
 import { SectionHead, CtaBanner } from '../components/shared';
+import TeamAvatar from '../components/TeamAvatar';
 import { googleRating, team } from '../data/content';
 import { IMG } from '../data/images';
 
@@ -55,9 +56,9 @@ export default function About() {
           <SectionHead eyebrow="Leadership & Experts" title="Hands you can trust" sub="A few of the 200+ clinicians, coaches and aestheticians behind your results." />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
             {team.map((m, i) => (
-              <motion.div key={m.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="bg-white rounded-3xl overflow-hidden border border-linen group">
-                <div className="h-64 overflow-hidden"><img loading="lazy" decoding="async" src={m.img} alt={m.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" /></div>
-                <div className="p-5"><p className="font-display text-xl">{m.name}</p><p className="text-xs text-golddark tracking-wide uppercase mt-0.5">{m.role}</p><p className="text-xs text-stone2 mt-1">{m.note}</p></div>
+              <motion.div key={m.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="bg-white rounded-3xl overflow-hidden border border-linen group">
+                <div className="h-64 overflow-hidden"><TeamAvatar m={m} initialsClass="text-5xl" className="w-full h-full object-cover" /></div>
+                <div className="p-5"><p className="font-display text-xl">{m.name}</p><p className="text-xs text-golddark tracking-wide uppercase mt-0.5">{m.role}</p>{m.note && <p className="text-xs text-stone2 mt-1">{m.note}</p>}</div>
               </motion.div>
             ))}
           </div>
