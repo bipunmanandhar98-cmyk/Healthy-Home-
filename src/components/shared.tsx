@@ -40,7 +40,14 @@ export function SectionHead({ eyebrow, title, sub, center = true, light = false 
   return (
     <div className={`${center ? 'text-center mx-auto' : ''} max-w-2xl`}>
       <p className={`text-[11px] tracking-[0.35em] uppercase font-medium ${light ? 'text-goldlight' : 'text-golddark'}`}>{eyebrow}</p>
-      <h2 className={`font-display text-4xl sm:text-5xl mt-3 leading-[1.05] ${light ? 'text-white' : 'text-ink'}`}>{title}</h2>
+      {/* leading-[1.14], not the 1.05 this was set to. 1.05 was correct for the
+          Cormorant Garamond serif these headings used to be set in, but the
+          display face is now Century Gothic Pro / Montserrat — a geometric sans
+          with a large x-height and tall ascenders. At 48px, 1.05 leaves descenders
+          in a wrapped heading touching the ascenders of the line below. Section
+          titles are the most-wrapped headings on the site, so this one value
+          governs nearly all of them. */}
+      <h2 className={`font-display text-4xl sm:text-5xl mt-3 leading-[1.14] ${light ? 'text-white' : 'text-ink'}`}>{title}</h2>
       {sub && <p className={`mt-4 text-[15px] leading-relaxed ${light ? 'text-mist' : 'text-mocha'}`}>{sub}</p>}
     </div>
   );

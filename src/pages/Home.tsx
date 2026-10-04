@@ -191,12 +191,16 @@ export default function Home() {
                   {heroSlides[heroSlide].eyebrow}
                 </motion.p>
 
+                {/* leading-[1.04], up to 68px. Was 0.98, set for the old serif; the geometric
+                    display face has a much taller x-height, so at 0.98 the
+                    descenders closed on the line below. Kept tight because this
+                    is display type and should still read as a headline. */}
                 <motion.h1
                   variants={{
                     hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
                     visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
                   }}
-                  className="font-display text-4xl sm:text-5xl lg:text-[58px] xl:text-[68px] leading-[0.98] mt-4"
+                  className="font-display text-4xl sm:text-5xl lg:text-[58px] xl:text-[68px] leading-[1.04] mt-4"
                 >
                   {heroSlides[heroSlide].title}
                 </motion.h1>
@@ -353,7 +357,9 @@ export default function Home() {
     <section className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
       <div className="max-w-2xl">
         <p className="text-[10px] tracking-[0.3em] uppercase text-golddark">What We Do</p>
-        <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-[0.95] mt-2">
+        {/* Was leading-[0.95] — the tightest leading on the site, and at lg:text-6xl
+            (60px) that overlapped outright. Now 1.06. */}
+        <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-[1.06] mt-2">
           Personalized care,<br />
           <span className="gold-text non-italic">without the pressure.</span>
         </h2>
@@ -451,7 +457,7 @@ export default function Home() {
           {/* Left: heading and standfirst */}
           <div className="max-w-md">
             <span aria-hidden="true" className="block h-px w-14 bg-gold mb-4" />
-            <h2 className="font-display text-4xl sm:text-5xl leading-[1.05] text-ink">
+            <h2 className="font-display text-4xl sm:text-5xl leading-[1.12] text-ink">
               Why Trust
               <span className="block italic text-gold">Healthy Home?</span>
             </h2>
@@ -486,7 +492,7 @@ export default function Home() {
                 </span>
                 <span aria-hidden="true" className="w-px h-10 shrink-0 bg-linen" />
                 <div className="min-w-0">
-                  <p className="font-display text-4xl sm:text-5xl leading-none text-ink">
+                  <p className="font-display text-4xl sm:text-5xl leading-[1.1] text-ink">
                     {s.animated ? <CountUp to={50} suffix="K+" /> : s.value}
                   </p>
                   <p className="text-[11px] tracking-[0.22em] uppercase text-ink mt-2">
