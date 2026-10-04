@@ -9,7 +9,7 @@ import TestimonialCarousel from '../components/TestimonialCarousel';
 import TeamCarousel from '../components/TeamCarousel';
 import WhatsAppWidget from '../components/WhatsAppWidget';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { IMG } from '../data/images';
 
 const fadeUp = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } as const;
@@ -37,6 +37,39 @@ export default function Home() {
     window.scrollTo({ top, behavior: 'smooth' });
   };
   const brands = ['BCA TEST', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL','LAB TEST'];
+
+  /* How many brand items one copy of the marquee should hold.
+   *
+   * A -50% slide only loops seamlessly when a single copy is at least as wide as
+   * the viewport. Five services make a list roughly half the width of a desktop
+   * screen, so by the far end of every lap the track had run out and left bare
+   * space on the right.
+   *
+   * Rather than hardcode a count that happens to suit one window, repeat the list
+   * until one copy covers the viewport, re-measuring on resize. The count is kept
+   * a whole number of full passes through `brands`, otherwise the lap boundary
+   * would land mid-cycle and the same service would appear twice in a row. */
+  const marqueeSample = useRef<HTMLSpanElement>(null);
+  const [marqueeCount, setMarqueeCount] = useState(brands.length * 2);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const sample = marqueeSample.current;
+      if (!sample) return;
+      const item = sample.getBoundingClientRect().width;
+      if (!item) return;
+      const cycle = item * brands.length;
+      // +1 spare pass, so a resize that lands just short still covers the width.
+      const cycles = Math.max(2, Math.ceil(window.innerWidth / cycle) + 1);
+      const next = cycles * brands.length;
+      setMarqueeCount(prev => (prev === next ? prev : next));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+    /* brands is a module-level constant, so this is a stable 5 and the effect
+       still runs exactly once. */
+  }, [brands.length]);
 
   const heroSlides = [
     {
@@ -250,41 +283,45 @@ export default function Home() {
       {/* Brand marquee — full-bleed, looping continuously. */}
       <div className="marquee-viewport mt-7 border-y border-linen bg-white/60 py-3.5 overflow-hidden">
         <div className="marquee-track flex w-max">
-          {/* Two identical copies, each with its own trailing gap. The track slides
-              by -50%, which is then exactly one copy's full width, so the loop
-              closes with no seam.
+          {/* Two identical copies, so the -50% slide is exactly one copy's width
+              and the lap closes with no seam. Each copy repeats the list as many
+              times as it needs to cover the viewport, so the strip is never short
+              of text part-way through a lap.
 
-              Spreading the gap across all ten items instead (as a single gap on the
-              track) left half a gap short of where the second copy began — a 20px
-              jump on every lap. Giving each copy its own pr-10 is what makes the
-              two halves match exactly. */}
+              The trailing gap lives on each item (pr-10) rather than on the flex
+              container. That keeps every item the same width, which is what lets
+              the copy be measured and repeated without drift. */}
           {[0, 1].map(copy => (
-            <div key={copy} inert={copy === 1} className="flex items-center gap-10 pr-10">
-              {brands.map(b => (
-                <span
-                  key={b}
-                  className="text-xs tracking-[0.3em] uppercase text-mocha flex items-center gap-5 leading-none h-6"
-                >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      // Lab Tests isn't in the featured grid, so send it to its own page.
-                      if (b === 'LAB TEST') { navigate('/services/lab-tests'); return; }
-                      scrollToSection(
-                        b === 'BCA TESTING' ? 'bca-testing' :
-                        b === 'WEIGHT LOSS' ? 'weight-management' :
-                        b === 'CHEMICAL PEELING' ? 'chemical-peeling' :
-                        b === 'HYDRAFACIAL' ? 'hydrafacial' :
-                        'laser-hair-removal'
-                      );
-                    }}
-                    className="inline-flex items-center gap-5 min-h-[44px] leading-none hover:text-golddark transition-colors duration-300"
+            <div key={copy} inert={copy === 1} className="flex items-center">
+              {Array.from({ length: marqueeCount }, (_, i) => {
+                const b = brands[i % brands.length]!;
+                return (
+                  <span
+                    key={i}
+                    ref={copy === 0 && i === 0 ? marqueeSample : undefined}
+                    className="text-xs tracking-[0.3em] uppercase text-mocha flex items-center leading-none h-6 pr-10"
                   >
-                    <span>{b}</span>
-                    <img loading="lazy" decoding="async" src={IMG.brand.leaf} alt="" className="w-5 h-5 object-contain shrink-0" />
-                  </button>
-                </span>
-              ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // Lab Tests isn't in the featured grid, so send it to its own page.
+                        if (b === 'LAB TEST') { navigate('/services/lab-tests'); return; }
+                        scrollToSection(
+                          b === 'BCA TESTING' ? 'bca-testing' :
+                          b === 'WEIGHT LOSS' ? 'weight-management' :
+                          b === 'CHEMICAL PEELING' ? 'chemical-peeling' :
+                          b === 'HYDRAFACIAL' ? 'hydrafacial' :
+                          'laser-hair-removal'
+                        );
+                      }}
+                      className="inline-flex items-center gap-5 min-h-[44px] leading-none hover:text-golddark transition-colors duration-300"
+                    >
+                      <span>{b}</span>
+                      <img loading="lazy" decoding="async" src={IMG.brand.leaf} alt="" className="w-5 h-5 object-contain shrink-0" />
+                    </button>
+                  </span>
+                );
+              })}
             </div>
           ))}
         </div>
