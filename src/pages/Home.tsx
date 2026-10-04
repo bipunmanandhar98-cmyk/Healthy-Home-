@@ -6,6 +6,7 @@ import { useBooking } from '../components/booking';
 import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared';
 import BeforeAfter from '../components/BeforeAfter';
 import TestimonialCarousel from '../components/TestimonialCarousel';
+import TeamCarousel from '../components/TeamCarousel';
 import WhatsAppWidget from '../components/WhatsAppWidget';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -513,6 +514,14 @@ export default function Home() {
         <p className="text-xs text-stone2 text-center mt-6 max-w-2xl mx-auto">
           Results depend on your starting point, consistency and aftercare. A consultation maps what is realistically achievable for you.
         </p>
+      </div>
+    </section>
+
+    {/* LEADERSHIP & EXPERTS */}
+    <section className="bg-sand/60 border-y border-linen">
+      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
+        <SectionHead eyebrow="Leadership & Experts" title="Hands you can trust" sub="A few of the 200+ clinicians, coaches and aestheticians behind your results." />
+        <TeamCarousel />
       </div>
     </section>
 

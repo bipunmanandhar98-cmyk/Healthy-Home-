@@ -620,6 +620,35 @@ export const featuredTestimonials: Testimonial[] = FEATURED_REVIEW_NAMES
   .map(name => testimonials.find(t => t.name === name))
   .filter((t): t is Testimonial => t !== undefined);
 
+/* Clinical leadership, shown in two places: the four-card grid on /about and the
+   carousel on the landing page. Both read this array, so a change here updates
+   both and the two can never drift apart.
+
+   These four files are separate from the Career page's staff photos
+   (IMG.staff.*) — different people, independently replaceable.
+
+   `note` is deliberately a short, factual credential line rather than a
+   paragraph. These are named, identifiable clinicians, so nothing here should
+   read as a clinical claim about a specific person's qualifications beyond what
+   the clinic has confirmed. If you want the longer write-ups the carousel
+   layout can hold, add them as a separate confirmed field. */
+export type TeamMember = {
+  id: string;
+  name: string;
+  role: string;
+  /** Short credential/ focus line, e.g. '20+ yrs · 50k+ consultations'. */
+  note: string;
+  /** Path from `IMG.team.*` — never a literal, so it stays swappable. */
+  img: string;
+};
+
+export const team: TeamMember[] = [
+  { id: 'taheri', name: 'Dr. Daniel Taheri, MD', role: 'Medical Director · Weight & Wellness', img: IMG.team.about1, note: '20+ yrs · 50k+ consultations' },
+  { id: 'mitchell', name: 'Sarah Mitchell, NP-C', role: 'Lead Weight-Loss Clinician', img: IMG.team.about2, note: 'Obesity care & nutrition' },
+  { id: 'alvarez', name: 'Jessica Alvarez, RN', role: 'Lead Aesthetic Specialist', img: IMG.team.about3, note: '8 yrs · skin & wellness care' },
+  { id: 'nair', name: 'Dr. Priya Nair, MD', role: 'Wellness & Screening Physician', img: IMG.team.about4, note: 'Screening + lifestyle medicine' },
+];
+
 /* Products sold at the branch and online. This array is the single source of
    truth for /wellness-store: the category filter chips and the grid are both
    derived from it, so adding a product needs no other edits.

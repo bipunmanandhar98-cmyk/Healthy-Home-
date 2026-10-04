@@ -3,17 +3,8 @@ import { Link } from 'react-router-dom';
 import { Award, HeartHandshake, Microscope, ArrowRight, Quote } from 'lucide-react';
 import { useBooking } from '../components/booking';
 import { SectionHead, CtaBanner } from '../components/shared';
-import { googleRating } from '../data/content';
+import { googleRating, team } from '../data/content';
 import { IMG } from '../data/images';
-
-/* Clinical team. These four files are separate from the Career page's staff
-   photos (IMG.staff.*) — different people, independently replaceable. */
-const team = [
-  { name: 'Dr. Daniel Taheri, MD', role: 'Medical Director · Weight & Wellness', img: IMG.team.about1, note: '20+ yrs · 50k+ consultations' },
-  { name: 'Sarah Mitchell, NP-C', role: 'Lead Weight-Loss Clinician', img: IMG.team.about2, note: 'Obesity care & nutrition' },
-  { name: 'Jessica Alvarez, RN', role: 'Lead Aesthetic Specialist', img: IMG.team.about3, note: '8 yrs · skin & wellness care' },
-  { name: 'Dr. Priya Nair, MD', role: 'Wellness & Screening Physician', img: IMG.team.about4, note: 'Screening + lifestyle medicine' },
-];
 
 const values = [
   { icon: HeartHandshake, t: 'Clients first, always', s: 'Honest recommendations — we talk 1 in 5 clients OUT of services they don\u2019t need.' },
