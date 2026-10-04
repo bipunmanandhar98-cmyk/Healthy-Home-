@@ -13,6 +13,21 @@ const values = [
   { icon: Award, t: 'Mastery is mandatory', s: '100+ academy hours, ongoing clinical training, and supervised care for every specialist.' },
 ];
 
+/* Company milestones, oldest first. Rendered as the journey timeline below, which
+   alternates sides from lg up, so the order matters. */
+const journey = [
+  {
+    year: '2006',
+    title: 'A Dream Beginning',
+    body: 'Two young men, both with unparalleled ambitions and the right knowledge decided to embark on a journey to establish Healthy Home, Nepal\u2019s first weight loss clinic. Mr Krishna forgo his plans to visit Japan and decided to contribute in Nepal. Mr Mohan had just returned from an extensive experience in the wellness industry from abroad. Both forged a charming partnership with their initial outlet in Bagbazaar.',
+  },
+  {
+    year: '2008 \u2013 Present',
+    title: 'A Journey of Trust and Transformation',
+    body: 'Throughout this journey, we\u2019ve transformed countless lives, earning the trust of thousands through holistic care, proven results, and a strong community built on wellness and transformation. From 2008 to 2026, Healthy Home grew from a single vision into a trusted name in health and wellness. With over 50,000 satisfied customers and 6 thriving branches, Healthy Home continues to grow stronger, expanding through franchise opportunities, advanced technologies, and a renewed vision to inspire holistic wellness nationwide.',
+  },
+];
+
 export default function About() {
   const { openBooking } = useBooking();
   return (
@@ -34,6 +49,61 @@ export default function About() {
             {[['2005', 'Serving Nepal'], ['50K+', 'Sessions Received'], ['200+', 'Licensed providers'], ['6', 'Nepal branch'], [`${googleRating.average}★`, 'Google rating'], ['20+', 'Years of glow']].map(([n, l]) => (
               <div key={l} className="bg-white border border-linen shadow-sm rounded-2xl p-5"><p className="font-display text-3xl gold-text font-semibold">{n}</p><p className="text-[11px] tracking-widest uppercase text-stone2 mt-1">{l}</p></div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* OUR JOURNEY — timeline. Sits directly under the hero because the hero
+          already opens on "what began in 2005"; this is the detail behind it. */}
+      <section className="bg-cream border-y border-linen">
+        <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
+          <SectionHead
+            eyebrow="Our Journey"
+            title={<>From one room in Bagbazaar to <em className="gold-text not-italic">six branches</em></>}
+            sub="How two young men’s partnership grew into one of Nepal’s best-known wellness names."
+          />
+
+          <div className="relative mt-14 lg:mt-16">
+            {/* The spine. Sits at the left on mobile, where the entries stack in a
+                single column, and moves to the centre from lg up, where they
+                alternate either side of it. A sibling of the list rather than a
+                child: <ol> may only contain <li>. */}
+            <span
+              aria-hidden="true"
+              className="absolute left-0 lg:left-1/2 top-2 bottom-2 w-px -translate-x-1/2 bg-gradient-to-b from-gold via-gold/40 to-transparent"
+            />
+
+            {/* Spacing lives on the list, not on the entries. As padding inside an
+                entry it would count towards that entry's height, and the node is
+                centred on the entry — so the first node dropped 48px below its
+                own text while the last, having no trailing padding, sat correctly. */}
+            <ol className="space-y-14 lg:space-y-24">
+              {journey.map((j, i) => {
+                const onRight = i % 2 === 1;
+                return (
+                  <li key={j.year} className="relative lg:grid lg:grid-cols-2 lg:gap-16 lg:items-center">
+                    {/* Node on the spine, ringed in the section's own background so
+                        the spine appears to pass behind it rather than through. */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-0 lg:left-1/2 top-1.5 lg:top-1/2 h-3.5 w-3.5 -translate-x-1/2 lg:-translate-y-1/2 rounded-full bg-gold ring-[5px] ring-cream"
+                    />
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5 }}
+                      className={`pl-9 lg:pl-0 ${onRight ? 'lg:col-start-2' : 'lg:col-start-1'}`}
+                    >
+                      <p className="font-display text-3xl sm:text-4xl gold-text leading-none">{j.year}</p>
+                      <h3 className="font-display text-2xl sm:text-3xl mt-3">{j.title}</h3>
+                      <p className="text-[15px] text-mocha mt-3 leading-relaxed">{j.body}</p>
+                    </motion.div>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
         </div>
       </section>
