@@ -247,33 +247,45 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Brand marquee — separated from the slider */}
-      <div className="max-w-[1500px] mx-auto mt-7 border-y border-linen bg-white/60 py-3.5 overflow-hidden">
-        <div className="marquee-track flex items-center gap-10 whitespace-nowrap w-max">
-          {[...brands, ...brands].map((b, i) => (
-            <span
-              key={i}
-              className="text-xs tracking-[0.3em] uppercase text-mocha flex items-center gap-5 leading-none h-6"
-            >
-              <button
-                type="button"
-                onClick={() => {
-                  // Lab Tests isn't in the featured grid, so send it to its own page.
-                  if (b === 'LAB TEST') { navigate('/services/lab-tests'); return; }
-                  scrollToSection(
-                    b === 'BCA TESTING' ? 'bca-testing' :
-                    b === 'WEIGHT LOSS' ? 'weight-management' :
-                    b === 'CHEMICAL PEELING' ? 'chemical-peeling' :
-                    b === 'HYDRAFACIAL' ? 'hydrafacial' :
-                    'laser-hair-removal'
-                  );
-                }}
-                className="inline-flex items-center gap-5 min-h-[44px] leading-none hover:text-golddark transition-colors duration-300"
-              >
-                <span>{b}</span>
-                <img loading="lazy" decoding="async" src={IMG.brand.leaf} alt="" className="w-5 h-5 object-contain shrink-0" />
-              </button>
-            </span>
+      {/* Brand marquee — full-bleed, looping continuously. */}
+      <div className="marquee-viewport mt-7 border-y border-linen bg-white/60 py-3.5 overflow-hidden">
+        <div className="marquee-track flex w-max">
+          {/* Two identical copies, each with its own trailing gap. The track slides
+              by -50%, which is then exactly one copy's full width, so the loop
+              closes with no seam.
+
+              Spreading the gap across all ten items instead (as a single gap on the
+              track) left half a gap short of where the second copy began — a 20px
+              jump on every lap. Giving each copy its own pr-10 is what makes the
+              two halves match exactly. */}
+          {[0, 1].map(copy => (
+            <div key={copy} inert={copy === 1} className="flex items-center gap-10 pr-10">
+              {brands.map(b => (
+                <span
+                  key={b}
+                  className="text-xs tracking-[0.3em] uppercase text-mocha flex items-center gap-5 leading-none h-6"
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Lab Tests isn't in the featured grid, so send it to its own page.
+                      if (b === 'LAB TEST') { navigate('/services/lab-tests'); return; }
+                      scrollToSection(
+                        b === 'BCA TESTING' ? 'bca-testing' :
+                        b === 'WEIGHT LOSS' ? 'weight-management' :
+                        b === 'CHEMICAL PEELING' ? 'chemical-peeling' :
+                        b === 'HYDRAFACIAL' ? 'hydrafacial' :
+                        'laser-hair-removal'
+                      );
+                    }}
+                    className="inline-flex items-center gap-5 min-h-[44px] leading-none hover:text-golddark transition-colors duration-300"
+                  >
+                    <span>{b}</span>
+                    <img loading="lazy" decoding="async" src={IMG.brand.leaf} alt="" className="w-5 h-5 object-contain shrink-0" />
+                  </button>
+                </span>
+              ))}
+            </div>
           ))}
         </div>
       </div>

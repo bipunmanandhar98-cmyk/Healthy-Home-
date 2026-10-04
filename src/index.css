@@ -48,6 +48,16 @@ label {
   .hh-drop-in {
     animation: none;
   }
+  /* Stop the marquee sliding rather than merely pausing it — a still strip is
+     readable, a frozen one still implies movement. With the animation off
+     everything is laid out from translateX(0), so the clipped remainder has to
+     become scrollable or those services could not be reached at all. */
+  .marquee-track {
+    animation: none;
+  }
+  .marquee-viewport {
+    overflow-x: auto;
+  }
 }
 /*
  * Combined height of the sticky TopBar + Navbar. The hero subtracts this from
@@ -109,8 +119,18 @@ body {
   background-image: radial-gradient(rgba(0,145,154,0.10) 1px, transparent 1px);
   background-size: 22px 22px;
 }
+/* Services marquee. The track holds two identical copies and slides by -50%,
+   which is exactly one copy, so the lap closes seamlessly. */
 .marquee-track { animation: marquee 28s linear infinite; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* Hold still while hovered or focused. These are links, and a target sliding
+   under the cursor is close to unclickable; it also satisfies WCAG 2.2.2, which
+   asks for a way to pause moving content that runs longer than five seconds.
+   Keyboard users get the same thing for free via :focus-within, so tabbing to a
+   service stops the strip and lets it be activated. */
+.marquee-track:hover,
+.marquee-track:focus-within { animation-play-state: paused; }
 @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .animate-floaty { animation: floaty 5s ease-in-out infinite; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
