@@ -149,14 +149,6 @@ const registry = {
     prakritiKarki: '/images/reviews/prakriti-karki.jpg',
   },
 
-  /* ── About page: clinical team ──────────────────────────────────────── */
-  team: {
-    about1: '/images/team/about-1.jpg',
-    about2: '/images/team/about-2.jpg',
-    about3: '/images/team/about-3.jpg',
-    about4: '/images/team/about-4.jpg',
-  },
-
   /* ── Career page: staff stories ───────────────────────────────────────
      Different people from the About team, so these are separate files. */
   staff: {

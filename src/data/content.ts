@@ -625,14 +625,13 @@ export const featuredTestimonials: Testimonial[] = FEATURED_REVIEW_NAMES
    both and the two can never drift apart.
 
    ORDER MATTERS: this is the order the landing page carousel cycles through, and
-   it opens on the first person. The clinical leadership comes first, then the
-   entries that predate it.
+   it opens on the first person.
 
-   `img` is optional and deliberately left unset for anyone without a confirmed
-   photograph. TeamAvatar falls back to an initials tile in that case, because
-   reusing another clinician's picture would put a real, named person's face
-   against a different real, named colleague — worse than showing no face at all.
-   Add a file under /public/images/team/ and a registry key when the photo is ready.
+   `img` is optional and unset for everyone so far, because no confirmed
+   photograph has been supplied. TeamAvatar falls back to an initials tile in that
+   case, and a photo should only be attached to the person it actually shows —
+   never borrowed from a colleague. Add a file under /public/images/team/ and a
+   registry key in src/data/images.ts when a real photo is ready.
 
    `note` is optional too, and is a short factual line only — nothing here should
    read as a clinical claim about a specific person's qualifications beyond what
@@ -643,7 +642,7 @@ export type TeamMember = {
   role: string;
   /** Short credential/ focus line, e.g. '20+ yrs · 50k+ consultations'. */
   note?: string;
-  /** Path from `IMG.team.*` — never a literal, so it stays swappable. */
+  /** Path from the registry in src/data/images.ts — never a literal. */
   img?: string;
 };
 
@@ -655,10 +654,6 @@ export const team: TeamMember[] = [
   { id: 'chabegu', name: 'Eksa Chabegu', role: 'Nutrition Consultant' },
   { id: 'poudel', name: 'Sandhya Poudel', role: 'Nutrition Consultant' },
   { id: 'joshi', name: 'Preeti Baba Joshi', role: 'Nutrition Consultant' },
-  { id: 'taheri', name: 'Dr. Daniel Taheri, MD', role: 'Medical Director · Weight & Wellness', img: IMG.team.about1, note: '20+ yrs · 50k+ consultations' },
-  { id: 'mitchell', name: 'Sarah Mitchell, NP-C', role: 'Lead Weight-Loss Clinician', img: IMG.team.about2, note: 'Obesity care & nutrition' },
-  { id: 'alvarez', name: 'Jessica Alvarez, RN', role: 'Lead Aesthetic Specialist', img: IMG.team.about3, note: '8 yrs · skin & wellness care' },
-  { id: 'nair', name: 'Dr. Priya Nair, MD', role: 'Wellness & Screening Physician', img: IMG.team.about4, note: 'Screening + lifestyle medicine' },
 ];
 
 /* Products sold at the branch and online. This array is the single source of
