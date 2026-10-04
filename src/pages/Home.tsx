@@ -278,74 +278,25 @@ export default function Home() {
         </div>
       </div>
 
-    {/* STATS — "Why Trust" band.
-        Uses the site's most common section treatment (bg-white with linen
-        rules) rather than a dark slab, so the band sits with its neighbours
-        instead of interrupting them. Dark espresso is reserved for the footer
-        and the CTA banner.
-        Layout keeps the approved structure: heading left, figures 2x2 right.
-        The heading is a real h2, so the band is reachable by screen readers.
-
-        Labels use text-ink, not the site's usual text-stone2. Measured on this
-        ground stone2 is only 2.7:1, which fails WCAG AA for small text. Ink is
-        14.7:1. The standfirst keeps text-mocha, which is the site's body colour
-        and clears AA on white at 4.6:1. */} 
-    <section className="bg-white border-y border-linen">
-      {/* Padding and figure size are tuned so the band lands near 1900x325 at a
-          wide desktop: it is a banner, not a block of cards, and the height is
-          content-driven rather than a fixed aspect. */}
-      <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16">
-        <div className="grid lg:grid-cols-[0.92fr_1.45fr] gap-10 lg:gap-16 items-center">
-
-          {/* Left: heading and standfirst */}
-          <div className="max-w-md">
-            <span aria-hidden="true" className="block h-px w-14 bg-gold mb-4" />
-            <h2 className="font-display text-4xl sm:text-5xl leading-[1.05] text-ink">
-              Why Trust
-              <span className="block italic text-gold">Healthy Home?</span>
-            </h2>
-            <p className="text-[15px] leading-relaxed text-mocha mt-4">
-              Your wellness journey, backed by experience, expertise and a growing community.
-            </p>
-          </div>
-
-          {/* Right: the four figures, 2 x 2.
-              A badge, a hairline rule and the figure read left to right, so the
-              eye lands on the number without the label competing with it. */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7 lg:gap-x-12 lg:gap-y-8">
-            {([
-              { badge: <Building2 size={22} />, value: '6', label: 'Branch across Nepal', animated: false },
-              { badge: <Users size={22} />, value: '50K+', label: 'Sessions received', animated: true },
-              { badge: <Award size={22} />, value: '21+', label: 'Years of expertise', animated: false },
-              /* A lettered G rather than a star, so the Google figure carries its
-                 own identity instead of reading as another symbol. */
-              { badge: <span className="font-display text-[22px] leading-none pt-0.5">G</span>, value: String(googleRating.average), label: 'Google rating', animated: false },
-            ]).map((s, i) => (
-              <motion.div
-                key={s.label}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.06 }}
-                className="flex items-center gap-4"
-              >
-                <span
-                  aria-hidden="true"
-                  className="w-12 h-12 shrink-0 rounded-full grid place-items-center bg-sand/60 border border-linen text-gold"
-                >
-                  {s.badge}
-                </span>
-                <span aria-hidden="true" className="w-px h-10 shrink-0 bg-linen" />
-                <div className="min-w-0">
-                  <p className="font-display text-4xl sm:text-5xl leading-none text-ink">
-                    {s.animated ? <CountUp to={50} suffix="K+" /> : s.value}
-                  </p>
-                  <p className="text-[11px] tracking-[0.22em] uppercase text-ink mt-2">
-                    {s.label}
-                  </p>
-                </div>
-              </motion.div>
+    {/* EXPERIENCE / WHY */}
+    <section className="bg-white border-y border-linen relative overflow-hidden">
+      <div className="absolute inset-0 texture-grain opacity-60" />
+      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center relative">
+        <motion.div {...fadeUp}>
+          <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">The Healthy Home Experience</p>
+          <h2 className="font-display text-4xl sm:text-5xl mt-3 leading-tight text-ink">Luxury you feel.<br />Service you can <em className="gold-text not-italic">trust.</em></h2>
+          <div className="grid gap-5 mt-8">
+            {[['Guided care, always', 'Every branch is staffed by clinicians, wellness coaches and licensed aestheticians with 100+ hours of Healthy Home academy training.'], ['Natural & non-invasive first', 'Weight-loss coaching, non-invasive aesthetic treatments, screening-led plans and lifestyle products — no surgery, no extremes.'], ['Honest, mapped pricing', 'Body/fat assessment, labs and written service plans before you spend a rupee. Members save 15-25% with rollover banked value.']].map(([t, s]) => (
+              <div key={t} className="flex gap-4"><div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5"><BadgeCheck size={16} className="text-golddark" /></div><div><p className="font-medium text-ink">{t}</p><p className="text-mocha text-sm mt-1 leading-relaxed">{s}</p></div></div>
             ))}
           </div>
-        </div>
+          <Link to="/about" className="inline-flex items-center gap-2 mt-8 min-h-[44px] border border-golddark/50 text-golddark px-7 py-3 rounded-full text-xs tracking-[0.2em] uppercase hover:bg-gold hover:text-white hover:border-gold transition">Our Story <ArrowRight size={14} /></Link>
+        </motion.div>
+        <motion.div {...fadeUp} className="grid grid-cols-2 gap-4">
+          <img loading="lazy" decoding="async" src={IMG.home.experienceMain} alt="Healthy Home medical professional with client" className="rounded-xl h-64 w-full object-cover col-span-2" />
+          <img loading="lazy" decoding="async" src={IMG.home.experienceDerma} alt="Dermatology service" className="rounded-xl h-52 w-full object-cover" />
+          <img loading="lazy" decoding="async" src={IMG.home.experienceWeight} alt="Weight management service" className="rounded-xl h-52 w-full object-cover" />
+        </motion.div>
       </div>
     </section>
 
@@ -429,25 +380,74 @@ export default function Home() {
       </div>
     </section>
 
-    {/* EXPERIENCE / WHY */}
-    <section className="bg-white border-y border-linen relative overflow-hidden">
-      <div className="absolute inset-0 texture-grain opacity-60" />
-      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center relative">
-        <motion.div {...fadeUp}>
-          <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">The Healthy Home Experience</p>
-          <h2 className="font-display text-4xl sm:text-5xl mt-3 leading-tight text-ink">Luxury you feel.<br />Service you can <em className="gold-text not-italic">trust.</em></h2>
-          <div className="grid gap-5 mt-8">
-            {[['Guided care, always', 'Every branch is staffed by clinicians, wellness coaches and licensed aestheticians with 100+ hours of Healthy Home academy training.'], ['Natural & non-invasive first', 'Weight-loss coaching, non-invasive aesthetic treatments, screening-led plans and lifestyle products — no surgery, no extremes.'], ['Honest, mapped pricing', 'Body/fat assessment, labs and written service plans before you spend a rupee. Members save 15-25% with rollover banked value.']].map(([t, s]) => (
-              <div key={t} className="flex gap-4"><div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5"><BadgeCheck size={16} className="text-golddark" /></div><div><p className="font-medium text-ink">{t}</p><p className="text-mocha text-sm mt-1 leading-relaxed">{s}</p></div></div>
+    {/* STATS — "Why Trust" band.
+        Uses the site's most common section treatment (bg-white with linen
+        rules) rather than a dark slab, so the band sits with its neighbours
+        instead of interrupting them. Dark espresso is reserved for the footer
+        and the CTA banner.
+        Layout keeps the approved structure: heading left, figures 2x2 right.
+        The heading is a real h2, so the band is reachable by screen readers.
+
+        Labels use text-ink, not the site's usual text-stone2. Measured on this
+        ground stone2 is only 2.7:1, which fails WCAG AA for small text. Ink is
+        14.7:1. The standfirst keeps text-mocha, which is the site's body colour
+        and clears AA on white at 4.6:1. */} 
+    <section className="bg-white border-y border-linen">
+      {/* Padding and figure size are tuned so the band lands near 1900x325 at a
+          wide desktop: it is a banner, not a block of cards, and the height is
+          content-driven rather than a fixed aspect. */}
+      <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16">
+        <div className="grid lg:grid-cols-[0.92fr_1.45fr] gap-10 lg:gap-16 items-center">
+
+          {/* Left: heading and standfirst */}
+          <div className="max-w-md">
+            <span aria-hidden="true" className="block h-px w-14 bg-gold mb-4" />
+            <h2 className="font-display text-4xl sm:text-5xl leading-[1.05] text-ink">
+              Why Trust
+              <span className="block italic text-gold">Healthy Home?</span>
+            </h2>
+            <p className="text-[15px] leading-relaxed text-mocha mt-4">
+              Your wellness journey, backed by experience, expertise and a growing community.
+            </p>
+          </div>
+
+          {/* Right: the four figures, 2 x 2.
+              A badge, a hairline rule and the figure read left to right, so the
+              eye lands on the number without the label competing with it. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7 lg:gap-x-12 lg:gap-y-8">
+            {([
+              { badge: <Building2 size={22} />, value: '6', label: 'Branch across Nepal', animated: false },
+              { badge: <Users size={22} />, value: '50K+', label: 'Sessions received', animated: true },
+              { badge: <Award size={22} />, value: '21+', label: 'Years of expertise', animated: false },
+              /* A lettered G rather than a star, so the Google figure carries its
+                 own identity instead of reading as another symbol. */
+              { badge: <span className="font-display text-[22px] leading-none pt-0.5">G</span>, value: String(googleRating.average), label: 'Google rating', animated: false },
+            ]).map((s, i) => (
+              <motion.div
+                key={s.label}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.06 }}
+                className="flex items-center gap-4"
+              >
+                <span
+                  aria-hidden="true"
+                  className="w-12 h-12 shrink-0 rounded-full grid place-items-center bg-sand/60 border border-linen text-gold"
+                >
+                  {s.badge}
+                </span>
+                <span aria-hidden="true" className="w-px h-10 shrink-0 bg-linen" />
+                <div className="min-w-0">
+                  <p className="font-display text-4xl sm:text-5xl leading-none text-ink">
+                    {s.animated ? <CountUp to={50} suffix="K+" /> : s.value}
+                  </p>
+                  <p className="text-[11px] tracking-[0.22em] uppercase text-ink mt-2">
+                    {s.label}
+                  </p>
+                </div>
+              </motion.div>
             ))}
           </div>
-          <Link to="/about" className="inline-flex items-center gap-2 mt-8 min-h-[44px] border border-golddark/50 text-golddark px-7 py-3 rounded-full text-xs tracking-[0.2em] uppercase hover:bg-gold hover:text-white hover:border-gold transition">Our Story <ArrowRight size={14} /></Link>
-        </motion.div>
-        <motion.div {...fadeUp} className="grid grid-cols-2 gap-4">
-          <img loading="lazy" decoding="async" src={IMG.home.experienceMain} alt="Healthy Home medical professional with client" className="rounded-xl h-64 w-full object-cover col-span-2" />
-          <img loading="lazy" decoding="async" src={IMG.home.experienceDerma} alt="Dermatology service" className="rounded-xl h-52 w-full object-cover" />
-          <img loading="lazy" decoding="async" src={IMG.home.experienceWeight} alt="Weight management service" className="rounded-xl h-52 w-full object-cover" />
-        </motion.div>
+        </div>
       </div>
     </section>
 
