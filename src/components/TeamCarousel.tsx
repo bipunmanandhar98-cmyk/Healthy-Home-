@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { team } from '../data/content';
@@ -22,17 +22,58 @@ import TeamAvatar from './TeamAvatar';
 export default function TeamCarousel() {
   const [index, setIndex] = useState(0);
   const active = team[index]!;
+  const stripRef = useRef<HTMLDivElement>(null);
 
   // Wrap around, so the arrows never dead-end on the first or last person.
   const step = (d: number) => setIndex(v => (v + d + team.length) % team.length);
+
+  /* Keep the chosen thumbnail on screen. Only a few fit beside the portrait, so
+     the dots and arrows would otherwise move to a clinician whose thumbnail is
+     scrolled out of view, leaving no clue who is showing. Centred rather than
+     merely visible, because a thumbnail clipped by the strip's own edge still
+     reads as cut off.
+     Skip when the strip is not actually scrollable, so a future narrower team
+     does not get nudged sideways for no reason. */
+  useEffect(() => {
+    const strip = stripRef.current;
+    const thumb = strip?.querySelector<HTMLElement>('[aria-current="true"]');
+    if (!strip || !thumb) return;
+    const max = strip.scrollWidth - strip.clientWidth;
+    if (max <= 0) return;
+
+    /* Measured off the two rects rather than `offsetLeft`: the strip is not
+       position:relative, so a child's offsetLeft is resolved against some
+       further ancestor instead of the strip and comes back far too small — which
+       silently collapses this whole calculation to zero. Rects are relative to
+       the viewport, so the difference between them is the offset within the
+       strip whatever the positioning context happens to be. `scrollLeft` is
+       added back because that part of the offset has already been scrolled away. */
+    const stripBox = strip.getBoundingClientRect();
+    const thumbBox = thumb.getBoundingClientRect();
+    const offsetWithinStrip = strip.scrollLeft + (thumbBox.left - stripBox.left);
+    const left = offsetWithinStrip - (strip.clientWidth - thumbBox.width) / 2;
+    /* Assign scrollLeft rather than calling scrollTo(): the smooth animation comes
+       from the `scroll-smooth` class on the strip, and assigning the property is
+       the form that reliably takes effect everywhere. */
+    strip.scrollLeft = Math.min(max, Math.max(0, left));
+  }, [index]);
 
   return (
     <div className="mt-10">
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,290px)_minmax(0,1.05fr)] lg:items-center gap-y-7">
         {/* Thumbnails. Below the portrait on a phone, to its left on a desktop.
             Horizontally scrollable rather than wrapped, so the strip never
-            reflows into two rows as the team grows. */}
-        <div className="order-2 lg:order-1 flex gap-3 overflow-x-auto no-scrollbar lg:overflow-x-visible lg:justify-end">
+            reflows into two rows as the team grows.
+
+            Scrollable at EVERY breakpoint on purpose. An earlier version overrode
+            this to `overflow-x-visible lg:justify-end` so the four-person team
+            would sit neatly against the portrait, but once the team outgrew the
+            column the overflow was pushed out the *start* edge of a
+            right-aligned flex line — where a scroll container cannot scroll back.
+            The thumbnails then ran off past the container and were clipped by the
+            viewport instead. Letting the strip scroll clips it to its own column,
+            which is what keeps it inside the red box. */}
+        <div ref={stripRef} className="order-2 lg:order-1 flex gap-3 overflow-x-auto no-scrollbar scroll-smooth">
           {team.map((m, i) => (
             <button
               key={m.id}
