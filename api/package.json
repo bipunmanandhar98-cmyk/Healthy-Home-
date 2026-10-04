@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Vercel serverless function. Dependencies live here rather than in the root package.json so the Resend SDK is never bundled into the browser.",
+  "description": "Vercel serverless function. `resend` is declared here AND in the root package.json: the root copy is what lets `tsc -b` type-check api/send.ts during `npm run build`, because Vercel only runs the root `npm install`. Declaring it in both places does NOT put the SDK in the browser - nothing under api/ is reachable from src/, so Vite never bundles it.",
   "dependencies": {
     "resend": "^4.0.1"
   }
