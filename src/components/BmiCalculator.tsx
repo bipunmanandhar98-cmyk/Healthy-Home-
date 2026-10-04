@@ -162,7 +162,7 @@ function BmiBar({ bmi, color }: { bmi: number; color: string }) {
           style={{ left: `calc(${markerPct}% - 2px)`, background: '#14100E' }}
         />
         <span
-          className="absolute top-3 -translate-x-1/2 text-[10px] font-semibold whitespace-nowrap text-ink"
+          className="absolute top-3 -translate-x-1/2 text-[11px] font-semibold whitespace-nowrap text-ink"
           style={{ left: `${markerPct}%` }}
         >
           {bmi.toFixed(1)}
@@ -171,7 +171,7 @@ function BmiBar({ bmi, color }: { bmi: number; color: string }) {
 
       {/* Cut-off scale. Each label is nudged so it sits at its own boundary
           rather than being centred in a fixed column. */}
-      <div className="relative h-4 text-[9px] text-stone2">
+      <div className="relative h-4 text-[10px] text-stone2">
         {BMI_BANDS.slice(1).map((b) => {
           const pct = ((b.from - BMI_MIN) / span) * 100;
           return (
@@ -465,12 +465,12 @@ export default function BmiCalculator({ compact = false }: { compact?: boolean }
                           <div className="relative w-[140px] h-[140px]">
                             <BmiRing bmi={rounded} color={cat.color} />
                             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                              <span className="text-[10px] tracking-[0.15em] uppercase text-stone2">Your BMI</span>
+                              <span className="text-[11px] tracking-[0.15em] uppercase text-stone2">Your BMI</span>
                               <span className="font-display text-4xl leading-none mt-0.5">{rounded.toFixed(1)}</span>
                             </div>
                           </div>
                           <span
-                            className="mt-2.5 text-[10px] font-semibold tracking-[0.1em] uppercase px-3 py-1 rounded-full whitespace-nowrap"
+                            className="mt-2.5 text-[11px] font-semibold tracking-[0.1em] uppercase px-3 py-1 rounded-full whitespace-nowrap"
                             style={{ background: `${cat.color}22`, color: cat.color }}
                           >
                             {cat.label}
@@ -542,18 +542,18 @@ export default function BmiCalculator({ compact = false }: { compact?: boolean }
                             <div className="min-w-0 grow">
                               <div className="flex items-center gap-2 flex-wrap">
                                 <span
-                                  className={`text-[10px] tracking-[0.15em] uppercase font-semibold px-2 py-0.5 rounded-full ${
+                                  className={`text-[11px] tracking-[0.15em] uppercase font-semibold px-2 py-0.5 rounded-full ${
                                     i === 0 ? 'bg-gold text-white' : 'bg-sand text-stone2'
                                   }`}
                                 >
                                   {i === 0 ? 'Start here' : `Step ${i + 1}`}
                                 </span>
-                                <span className="text-[10px] tracking-[0.15em] uppercase text-stone2 truncate">
+                                <span className="text-[11px] tracking-[0.15em] uppercase text-stone2 truncate">
                                   {parent.name}
                                 </span>
                                 {/* duration is real data from content.ts, so it
                                     answers "how long will this take" up front. */}
-                                <span className="text-[10px] text-stone2 inline-flex items-center gap-1 shrink-0">
+                                <span className="text-[11px] text-stone2 inline-flex items-center gap-1 shrink-0">
                                   <Clock size={10} /> {sub.duration}
                                 </span>
                               </div>
@@ -564,7 +564,7 @@ export default function BmiCalculator({ compact = false }: { compact?: boolean }
 
                             <Link
                               to={`/services/${parent.id}/${sub.id}`}
-                              className="shrink-0 bg-[#00919A] hover:bg-[#00747B] text-white rounded-full px-4 py-2 text-[10px] tracking-[0.15em] uppercase font-medium transition min-h-[40px] inline-flex items-center"
+                              className="shrink-0 bg-[#00919A] hover:bg-[#00747B] text-white rounded-full px-4 py-2 text-[11px] tracking-[0.15em] uppercase font-medium transition min-h-[40px] inline-flex items-center"
                             >
                               View
                             </Link>

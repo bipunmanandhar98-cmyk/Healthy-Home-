@@ -336,7 +336,7 @@ export default function PrivacyPolicy() {
           </Link>
           <div className="mt-4 max-w-3xl">
             <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Legal</p>
-            <h1 className="font-display text-4xl sm:text-5xl mt-3 leading-tight">
+            <h1 className="font-display text-4xl sm:text-[44px] mt-3 leading-tight">
               Privacy <em className="gold-text not-italic">Policy</em>
             </h1>
             <p className="text-mocha mt-4 leading-relaxed">

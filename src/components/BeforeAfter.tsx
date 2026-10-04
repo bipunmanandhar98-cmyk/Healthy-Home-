@@ -127,8 +127,8 @@ export default function BeforeAfter({
         />
       </div>
 
-      <span className="absolute top-3 left-3 text-[10px] tracking-[0.18em] uppercase bg-ink/70 text-white px-2.5 py-1 rounded-full pointer-events-none">{beforeLabel}</span>
-      <span className="absolute top-3 right-3 text-[10px] tracking-[0.18em] uppercase bg-gold text-white px-2.5 py-1 rounded-full pointer-events-none">{afterLabel}</span>
+      <span className="absolute top-3 left-3 text-[11px] tracking-[0.18em] uppercase bg-ink/70 text-white px-2.5 py-1 rounded-full pointer-events-none">{beforeLabel}</span>
+      <span className="absolute top-3 right-3 text-[11px] tracking-[0.18em] uppercase bg-gold text-white px-2.5 py-1 rounded-full pointer-events-none">{afterLabel}</span>
 
       {/* Divider */}
       <div className="absolute inset-y-0 w-0.5 bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.12)] pointer-events-none" style={{ left: `${pos}%` }} />

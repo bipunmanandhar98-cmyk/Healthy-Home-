@@ -31,7 +31,7 @@ export default function SubService() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="relative rounded-[2rem] overflow-hidden">
             <img src={sub.image} alt={sub.name} className="w-full h-[380px] sm:h-[460px] object-cover" />
-            <span className="absolute top-4 left-4 bg-gold text-white text-[10px] tracking-[0.15em] uppercase px-4 py-2 rounded-full">Part of {t.name}</span>
+            <span className="absolute top-4 left-4 bg-gold text-white text-[11px] tracking-[0.15em] uppercase px-4 py-2 rounded-full">Part of {t.name}</span>
           </div>
           <div className="grid grid-cols-3 gap-3 mt-4">
             {[[<Clock key="c" size={16} />, sub.duration, 'Duration'], [<ShieldCheck key="s" size={16} />, 'None', 'Downtime'], [<Sparkles key="g" size={16} />, t.results, 'Program']].map(([icon, v, l], i) => (
@@ -48,7 +48,7 @@ export default function SubService() {
           <Link to={`/services/${t.id}`} className="inline-flex items-center gap-1.5 min-h-[40px] text-[11px] tracking-[0.25em] uppercase text-golddark hover:underline underline-offset-4">
             Branched under {t.name}
           </Link>
-          <h1 className="font-display text-5xl mt-2 leading-tight">{sub.name}</h1>
+          <h1 className="font-display text-[44px] mt-2 leading-tight">{sub.name}</h1>
           <p className="font-display italic text-xl text-mocha mt-1">{t.tagline}</p>
 
           {/* What the treatment/test is */}
@@ -133,7 +133,7 @@ export default function SubService() {
               <Link key={s.id} to={`/services/${t.id}/${slugify(s.name)}`} className="group bg-white border border-linen rounded-3xl overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition flex flex-col">
                 <div className="h-36 overflow-hidden relative">
                   <img src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
-                  <span className="absolute top-3 left-3 bg-gold text-white text-[10px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full">{t.name}</span>
+                  <span className="absolute top-3 left-3 bg-gold text-white text-[11px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full">{t.name}</span>
                 </div>
                 <div className="p-5 flex flex-col grow">
                   <p className="font-display text-xl leading-tight group-hover:text-[#007C83]">{s.name}</p>

@@ -44,7 +44,7 @@ export default function About() {
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-24 grid lg:grid-cols-2 gap-10 items-center">
           <div>
             <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Our Story · Est. 2005</p>
-            <h1 className="font-display text-5xl sm:text-6xl mt-3 leading-tight">Healthy habits start <em className="gold-text not-italic">at home.</em></h1>
+            <h1 className="font-display text-[44px] sm:text-[56px] mt-3 leading-tight">Healthy habits start <em className="gold-text not-italic">at home.</em></h1>
             <p className="text-mocha mt-5 leading-relaxed max-w-lg">What began as a single flagship studio in 2005 is now a trusted wellness destination — 6 branch, 200+ clinicians, coaches and aestheticians, 50K+ services — still family-run, still focused on natural, lasting results.</p>
             <div className="flex gap-3 mt-6">
               <button onClick={() => openBooking()} className="bg-gold hover:bg-[#00747B] text-white px-7 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase shadow-lg shadow-[#00919A]/25">Meet Us In Person</button>
@@ -155,7 +155,7 @@ export default function About() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
             {team.map((m, i) => (
               <motion.div key={m.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="bg-white rounded-3xl overflow-hidden border border-linen group">
-                <div className="h-64 overflow-hidden"><TeamAvatar m={m} initialsClass="text-5xl" className="w-full h-full object-cover" /></div>
+                <div className="h-64 overflow-hidden"><TeamAvatar m={m} initialsClass="text-[44px]" className="w-full h-full object-cover" /></div>
                 <div className="p-5"><p className="font-display text-xl">{m.name}</p><p className="text-xs text-golddark tracking-wide uppercase mt-0.5">{m.role}</p>{m.note && <p className="text-xs text-stone2 mt-1">{m.note}</p>}</div>
               </motion.div>
             ))}

@@ -121,7 +121,7 @@ export default function TeamCarousel() {
             exit={reduce ? fade : { opacity: 0, y: -14, filter: 'blur(8px)' }}
             transition={{ duration: reduce ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="font-display italic text-4xl sm:text-5xl leading-tight">{active.name}</p>
+            <p className="font-display italic text-4xl sm:text-[44px] leading-tight">{active.name}</p>
             <p className="text-golddark text-sm mt-2">{active.role}</p>
             {active.note && <p className="text-mocha italic text-sm mt-2">{active.note}</p>}
           </motion.div>

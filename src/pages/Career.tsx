@@ -421,7 +421,7 @@ export default function Career() {
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Join Our Team</p>
-          <h1 className="font-display text-5xl sm:text-6xl mt-3">Build a career in <em className="gold-text not-italic">wellness</em></h1>
+          <h1 className="font-display text-[44px] sm:text-[56px] mt-3">Build a career in <em className="gold-text not-italic">wellness</em></h1>
           <p className="text-mocha mt-4 max-w-xl mx-auto">Healthy Home is Nepal's leading wellness destination — 6 branch and 200+ professionals. We're growing and looking for passionate people to join our mission.</p>
           <div className="flex flex-wrap justify-center gap-4 mt-8 text-sm text-mist">
             <span className="flex items-center gap-1.5"><Check size={14} className="text-gold" /> 6 Branch Across Nepal</span>
@@ -513,9 +513,9 @@ export default function Career() {
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[10px] tracking-[0.15em] uppercase bg-gold/15 text-gold px-2.5 py-1 rounded-full">{job.department}</span>
-                    <span className="text-[10px] tracking-[0.15em] uppercase bg-sand text-stone2 px-2.5 py-1 rounded-full">{job.type}</span>
-                    <span className="text-[10px] tracking-[0.15em] uppercase bg-gold/15 text-gold px-2.5 py-1 rounded-full">{job.experience}</span>
+                    <span className="text-[11px] tracking-[0.15em] uppercase bg-gold/15 text-gold px-2.5 py-1 rounded-full">{job.department}</span>
+                    <span className="text-[11px] tracking-[0.15em] uppercase bg-sand text-stone2 px-2.5 py-1 rounded-full">{job.type}</span>
+                    <span className="text-[11px] tracking-[0.15em] uppercase bg-gold/15 text-gold px-2.5 py-1 rounded-full">{job.experience}</span>
                   </div>
                   <h3 className="font-display text-2xl sm:text-3xl text-ink mb-1">{job.title}</h3>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-mocha">

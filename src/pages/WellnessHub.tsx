@@ -71,7 +71,7 @@ export default function WellnessHub() {
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-12 sm:py-14 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Free Health Tools</p>
-          <h1 className="font-display text-5xl sm:text-6xl mt-3">Wellness <em className="gold-text not-italic">Hub</em></h1>
+          <h1 className="font-display text-[44px] sm:text-[56px] mt-3">Wellness <em className="gold-text not-italic">Hub</em></h1>
           <p className="text-mocha mt-4 max-w-2xl mx-auto">
             Two free self-checks to help you start in the right place. No sign-up, and neither one
             replaces a consultation.

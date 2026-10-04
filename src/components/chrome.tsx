@@ -186,7 +186,7 @@ function BookingModal() {
                   {steps.map((s, i) => (
                     <button key={s} onClick={() => i < step && setStep(i)} className="flex-1 text-left">
                       <div className={`h-1 rounded-full ${i <= step ? 'bg-gold' : 'bg-linen'}`} />
-                      <p className={`mt-1.5 text-[10px] sm:text-[11px] uppercase tracking-widest ${i === step ? 'text-ink font-semibold' : 'text-stone2'}`}>{i + 1}. {s}</p>
+                      <p className={`mt-1.5 text-[11px] sm:text-[11px] uppercase tracking-widest ${i === step ? 'text-ink font-semibold' : 'text-stone2'}`}>{i + 1}. {s}</p>
                     </button>
                   ))}
                 </div>
@@ -195,7 +195,7 @@ function BookingModal() {
                     <div className="grid sm:grid-cols-2 gap-3">
                       {bookableCenters.map(c => (
                         <button key={c.id} onClick={() => setCenterId(c.id)} aria-pressed={centerId === c.id} className={`text-left rounded-2xl border p-4 transition ${centerId === c.id ? 'border-gold bg-white shadow-md' : 'border-linen bg-white/60 hover:border-gold/50'}`}>
-                          <span className="flex items-center gap-1.5 font-medium text-sm"><MapPin size={14} className="text-gold" /> {c.name}{c.flagship && <span className="text-[10px] bg-gold text-white px-2 py-0.5 rounded-full ml-1">FLAGSHIP</span>}</span>
+                          <span className="flex items-center gap-1.5 font-medium text-sm"><MapPin size={14} className="text-gold" /> {c.name}{c.flagship && <span className="text-[11px] bg-gold text-white px-2 py-0.5 rounded-full ml-1">FLAGSHIP</span>}</span>
                           <span className="block text-xs text-stone2 mt-1">{c.locationLine ?? `${c.address}, ${c.city}, ${c.state}`}</span>
                           {c.rating || c.phone ? <span className="flex items-center gap-1 text-xs mt-1.5 text-mocha">{c.rating ? <><Star size={12} className="fill-gold text-gold" /> {c.rating} ({c.reviews?.toLocaleString()} Google reviews)</> : null}{c.rating && c.phone ? ' · ' : ''}{c.phone ?? ''}</span> : null}
                           <span className={`block text-[11px] mt-1.5 ${c.services?.length ? 'text-golddark' : 'text-stone2'}`}>
@@ -219,7 +219,7 @@ function BookingModal() {
                           <span className="flex items-center gap-1.5 font-medium text-sm text-stone2">
                             <MapPin size={14} className="shrink-0" />
                             {c.name}
-                            <span className="text-[10px] bg-linen text-stone2 px-2 py-0.5 rounded-full ml-1">HEAD OFFICE</span>
+                            <span className="text-[11px] bg-linen text-stone2 px-2 py-0.5 rounded-full ml-1">HEAD OFFICE</span>
                           </span>
                           <span className="block text-xs text-stone2 mt-1">{c.locationLine ?? `${c.address}, ${c.city}, ${c.state}`}</span>
                           {c.phone ? <span className="block text-xs mt-1.5 text-stone2">{c.phone}</span> : null}
@@ -248,9 +248,9 @@ function BookingModal() {
                       <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
                         {dates.map(d => (
                           <button key={d} onClick={() => setDate(d)} className={`shrink-0 w-[74px] rounded-2xl border py-2.5 text-center transition ${date === d ? 'border-gold bg-gold text-white' : 'border-linen bg-white'}`}>
-                            <span className="block text-[10px] uppercase tracking-widest opacity-70">{new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' })}</span>
+                            <span className="block text-[11px] uppercase tracking-widest opacity-70">{new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short' })}</span>
                             <span className="block font-display text-xl leading-tight">{new Date(d + 'T12:00:00').getDate()}</span>
-                            <span className="block text-[10px] opacity-70">{new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short' })}</span>
+                            <span className="block text-[11px] opacity-70">{new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'short' })}</span>
                           </button>
                         ))}
                       </div>
@@ -427,7 +427,7 @@ export function Navbar() {
           <Link to="/franchise" className={navUnderline}>FRANCHISE</Link>
           <Link to="/specials" className="flex items-center gap-1">
             <span className={navUnderline}>SPECIAL</span>
-            <span className="text-[9px] bg-gold text-white px-1.5 py-0.5 rounded-full tracking-normal">-20%</span>
+            <span className="text-[10px] bg-gold text-white px-1.5 py-0.5 rounded-full tracking-normal">-20%</span>
           </Link>
         </nav>
 
@@ -692,7 +692,7 @@ export function Footer() {
               >
                 {l.label}
                 {/* Not trading yet, so say so rather than implying you can walk in. */}
-                {l.openingSoon && <span className="ml-2 text-[10px] tracking-[0.12em] uppercase text-goldlight/70">Soon</span>}
+                {l.openingSoon && <span className="ml-2 text-[11px] tracking-[0.12em] uppercase text-goldlight/70">Soon</span>}
               </a>
             ))}
           </div>

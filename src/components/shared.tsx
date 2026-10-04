@@ -47,7 +47,7 @@ export function SectionHead({ eyebrow, title, sub, center = true, light = false 
           in a wrapped heading touching the ascenders of the line below. Section
           titles are the most-wrapped headings on the site, so this one value
           governs nearly all of them. */}
-      <h2 className={`font-display text-4xl sm:text-5xl mt-3 leading-[1.14] ${light ? 'text-white' : 'text-ink'}`}>{title}</h2>
+      <h2 className={`font-display text-4xl sm:text-[44px] mt-3 leading-[1.14] ${light ? 'text-white' : 'text-ink'}`}>{title}</h2>
       {sub && <p className={`mt-4 text-[15px] leading-relaxed ${light ? 'text-mist' : 'text-mocha'}`}>{sub}</p>}
     </div>
   );
@@ -61,7 +61,7 @@ export function TreatmentCard({ t, showSubs = false }: { t: Treatment; showSubs?
       <Link to={`/services/${t.id}`} className="relative h-52 overflow-hidden block">
         <img src={t.image} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-ink/50 to-transparent" />
-        {t.badge && <span className="absolute top-3 left-3 bg-gold text-white text-[10px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full font-medium">{t.badge}</span>}
+        {t.badge && <span className="absolute top-3 left-3 bg-gold text-white text-[11px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full font-medium">{t.badge}</span>}
         <span className="absolute bottom-3 left-4 text-cream text-[11px] tracking-[0.2em] uppercase">{t.category}</span>
       </Link>
       <div className="p-5 flex flex-col grow">
@@ -114,7 +114,7 @@ export function CtaBanner() {
       <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 grid lg:grid-cols-2 gap-8 items-center">
         <div>
           <p className="text-[11px] tracking-[0.35em] uppercase text-goldlight">Limited Availability</p>
-          <h2 className="font-display text-4xl sm:text-5xl mt-3 leading-tight text-white">Your healthy start begins with a <em className="text-goldlight not-italic font-semibold">consultation</em></h2>
+          <h2 className="font-display text-4xl sm:text-[44px] mt-3 leading-tight text-white">Your healthy start begins with a <em className="text-goldlight not-italic font-semibold">consultation</em></h2>
           <p className="text-mist mt-4 max-w-md">Body/fat assessment, honest pricing, custom service plan — 30 minutes, zero pressure, Rs 1,500 off your first service when you book today.</p>
           <div className="flex flex-wrap gap-3 mt-6">
             <button onClick={() => openBooking()} className="bg-gold hover:bg-[#00747B] text-white px-8 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase font-medium flex items-center gap-2">Claim Rs 1,500 Off <ArrowRight size={15} /></button>

@@ -352,7 +352,7 @@ export default function Franchise() {
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-24 grid lg:grid-cols-2 gap-10 items-center">
           <div>
             <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Franchise Opportunities</p>
-            <h1 className="font-display text-5xl sm:text-6xl mt-3 leading-tight">
+            <h1 className="font-display text-[44px] sm:text-[56px] mt-3 leading-tight">
               Own a <em className="gold-text not-italic">Healthy Home.</em>
             </h1>
             <p className="text-mocha mt-5 leading-relaxed max-w-lg">
@@ -740,7 +740,7 @@ export default function Franchise() {
                 transition={{ delay: (i % 3) * 0.08 }}
                 className="relative bg-white border border-linen rounded-3xl p-7 overflow-hidden"
               >
-                <span className="absolute top-4 right-6 font-display text-6xl text-sand leading-none font-semibold select-none">
+                <span className="absolute top-4 right-6 font-display text-[56px] text-sand leading-none font-semibold select-none">
                   {s.n}
                 </span>
                 <div className="w-11 h-11 rounded-2xl bg-gold/15 flex items-center justify-center relative">

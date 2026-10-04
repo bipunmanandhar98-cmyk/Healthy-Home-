@@ -162,7 +162,7 @@ export default function SkinQuiz({ compact = false }: { compact?: boolean }) {
                 {STEPS.map((s, i) => (
                   <div key={s} className="flex-1">
                     <div className={`h-1 rounded-full ${done || i < step ? 'bg-goldlight' : i === step ? 'bg-gold' : 'bg-white/15'}`} />
-                    <p className={`mt-1.5 text-[10px] uppercase tracking-widest ${i === step && !done ? 'text-white font-semibold' : 'text-mist/70'}`}>{i + 1}. {s}</p>
+                    <p className={`mt-1.5 text-[11px] uppercase tracking-widest ${i === step && !done ? 'text-white font-semibold' : 'text-mist/70'}`}>{i + 1}. {s}</p>
                   </div>
                 ))}
               </div>
@@ -199,11 +199,11 @@ export default function SkinQuiz({ compact = false }: { compact?: boolean }) {
                       <div key={s.id} className={`rounded-2xl border p-4 flex gap-3 items-center ${i === 0 ? 'bg-sand border-gold/50' : 'bg-white border-linen'}`}>
                         <img src={s.image} alt={s.name} className="w-14 h-14 rounded-xl object-cover shrink-0" loading="lazy" />
                         <div className="min-w-0 grow">
-                          <p className="text-[10px] tracking-[0.2em] uppercase text-golddark">{i === 0 ? '★ Best match' : `Match #${i + 1}`} · Dermatology</p>
+                          <p className="text-[11px] tracking-[0.2em] uppercase text-golddark">{i === 0 ? '★ Best match' : `Match #${i + 1}`} · Dermatology</p>
                           <p className="font-medium leading-snug mt-0.5">{s.name}</p>
                           <p className="text-xs text-stone2 mt-0.5 line-clamp-1">{s.description}</p>
                         </div>
-                        <Link to={`/services/dermatology/${slugify(s.name)}`} className="shrink-0 bg-gold hover:bg-[#00747B] text-white rounded-full px-4 py-2 text-[10px] tracking-[0.15em] uppercase font-medium transition">Open</Link>
+                        <Link to={`/services/dermatology/${slugify(s.name)}`} className="shrink-0 bg-gold hover:bg-[#00747B] text-white rounded-full px-4 py-2 text-[11px] tracking-[0.15em] uppercase font-medium transition">Open</Link>
                       </div>
                     ))}
                   </div>

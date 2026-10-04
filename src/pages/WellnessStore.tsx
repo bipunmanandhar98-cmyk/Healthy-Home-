@@ -45,7 +45,7 @@ function ProductCard({ p, index }: { p: (typeof products)[number]; index: number
     >
       <div className="relative">
         <ProductImage p={p} />
-        {p.badge && <span className="absolute top-3 left-3 bg-gold text-white text-[10px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full shadow">{p.badge}</span>}
+        {p.badge && <span className="absolute top-3 left-3 bg-gold text-white text-[11px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full shadow">{p.badge}</span>}
         {sold && <span className="absolute inset-0 bg-white/70 grid place-items-center text-[11px] tracking-[0.2em] uppercase text-stone2">Out of stock</span>}
       </div>
 
@@ -102,7 +102,7 @@ export default function WellnessStore() {
         <div className="absolute inset-0 texture-grain opacity-40" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Healthy Home Wellness Store</p>
-          <h1 className="font-display text-5xl sm:text-6xl mt-3">Wellness, <em className="gold-text not-italic">to take home</em></h1>
+          <h1 className="font-display text-[44px] sm:text-[56px] mt-3">Wellness, <em className="gold-text not-italic">to take home</em></h1>
           <p className="text-mocha mt-4 max-w-xl mx-auto">
             The wellness teas, nutrition and skin-care range we use and recommend in clinic. Order by phone or
             at any branch counter.

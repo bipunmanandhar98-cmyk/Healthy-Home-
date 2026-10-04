@@ -30,7 +30,7 @@ export default function Services() {
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-14 sm:py-16 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Services Menu</p>
-          <h1 className="font-display text-5xl sm:text-6xl mt-3">Every service, <em className="gold-text not-italic">one roof</em></h1>
+          <h1 className="font-display text-[44px] sm:text-[56px] mt-3">Every service, <em className="gold-text not-italic">one roof</em></h1>
           <p className="text-mocha mt-4 max-w-xl mx-auto">Three main services — Weight Management (7 sub-services), Dermatology (8 sub-services) and Lab Tests (Whole Body Lab Test). Expand a main service to preview its sub-services, or open its dedicated page.</p>
           <div className="max-w-md mx-auto mt-6 relative">
             <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-stone2" />
@@ -60,8 +60,8 @@ export default function Services() {
                   <span className="relative h-32 md:h-28 rounded-2xl overflow-hidden block shrink-0">
                     <img src={t.image} alt={t.name} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                     <span className="absolute inset-0 bg-gradient-to-t from-ink/55 to-transparent" />
-                    {t.badge && <span className="absolute top-2 left-2 bg-gold text-white text-[10px] tracking-[0.15em] uppercase px-3 py-1 rounded-full">{t.badge}</span>}
-                    <span className="absolute bottom-2 left-2.5 text-cream text-[10px] tracking-[0.2em] uppercase">{subs.length} sub-services</span>
+                    {t.badge && <span className="absolute top-2 left-2 bg-gold text-white text-[11px] tracking-[0.15em] uppercase px-3 py-1 rounded-full">{t.badge}</span>}
+                    <span className="absolute bottom-2 left-2.5 text-cream text-[11px] tracking-[0.2em] uppercase">{subs.length} sub-services</span>
                   </span>
                   <span className="min-w-0">
                     <span className="block text-[11px] tracking-[0.3em] uppercase text-golddark">Main Service {String(i + 1).padStart(2, '0')}</span>
@@ -127,7 +127,7 @@ export default function Services() {
                 <Link key={s.id} to={`/services/${t.id}/${slugify(s.name)}`} className="group bg-white border border-linen rounded-3xl p-5 hover:shadow-xl hover:-translate-y-0.5 transition flex gap-4">
                   <img src={s.image} alt={s.name} className="w-20 h-20 rounded-2xl object-cover shrink-0" loading="lazy" />
                   <span>
-                    <span className="block text-[10px] tracking-[0.2em] uppercase text-golddark">{t.name}</span>
+                    <span className="block text-[11px] tracking-[0.2em] uppercase text-golddark">{t.name}</span>
                     <span className="block font-medium group-hover:text-[#007C83] mt-0.5">{s.name}</span>
                     <span className="block text-xs text-stone2 mt-1 line-clamp-2">{s.description}</span>
                   </span>

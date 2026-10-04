@@ -22,7 +22,7 @@ export default function Locations() {
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Our Locations</p>
-          <h1 className="font-display text-5xl sm:text-6xl mt-3">Find your <em className="gold-text not-italic">health nearby</em></h1>
+          <h1 className="font-display text-[44px] sm:text-[56px] mt-3">Find your <em className="gold-text not-italic">health nearby</em></h1>
           <p className="text-mocha mt-4 max-w-xl mx-auto">{openCenters.length} Healthy Home branches open across Kathmandu Valley, Lalitpur and Pokhara — plus 2 more opening soon. Every one held to the Healthy Home standard.</p>
           <div className="max-w-md mx-auto mt-6 relative">
             <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-stone2" />
@@ -40,7 +40,7 @@ export default function Locations() {
             <div key={c.id} className="bg-white border border-linen rounded-3xl p-6 hover:shadow-xl hover:-translate-y-0.5 transition flex flex-col">
               <div className="flex items-start justify-between">
                 <div className="w-11 h-11 rounded-2xl bg-gold text-white flex items-center justify-center shadow-md shadow-[#00919A]/25"><MapPin size={18} /></div>
-                {c.tag && <span className="text-[10px] tracking-[0.15em] uppercase bg-gold text-white px-3 py-1 rounded-full">{c.tag}</span>}
+                {c.tag && <span className="text-[11px] tracking-[0.15em] uppercase bg-gold text-white px-3 py-1 rounded-full">{c.tag}</span>}
               </div>
               <h3 className="font-display text-2xl mt-3">{c.name}</h3>
               <p className="text-sm text-mocha mt-1">{c.locationLine ?? <>{c.address}<br />{c.city}, {c.state}</>}</p>

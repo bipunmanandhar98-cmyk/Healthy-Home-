@@ -26,16 +26,16 @@ export default function Membership() {
         <div className="absolute inset-0 bg-gradient-to-b from-sand/70 via-cream/60 to-white" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Healthy Home Membership</p>
-          <h1 className="font-display text-5xl sm:text-6xl mt-3">One card. <em className="gold-text not-italic">A year of wellness.</em></h1>
+          <h1 className="font-display text-[44px] sm:text-[56px] mt-3">One card. <em className="gold-text not-italic">A year of wellness.</em></h1>
           <p className="text-mocha mt-4 max-w-xl mx-auto">Membership fee Rs. 5,000 per year — unlock member-only discounts, gifts, bonus points and early access across Weight Management, Dermatology and Lab Tests.</p>
         </div>
       </section>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="relative bg-white rounded-3xl border-2 border-gold p-8 sm:p-10 flex flex-col items-center text-center shadow-2xl overflow-hidden">
-          <span className="absolute top-0 left-1/2 -translate-x-1/2 bg-gold text-white text-[10px] tracking-[0.2em] uppercase px-5 py-1.5 rounded-b-2xl flex items-center gap-1.5"><Crown size={11} /> Healthy Home Membership</span>
+          <span className="absolute top-0 left-1/2 -translate-x-1/2 bg-gold text-white text-[11px] tracking-[0.2em] uppercase px-5 py-1.5 rounded-b-2xl flex items-center gap-1.5"><Crown size={11} /> Healthy Home Membership</span>
           <p className="text-[11px] tracking-[0.3em] uppercase text-golddark mt-4">Annual Membership</p>
-          <p className="font-display text-6xl mt-2">Rs. 5,000<span className="text-xl text-stone2 font-body">/year</span></p>
+          <p className="font-display text-[56px] mt-2">Rs. 5,000<span className="text-xl text-stone2 font-body">/year</span></p>
           <p className="text-sm text-mocha italic mt-1">Valid 12 months from activation · All 6 Nepal branch</p>
           <button onClick={() => openBooking()} className="mt-6 bg-gold hover:bg-[#00747B] text-white rounded-full px-10 py-3.5 text-xs tracking-[0.2em] uppercase font-medium transition shadow-lg shadow-[#00919A]/25">Become a Member</button>
         </motion.div>

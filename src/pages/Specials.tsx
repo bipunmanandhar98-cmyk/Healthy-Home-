@@ -38,7 +38,7 @@ export default function Specials() {
         <div className="absolute inset-0 texture-grain opacity-40" />
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Specials & Events</p>
-          <h1 className="font-display text-5xl sm:text-6xl mt-3">Save on your <em className="gold-text not-italic">healthy start</em></h1>
+          <h1 className="font-display text-[44px] sm:text-[56px] mt-3">Save on your <em className="gold-text not-italic">healthy start</em></h1>
           <p className="text-mocha mt-4 max-w-xl mx-auto">Copy a code, show it at check-in or mention it when booking. Stack with member rewards.</p>
         </div>
       </section>
@@ -48,7 +48,7 @@ export default function Specials() {
             const t = treatments.find(x => x.id === s.treatment);
             return (
               <motion.div key={s.code} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (i % 3) * 0.08 }} className="bg-white border border-linen rounded-3xl overflow-hidden hover:shadow-xl transition flex flex-col">
-                {t && <div className="h-36 overflow-hidden relative"><img loading="lazy" decoding="async" src={t.image} alt={s.title} className="w-full h-full object-cover" /><span className="absolute top-3 left-3 bg-gold text-white text-[10px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full shadow">{s.tag}</span></div>}
+                {t && <div className="h-36 overflow-hidden relative"><img loading="lazy" decoding="async" src={t.image} alt={s.title} className="w-full h-full object-cover" /><span className="absolute top-3 left-3 bg-gold text-white text-[11px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-full shadow">{s.tag}</span></div>}
                 <div className="p-6 flex flex-col grow">
                   <h3 className="font-display text-2xl leading-tight">{s.title}</h3>
                   <p className="text-sm text-mocha mt-2 grow">{s.desc}</p>
@@ -75,7 +75,7 @@ export default function Specials() {
           <div className="grid gap-3">
             {events.map(e => (
               <div key={e.title} className="bg-white border border-linen rounded-2xl p-5 flex gap-5 items-center">
-                <div className="w-16 h-16 rounded-2xl bg-gold text-white flex flex-col items-center justify-center shrink-0 shadow-md shadow-[#00919A]/25"><span className="text-[10px] tracking-widest opacity-90">{e.date.split(' ')[0]}</span><span className="font-display text-2xl leading-none">{e.date.split(' ')[1]}</span></div>
+                <div className="w-16 h-16 rounded-2xl bg-gold text-white flex flex-col items-center justify-center shrink-0 shadow-md shadow-[#00919A]/25"><span className="text-[11px] tracking-widest opacity-90">{e.date.split(' ')[0]}</span><span className="font-display text-2xl leading-none">{e.date.split(' ')[1]}</span></div>
                 <div className="grow"><p className="font-medium">{e.title}</p><p className="text-sm text-mocha">{e.desc}</p><p className="text-[11px] text-golddark mt-1 flex items-center gap-1"><Sparkles size={11} /> {e.spot}</p></div>
                 <button onClick={() => openBooking()} className="shrink-0 border border-ink/20 rounded-full px-5 py-2.5 text-[11px] tracking-[0.15em] uppercase hover:bg-gold hover:text-white hover:border-gold transition hidden sm:block">RSVP</button>
               </div>

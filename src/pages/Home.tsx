@@ -186,7 +186,7 @@ export default function Home() {
                     hidden: { opacity: 0, y: 18, filter: 'blur(6px)' },
                     visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } }
                   }}
-                  className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-white/80"
+                  className="text-[11px] sm:text-[11px] tracking-[0.3em] uppercase text-white/80"
                 >
                   {heroSlides[heroSlide].eyebrow}
                 </motion.p>
@@ -200,7 +200,7 @@ export default function Home() {
                     hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
                     visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
                   }}
-                  className="font-display text-4xl sm:text-5xl lg:text-[58px] xl:text-[68px] leading-[1.04] mt-4"
+                  className="font-display text-4xl sm:text-[44px] lg:text-[54px] xl:text-[62px] leading-[1.04] mt-4"
                 >
                   {heroSlides[heroSlide].title}
                 </motion.h1>
@@ -225,7 +225,7 @@ export default function Home() {
                   {heroSlides[heroSlide].type === 'booking' ? (
                     <button
                       onClick={() => openBooking()}
-                      className="bg-gold text-white px-6 sm:px-7 py-3 sm:py-3.5 min-h-[44px] rounded-full text-[11px] sm:text-[10px] tracking-[0.16em] uppercase font-medium hover:bg-[#00747B] flex items-center gap-2 transition shadow-xl"
+                      className="bg-gold text-white px-6 sm:px-7 py-3 sm:py-3.5 min-h-[44px] rounded-full text-[11px] sm:text-[11px] tracking-[0.16em] uppercase font-medium hover:bg-[#00747B] flex items-center gap-2 transition shadow-xl"
                     >
                       <Calendar size={15} />
                       {heroSlides[heroSlide].button}
@@ -233,7 +233,7 @@ export default function Home() {
                   ) : (
                     <Link
                       to={heroSlides[heroSlide].link!}
-                      className="bg-gold text-white px-6 sm:px-7 py-3 sm:py-3.5 min-h-[44px] rounded-full text-[11px] sm:text-[10px] tracking-[0.16em] uppercase font-medium hover:bg-[#00747B] flex items-center gap-2 transition shadow-xl"
+                      className="bg-gold text-white px-6 sm:px-7 py-3 sm:py-3.5 min-h-[44px] rounded-full text-[11px] sm:text-[11px] tracking-[0.16em] uppercase font-medium hover:bg-[#00747B] flex items-center gap-2 transition shadow-xl"
                     >
                       {heroSlides[heroSlide].button}
                       <ArrowRight size={15} />
@@ -242,7 +242,7 @@ export default function Home() {
 
                   <Link
                     to="/services"
-                    className="border border-white/60 bg-white/5 backdrop-blur-sm text-white px-6 sm:px-7 py-3 sm:py-3.5 min-h-[44px] rounded-full text-[11px] sm:text-[10px] tracking-[0.16em] uppercase font-medium hover:bg-white hover:text-ink transition flex items-center gap-2"
+                    className="border border-white/60 bg-white/5 backdrop-blur-sm text-white px-6 sm:px-7 py-3 sm:py-3.5 min-h-[44px] rounded-full text-[11px] sm:text-[11px] tracking-[0.16em] uppercase font-medium hover:bg-white hover:text-ink transition flex items-center gap-2"
                   >
                     Explore Services
                     <ArrowRight size={15} />
@@ -276,7 +276,7 @@ export default function Home() {
           </div>
 
           {/* Slide counter */}
-          <div className="absolute z-20 right-6 sm:right-10 lg:right-16 bottom-7 sm:bottom-10 text-white/80 text-[10px] tracking-[0.25em]">
+          <div className="absolute z-20 right-6 sm:right-10 lg:right-16 bottom-7 sm:bottom-10 text-white/80 text-[11px] tracking-[0.25em]">
             {String(heroSlide + 1).padStart(2, '0')}
             <span className="mx-2 text-white/40">/</span>
             {String(heroSlides.length).padStart(2, '0')}
@@ -337,7 +337,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center relative">
         <motion.div {...fadeUp}>
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">The Healthy Home Experience</p>
-          <h2 className="font-display text-4xl sm:text-5xl mt-3 leading-tight text-ink">Luxury you feel.<br />Service you can <em className="gold-text not-italic">trust.</em></h2>
+          <h2 className="font-display text-4xl sm:text-[44px] mt-3 leading-tight text-ink">Luxury you feel.<br />Service you can <em className="gold-text not-italic">trust.</em></h2>
           <div className="grid gap-5 mt-8">
             {[['Guided care, always', 'Every branch is staffed by clinicians, wellness coaches and licensed aestheticians with 100+ hours of Healthy Home academy training.'], ['Natural & non-invasive first', 'Weight-loss coaching, non-invasive aesthetic treatments, screening-led plans and lifestyle products — no surgery, no extremes.'], ['Honest, mapped pricing', 'Body/fat assessment, labs and written service plans before you spend a rupee. Members save 15-25% with rollover banked value.']].map(([t, s]) => (
               <div key={t} className="flex gap-4"><div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5"><BadgeCheck size={16} className="text-golddark" /></div><div><p className="font-medium text-ink">{t}</p><p className="text-mocha text-sm mt-1 leading-relaxed">{s}</p></div></div>
@@ -356,10 +356,10 @@ export default function Home() {
     {/* SERVICES — Card Grid */}
     <section className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
       <div className="max-w-2xl">
-        <p className="text-[10px] tracking-[0.3em] uppercase text-golddark">What We Do</p>
-        {/* Was leading-[0.95] — the tightest leading on the site, and at lg:text-6xl
+        <p className="text-[11px] tracking-[0.3em] uppercase text-golddark">What We Do</p>
+        {/* Was leading-[0.95] — the tightest leading on the site, and at lg:text-[56px]
             (60px) that overlapped outright. Now 1.06. */}
-        <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl leading-[1.06] mt-2">
+        <h2 className="font-display text-4xl sm:text-[44px] lg:text-[56px] leading-[1.06] mt-2">
           Personalized care,<br />
           <span className="gold-text non-italic">without the pressure.</span>
         </h2>
@@ -404,7 +404,7 @@ export default function Home() {
               </div>
 
               <div className="p-5 sm:p-6">
-                <p className="text-[9px] tracking-[0.22em] uppercase text-stone2">
+                <p className="text-[10px] tracking-[0.22em] uppercase text-stone2">
                   {s.parent.name}
                 </p>
 
@@ -412,11 +412,11 @@ export default function Home() {
                   {s.name}
                 </h3>
 
-                <p className="text-[10px] sm:text-[11px] text-stone2 mt-2 leading-relaxed line-clamp-2 min-h-[2rem]">
+                <p className="text-[11px] sm:text-[11px] text-stone2 mt-2 leading-relaxed line-clamp-2 min-h-[2rem]">
                   {s.description || `Personalized ${s.name.toLowerCase()} care designed around your goals.`}
                 </p>
 
-                <span className="inline-flex items-center gap-1 mt-4 text-[9px] tracking-[0.18em] uppercase text-[#007C83] font-medium">
+                <span className="inline-flex items-center gap-1 mt-4 text-[10px] tracking-[0.18em] uppercase text-[#007C83] font-medium">
                   Book Now <ArrowRight size={11} />
                 </span>
               </div>
@@ -457,7 +457,7 @@ export default function Home() {
           {/* Left: heading and standfirst */}
           <div className="max-w-md">
             <span aria-hidden="true" className="block h-px w-14 bg-gold mb-4" />
-            <h2 className="font-display text-4xl sm:text-5xl leading-[1.12] text-ink">
+            <h2 className="font-display text-4xl sm:text-[44px] leading-[1.12] text-ink">
               Why Trust
               <span className="block italic text-gold">Healthy Home?</span>
             </h2>
@@ -492,7 +492,7 @@ export default function Home() {
                 </span>
                 <span aria-hidden="true" className="w-px h-10 shrink-0 bg-linen" />
                 <div className="min-w-0">
-                  <p className="font-display text-4xl sm:text-5xl leading-[1.1] text-ink">
+                  <p className="font-display text-4xl sm:text-[44px] leading-[1.1] text-ink">
                     {s.animated ? <CountUp to={50} suffix="K+" /> : s.value}
                   </p>
                   <p className="text-[11px] tracking-[0.22em] uppercase text-ink mt-2">
@@ -512,7 +512,7 @@ export default function Home() {
       <div className="grid md:grid-cols-3 gap-5 lg:gap-6 mt-10">
         {[['01', 'Consultation', 'Body/fat + wellness analysis, honest recommendations and written pricing. 30-45 minutes, zero pressure.'], ['02', 'Personalized plan', 'Sequenced services mapped around your goals, schedule and budget.'], ['03', 'Support + maintain', 'Coaching, reviews and products then maintain.']].map(([n, t, s]) => (
           <motion.div key={n} {...fadeUp} className="bg-white border border-linen rounded-3xl p-7 relative overflow-hidden group hover:shadow-xl transition-all duration-500 ease-out">
-            <p className="font-display text-6xl text-sand group-hover:text-blush transition absolute top-3 right-5">{n}</p>
+            <p className="font-display text-[56px] text-sand group-hover:text-blush transition absolute top-3 right-5">{n}</p>
             <p className="font-display text-2xl relative">{t}</p>
             <p className="text-sm text-mocha mt-2 leading-relaxed relative">{s}</p>
           </motion.div>
