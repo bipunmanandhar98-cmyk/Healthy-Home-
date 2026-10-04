@@ -517,8 +517,13 @@ export default function Home() {
 
     {/* LEADERSHIP & EXPERTS */}
     <section className="bg-sand/60 border-y border-linen">
-      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
+      {/* Only the heading is inside the max-width container. The carousel below
+          sits outside it so its row of portraits bleeds off both edges of the
+          page, which is the point of that layout. */}
+      <div className="max-w-7xl mx-auto px-4 pt-16 lg:pt-20">
         <SectionHead eyebrow="Leadership & Experts" title="Hands you can trust" sub="A few of the 200+ clinicians, coaches and aestheticians behind your results." />
+      </div>
+      <div className="mt-10 pb-16 lg:pb-20">
         <TeamCarousel />
       </div>
     </section>
