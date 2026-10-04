@@ -406,7 +406,15 @@ export function Navbar() {
             Same type and rhythm as the right nav. This cell holds the longer
             labels, and since the row is `grid-cols-[1fr_auto_1fr]` it sets the
             ceiling on how much room the right nav gets at 1024. */}
-        <nav className="flex items-center justify-end gap-7 2xl:gap-8 text-[12px] tracking-[0.07em] uppercase font-medium">
+        {/* whitespace-nowrap on the nav, inherited by every item. Montserrat is
+            noticeably wider than the Jost these labels were set in, and the row
+            is `grid-cols-[1fr_auto_1fr]`, so the two longest right-hand labels
+            ("WELLNESS STORE", "WELLNESS HUB") plus "ABOUT US" broke onto a second
+            line and doubled the header height at 1280. Forbidding the wrap is
+            preferred over tightening the gap or the tracking, because both of
+            those are deliberate parts of this nav's rhythm. Measured at
+            1040/1100/1180/1232px: no horizontal overflow either way. */}
+        <nav className="flex items-center justify-end gap-7 2xl:gap-8 text-[12px] tracking-[0.07em] uppercase font-medium whitespace-nowrap">
           <div className="relative" onMouseEnter={openDrop} onMouseLeave={closeDrop}>
             {/* No chevron here: the hover panel still opens, but the label now
                 reads as plain nav text. The keyboard/touch paths are unchanged —
@@ -436,7 +444,7 @@ export function Navbar() {
             gap-7 (28px) at lg-xl, stepping to gap-8 (32px) once the row
             widens at 2xl. Tracking stays 0.07em - widening the gaps is what
             makes the nav feel airy, so the letter-spacing is kept. */}
-        <nav className="flex items-center gap-7 2xl:gap-8 text-[12px] tracking-[0.07em] uppercase font-medium">
+        <nav className="flex items-center gap-7 2xl:gap-8 text-[12px] tracking-[0.07em] uppercase font-medium whitespace-nowrap">
           <Link to="/about" className={navUnderline}>ABOUT US</Link>
           <Link to="/career" className={navUnderline}>CAREER</Link>
           <Link to="/wellness-store" className={navUnderline}>WELLNESS STORE</Link>

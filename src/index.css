@@ -1,5 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 @import "tailwindcss";
+
+/* ── Century Gothic Pro — self-hosted display face ───────────────────────
+   Headings run through this family first. It is a commercial Monotype face, so
+   the files are NOT in this repository — drop the licensed woff2 files into
+   public/fonts/century-gothic-pro/ using exactly the names below and they are
+   picked up with no further change.
+
+   Until then these two src URLs 404 and the browser quietly falls through to
+   "Century Gothic" (present on Windows and on Macs that shipped Office), then
+   Montserrat, then the system UI stack. Nothing renders broken in the meantime.
+   To silence the two 404s before shipping the real files, comment out the whole
+   block — the font stack below already names the family, so a machine with it
+   installed locally will still pick it up.
+
+   Century Gothic has no true italic. The handful of `font-display italic`
+   headings will be obliqued by the browser, which is the same result the system
+   font gives. Montserrat, by contrast, ships real italics. */
+@font-face {
+  font-family: "Century Gothic Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/century-gothic-pro/CenturyGothicPro-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Century Gothic Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/century-gothic-pro/CenturyGothicPro-Bold.woff2") format("woff2");
+}
 
 /* ── Mobile / touch ──────────────────────────────────────────────────
    - text-size-adjust stops iOS inflating body text in landscape, which
@@ -95,8 +125,24 @@ label {
   --color-stone2: #85999B;
   --color-blush: #D9EEEF;
   --color-mist: #A9BFC1;
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Jost", system-ui, sans-serif;
+  /* ── Type scale ───────────────────────────────────────────────────────
+     Headings: Century Gothic Pro first (self-hosted, see above), then the
+     system Century Gothic, then Montserrat — geometric like Century Gothic, so
+     the degradation as the stack walks down stays on-brand rather than dropping
+     to a neutral grotesque. Body copy: Montserrat, falling back to the system UI
+     stack so a visitor whose font never arrives still sees their own OS face
+     rather than the browser default. */
+
+  --font-display: "Century Gothic Pro", "Century Gothic", Montserrat, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-body: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  /* Tailwind's own `font-sans`, pinned to the same stack so the few `font-sans`
+     usages match the body copy instead of quietly falling back to ui-sans-serif. */
+  --font-sans: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  /* Code and tabular data. Fixed pitch so columns of figures line up. */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 html { scroll-behavior: smooth; }
