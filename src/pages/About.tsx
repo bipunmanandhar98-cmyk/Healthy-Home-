@@ -14,17 +14,23 @@ const values = [
 ];
 
 /* Company milestones, oldest first. Rendered as the journey timeline below, which
-   alternates sides from lg up, so the order matters. */
+   alternates sides from lg up, so the order matters. Each entry also carries a
+   photo, which fills the column opposite its text — swap the files in
+   public/images/journey/ for the real milestone photos and update the alt. */
 const journey = [
   {
     year: '2006',
     title: 'A Dream Beginning',
     body: 'Two young men, both with unparalleled ambitions and the right knowledge decided to embark on a journey to establish Healthy Home, Nepal\u2019s first weight loss clinic. Mr Krishna forgo his plans to visit Japan and decided to contribute in Nepal. Mr Mohan had just returned from an extensive experience in the wellness industry from abroad. Both forged a charming partnership with their initial outlet in Bagbazaar.',
+    img: IMG.journey.founding,
+    alt: 'Healthy Home reception',
   },
   {
     year: '2008 \u2013 Present',
     title: 'A Journey of Trust and Transformation',
     body: 'Throughout this journey, we\u2019ve transformed countless lives, earning the trust of thousands through holistic care, proven results, and a strong community built on wellness and transformation. From 2008 to 2026, Healthy Home grew from a single vision into a trusted name in health and wellness. With over 50,000 satisfied customers and 6 thriving branches, Healthy Home continues to grow stronger, expanding through franchise opportunities, advanced technologies, and a renewed vision to inspire holistic wellness nationwide.',
+    img: IMG.journey.growth,
+    alt: 'Healthy Home reception',
   },
 ];
 
@@ -99,6 +105,28 @@ export default function About() {
                       <p className="font-display text-3xl sm:text-4xl gold-text leading-none">{j.year}</p>
                       <h3 className="font-display text-2xl sm:text-3xl mt-3">{j.title}</h3>
                       <p className="text-[15px] text-mocha mt-3 leading-relaxed">{j.body}</p>
+                    </motion.div>
+
+                    {/* Photo, in whichever column the text is not in. Both are
+                        pinned to row 1 so they share the row and stay on the same
+                        baseline as the node between them; without the explicit row
+                        the second item would auto-flow onto a row of its own. */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.1 }}
+                      className={`pl-9 lg:pl-0 mt-8 lg:mt-0 ${onRight ? 'lg:col-start-1 lg:row-start-1' : 'lg:col-start-2 lg:row-start-1'}`}
+                    >
+                      <div className="overflow-hidden rounded-3xl border border-linen bg-sand shadow-sm">
+                        <img
+                          src={j.img}
+                          alt={j.alt}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full aspect-[16/10] object-cover"
+                        />
+                      </div>
                     </motion.div>
                   </li>
                 );

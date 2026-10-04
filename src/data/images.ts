@@ -65,6 +65,17 @@ const registry = {
     ctaFranchise: '/images/backgrounds/cta-franchise.jpg',
   },
 
+  /* ── About page: company journey timeline ─────────────────────────────
+      One photo per milestone, in the empty column opposite the entry's text.
+      These ship as placeholders — overwrite each file with the real photo for
+      that milestone, and update the `alt` on the matching entry in
+      pages/About.tsx. Separate files per milestone so one can be changed
+      without touching the other. */
+  journey: {
+    founding: '/images/journey/founding.jpg',
+    growth: '/images/journey/growth.jpg',
+  },
+
   /* ── Home: full-screen hero slider (4 rotating slides) ──────────────── */
   home: {
     hero1: '/images/home/hero-slide-1.jpg',
