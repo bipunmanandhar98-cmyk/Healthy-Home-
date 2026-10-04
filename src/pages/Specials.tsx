@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Tag, Copy, Check, Clock, Sparkles, ArrowRight, CalendarDays } from 'lucide-react';
 import { treatments } from '../data/content';
-import { useBooking } from '../components/chrome';
+import { useBooking } from '../components/booking';
 import { SectionHead, CtaBanner } from '../components/shared';
 
 const specials = [

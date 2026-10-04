@@ -1,21 +1,13 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, MapPin, ChevronDown, Calendar, Star, ArrowRight, Check, Sparkles } from 'lucide-react';
 import { treatments, subServices, centers, bookableCenters, googleRating } from '../data/content';
 import { sendBookingConfirmation, type SendResult } from '../lib/bookingEmail';
-import { slugify } from '../data/content';
 import { IMG } from '../data/images';
-
-type BookingState = {
-  open: boolean;
-  openBooking: (preset?: { treatment?: string; center?: string }) => void;
-  closeBooking: () => void;
-  preset: { treatment?: string; center?: string };
-};
-
-const BookingCtx = createContext<BookingState>({ open: false, openBooking: () => {}, closeBooking: () => {}, preset: {} });
-export const useBooking = () => useContext(BookingCtx);
+/* The context, its hook and the URL builders live in ./booking so that this
+   file exports components only — see the note at the top of booking.ts. */
+import { BookingCtx, useBooking, serviceUrl, subServiceUrl } from './booking';
 
 export function BookingProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -47,7 +39,21 @@ function BookingModal() {
   const [done, setDone] = useState<string | null>(null);
   const [err, setErr] = useState('');
 
-  useEffect(() => {
+  /* Start a clean booking each time the modal opens.
+   *
+   * This adjusts state during render rather than in an effect on purpose. An
+   * effect would run *after* the open frame had already been committed, so the
+   * modal would paint one frame carrying the previous visit's step, error or
+   * confirmation before being reset — a visible flash when reopening it after a
+   * completed booking. React re-renders immediately here instead, so the first
+   * committed frame is already the fresh one.
+   *
+   * Note what is deliberately NOT reset: name, phone, email and notes. Those
+   * survive closing and reopening the modal, exactly as before.
+   */
+  const [wasOpen, setWasOpen] = useState(open);
+  if (open !== wasOpen) {
+    setWasOpen(open);
     if (open) {
       setStep(0); setDone(null); setErr(''); setEmailResult(null); setSending(false);
       // Never preselect a branch that can't take a booking — not one that isn't
@@ -65,7 +71,7 @@ function BookingModal() {
       setDate(d.toISOString().slice(0, 10));
       setTime('10:30 AM');
     }
-  }, [open]);
+  }
 
   const dates = useMemo(() => {
     const out: string[] = [];
@@ -110,12 +116,18 @@ function BookingModal() {
     const code = 'HH-' + Math.random().toString(36).slice(2, 7).toUpperCase();
 
     setSending(true);
-    // Record the booking first — a failed email must never lose it.
+    // Record the booking locally first — a failed email must never lose it.
+    // This is a convenience copy, not the system of record: the email below is
+    // what actually reaches the clinic. So a failure here (private browsing,
+    // storage quota, corrupt JSON) is logged and shrugged off rather than
+    // surfaced, and the booking still goes out.
     try {
       const prev = JSON.parse(localStorage.getItem('healthy-home-bookings') ?? '[]');
       prev.push({ code, treatmentId: activeService?.id ?? '', centerId, date, time, name, phone, email, notes, created: Date.now() });
       localStorage.setItem('healthy-home-bookings', JSON.stringify(prev));
-    } catch {}
+    } catch (e) {
+      console.error('[booking] could not save the local booking copy:', e);
+    }
 
     const result: SendResult = await sendBookingConfirmation({
       to_email: email.trim(),
@@ -316,9 +328,6 @@ const quickLinks = [
   { label: 'Derma Consultation', parent: 'dermatology' },
   { label: 'Lab Tests', parent: 'lab-tests' },
 ];
-
-export const serviceUrl = (id: string) => `/services/${id}`;
-export const subServiceUrl = (parentId: string, name: string) => `/services/${parentId}/${slugify(name)}`;
 
 /* Desktop nav hover: a teal rule that wipes in from the left, replacing the
    old black-to-teal text colour swap. Applied to a wrapper that hugs the text
@@ -586,6 +595,27 @@ export function Navbar() {
   );
 }
 
+/* Footer location list.
+   *
+   * The "Healthy Home" prefix is dropped from each branch name — every line sits
+   * under a Locations heading, so repeating the brand on all eight is noise. The
+   * city is appended only where it adds information, which is why the Pokhara and
+   * Bhaktapur branches stand alone while the Kathmandu ones read "…, Kathmandu".
+   *
+   * Each links straight to that branch on Google Maps, reusing the same fallback
+   * the /locations page uses for the three branches with no listing of their own
+   * (Chhaya, Bhaktapur, Maharajgunj). Derived once at module scope, so the footer
+   * does not re-map the branch list on every render. */
+const footerLocations = centers.map(c => {
+  const branch = c.name.replace(/^Healthy Home\s+/, '');
+  return {
+    id: c.id,
+    label: branch.toLowerCase().includes(c.city.toLowerCase()) ? branch : `${branch}, ${c.city}`,
+    href: c.mapUrl ?? `https://maps.google.com/?q=${encodeURIComponent(c.address + ' ' + c.city)}`,
+    openingSoon: c.openingSoon,
+  };
+});
+
 export function Footer() {
   const { openBooking } = useBooking();
   const [email, setEmail] = useState('');
@@ -635,6 +665,31 @@ export function Footer() {
             <button onClick={() => openBooking()} className="mt-4 w-full border border-goldlight/50 text-goldlight rounded-full py-3 text-xs tracking-[0.2em] uppercase hover:bg-gold hover:text-white hover:border-gold transition">Book Consultation</button>
           </div>
         </div>
+
+        {/* LOCATIONS — every branch, so directions are reachable from any page
+            without going via the Locations page first. */}
+        <div className="mt-12">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-4">
+            <p className="text-xs tracking-[0.25em] uppercase text-goldlight">Locations</p>
+            <p className="text-xs text-mist/70">{footerLocations.length} branches nationwide</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-1">
+            {footerLocations.map(l => (
+              <a
+                key={l.id}
+                href={l.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center min-h-[40px] sm:min-h-0 text-sm text-mist hover:text-goldlight transition-colors"
+              >
+                {l.label}
+                {/* Not trading yet, so say so rather than implying you can walk in. */}
+                {l.openingSoon && <span className="ml-2 text-[10px] tracking-[0.12em] uppercase text-goldlight/70">Soon</span>}
+              </a>
+            ))}
+          </div>
+        </div>
+
         <div className="gold-line my-8 opacity-40" />
         <div className="flex flex-col sm:flex-row justify-between gap-3 text-xs text-mist/70">
           <p>© 2026 Healthy Home. All rights reserved.</p>

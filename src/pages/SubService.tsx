@@ -2,7 +2,7 @@ import { Link, useParams, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Check, Clock, ShieldCheck, Sparkles, ArrowRight, ChevronRight, Calendar } from 'lucide-react';
 import { treatments, getSubServices, findSubBySlug, slugify } from '../data/content';
-import { useBooking } from '../components/chrome';
+import { useBooking } from '../components/booking';
 import { TreatmentCard, CtaBanner } from '../components/shared';
 
 export default function SubService() {
@@ -11,8 +11,6 @@ export default function SubService() {
   const sub = parent && subId ? findSubBySlug(parent.id, subId) : undefined;
   const t = parent;
   const { openBooking } = useBooking();
-  const [tab, setTabLocal] = [0, (_: number) => {}] as unknown as [number, (n: number) => void];
-  void tab; void setTabLocal;
   if (!t || !sub) return <Navigate to="/services" replace />;
 
   const siblings = getSubServices(t.id).filter(s => s.id !== sub.id);

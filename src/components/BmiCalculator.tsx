@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { BMI_BANDS, BMI_MIN, BMI_MAX, bandForBmi } from '../data/bmiBands';
 import { treatments, subServices, type SubService, type Treatment } from '../data/content';
-import { useBooking } from './chrome';
+import { useBooking } from './booking';
 
 type Unit = 'metric' | 'imperial';
 type Sex = 'male' | 'female' | 'unspecified';

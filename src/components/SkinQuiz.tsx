@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ArrowRight, ArrowLeft, RotateCcw, Check, Calendar, FlaskConical } from 'lucide-react';
 import { treatments, subServices, slugify, centers } from '../data/content';
-import { useBooking } from './chrome';
-import { SectionHead } from './shared';
+import { useBooking } from './booking';
 
 type Answers = {
   skinType?: string;
@@ -231,13 +230,6 @@ export default function SkinQuiz({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
-
-function QuizBack({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5" /><path d="m12 19-7-7 7-7" /></svg>
-  );
-}
-
 
 export function SkinQuizTeaser() {
   return (

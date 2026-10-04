@@ -14,13 +14,25 @@ export default function WellnessHub() {
   const { hash } = useLocation();
   const [active, setActive] = useState(hash.replace('#', '') || 'bmi');
 
+  /* Deep links from the old /bmi-calculator and /skin-quiz routes land here with
+     a hash, so the active tool has to follow it. Adjusting state during render
+     rather than in an effect keeps the highlight correct on the very first
+     frame of that navigation. `lastHash` records what we have already reacted to,
+     which is what stops this firing again on unrelated re-renders. */
+  const toolId = hash.replace('#', '');
+  const isTool = Boolean(toolId) && TOOLS.some(t => t.id === toolId);
+  const [lastHash, setLastHash] = useState(hash);
+  if (hash !== lastHash) {
+    setLastHash(hash);
+    if (isTool) setActive(toolId);
+  }
+
   // Deep links from the old /bmi-calculator and /skin-quiz routes land here.
   // The page reflows as images load and whileInView sections mount, so a single
   // scroll can compute a stale offset. Retry until the target is really in view.
   useEffect(() => {
     const id = hash.replace('#', '');
     if (!id || !TOOLS.some(t => t.id === id)) return;
-    setActive(id);
 
     let cancelled = false;
     const scrollToTarget = () => {

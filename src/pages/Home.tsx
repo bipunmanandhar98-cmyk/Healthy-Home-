@@ -1,15 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, Star, ChevronRight, BadgeCheck, Sparkles, Calendar, Award, Users, Building2, Instagram, Play } from 'lucide-react';
-import { treatments, subServices, centers, faqs, googleRating } from '../data/content';
-import { useBooking } from '../components/chrome';
+import { ArrowRight, ChevronRight, BadgeCheck, Calendar, Award, Users, Building2 } from 'lucide-react';
+import { treatments, subServices, faqs, googleRating } from '../data/content';
+import { useBooking } from '../components/booking';
 import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared';
 import BeforeAfter from '../components/BeforeAfter';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import WhatsAppWidget from '../components/WhatsAppWidget';
-import { Link as RouterLink } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import { ChevronDown, Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { IMG } from '../data/images';
 
@@ -29,7 +27,6 @@ export default function Home() {
   const { openBooking } = useBooking();
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [openHome, setOpenHome] = useState<string[]>(treatments.map(t => t.id));
 
   const scrollToSection = (id: string) => {
     const target = document.getElementById(id);
@@ -39,32 +36,6 @@ export default function Home() {
     window.scrollTo({ top, behavior: 'smooth' });
   };
   const brands = ['BCA TEST', 'WEIGHT LOSS', 'CHEMICAL PEELING', 'HYDRAFACIAL','LAB TEST'];
-  /* Reel covers are their own files (IMG.home.reel1-4) rather than reusing the
-     hero slides, so a 9:13 reel cover can differ from the wide hero shot.
-     The URLs are the current reels on @healthyhome_nepal. Reels 2 and 3
-     previously pointed at different posts and have been corrected. */
-  const instagramReels = [
-    {
-      image: IMG.home.reel1,
-      title: 'Your Healthy Home journey starts here',
-      url: 'https://www.instagram.com/reel/DdJY3Jky8Vp/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
-    },
-    {
-      image: IMG.home.reel2,
-      title: 'Small steps. Big transformation.',
-      url: 'https://www.instagram.com/reel/Dc_FpTsiWk6/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
-    },
-    {
-      image: IMG.home.reel3,
-      title: 'Healthy skin, confident you',
-      url: 'https://www.instagram.com/reel/DbvRFyTyUsU/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
-    },
-    {
-      image: IMG.home.reel4,
-      title: 'Experience care you can trust',
-      url: 'https://www.instagram.com/reel/DbVhFmCyk-b/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=='
-    }
-  ];
 
   const heroSlides = [
     {
@@ -112,7 +83,12 @@ export default function Home() {
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+    /* `heroSlides.length` rather than `heroSlides`: the array is rebuilt on
+       every render, so depending on it would tear down and restart the timer
+       each time the slide changed, freezing the carousel on one frame. The
+       length is the only part the callback actually reads, and it never varies,
+       so the timer still starts once and runs for the life of the page. */
+  }, [heroSlides.length]);
 
 
   useEffect(() => {
@@ -537,111 +513,6 @@ export default function Home() {
         <p className="text-xs text-stone2 text-center mt-6 max-w-2xl mx-auto">
           Results depend on your starting point, consistency and aftercare. A consultation maps what is realistically achievable for you.
         </p>
-      </div>
-    </section>
-
-    {/* LOCATIONS PREVIEW */}
-    <section className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <SectionHead center={false} eyebrow="Find Your Health Nearby" title={<>6 branch, <em className="gold-text not-italic">one standard</em></>} sub="From Thapathali to Pokhara — same clinical excellence, same care, everywhere." />
-        <Link to="/locations" className="shrink-0 inline-flex items-center gap-2 border border-ink/20 px-6 py-3 rounded-full text-xs tracking-[0.2em] uppercase hover:bg-gold hover:text-white hover:border-gold transition">All Locations <MapPin size={14} /></Link>
-      </div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
-        {centers.slice(0, 4).map(c => (
-          <div key={c.id} className="bg-white border border-linen rounded-3xl p-6 flex flex-col h-full hover:shadow-xl transition-all duration-500 ease-out">
-            <p className="font-display text-2xl">{c.name}</p>
-            <p className="text-xs text-stone2 mt-1">{c.locationLine ?? <>{c.address}<br />{c.city}, {c.state}</>}</p>
-            {c.rating ? <p className="flex items-center gap-1 text-xs mt-2"><Star size={12} className="fill-gold text-gold" /> {c.rating} ({c.reviews?.toLocaleString()} Google reviews)</p> : null}
-            <p className="text-xs text-mocha mt-1">{c.phone ? c.phone : c.email ?? ''}</p>
-            {/* Head office is a corporate site and cannot take appointments, so
-                it gets no booking button here either. */}
-            {!c.noBooking ? (
-              <button onClick={() => openBooking({ center: c.id })} className="mt-auto pt-4 w-full bg-sand hover:bg-gold hover:text-white transition rounded-full py-2.5 text-[11px] tracking-[0.2em] uppercase font-medium">Book Here</button>
-            ) : (
-              <p className="mt-auto pt-4 text-[11px] text-stone2">{c.noBookingNote ?? 'Appointments not available'}</p>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="mt-10 bg-white border border-linen shadow-sm rounded-3xl p-8 sm:p-10 grid md:grid-cols-2 gap-6 items-center">
-        <div>
-          <p className="text-[11px] tracking-[0.3em] uppercase text-golddark">Expanding Across Nepal</p>
-          <h3 className="font-display text-3xl sm:text-4xl mt-2 text-ink">More branches coming soon</h3>
-          <p className="text-mocha text-sm mt-2">Join the waitlist for founding-member pricing (30% off your first year).</p>
-        </div>
-        <form onSubmit={e => { e.preventDefault(); alert('You are on the waitlist! Watch your inbox for founding-member pricing.'); }} className="flex gap-2">
-          <input required type="email" placeholder="Email for waitlist" className="flex-1 bg-sand border border-linen rounded-full px-5 py-3 text-sm placeholder:text-stone2 focus:border-gold" />
-          <button className="bg-gold hover:bg-[#00747B] text-white rounded-full px-6 text-xs tracking-widest uppercase">Notify Me</button>
-        </form>
-      </div>
-    </section>
-
-    {/* INSTAGRAM REELS */}
-    <section className="bg-sand/50 border-y border-linen">
-      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
-
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
-          <SectionHead
-            center={false}
-            eyebrow="Follow Along"
-            title={<>Healthy Home <em className="gold-text not-italic">on Instagram</em></>}
-            sub="Real moments, wellness tips, transformations and a closer look inside Healthy Home."
-          />
-
-          <a
-            href="https://www.instagram.com/"
-            target="_blank"
-            rel="noreferrer"
-            className="shrink-0 inline-flex items-center gap-2 bg-gold text-white px-6 py-3 rounded-full text-xs tracking-[0.2em] uppercase font-medium hover:bg-[#00747B] transition shadow-lg shadow-[#00919A]/20"
-          >
-            <Instagram size={15} />
-            Follow Us
-            <ArrowRight size={14} />
-          </a>
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
-          {instagramReels.map((reel, i) => (
-            <motion.a
-              key={i}
-              {...fadeUp}
-              href={reel.url}
-              target="_blank"
-              rel="noreferrer"
-              className="group relative aspect-[9/13] rounded-xl overflow-hidden bg-ink shadow-lg"
-            >
-              <img
-                src={reel.image}
-                alt={reel.title}
-                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                loading="lazy"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-ink/20" />
-
-              <div className="absolute top-4 left-4 w-9 h-9 rounded-full bg-white/90 backdrop-blur flex items-center justify-center text-ink shadow-lg">
-                <Instagram size={16} />
-              </div>
-
-              <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gold text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500 ease-out">
-                <Play size={15} fill="currentColor" />
-              </div>
-
-              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                <p className="text-[10px] tracking-[0.25em] uppercase text-goldlight mb-2">
-                  Instagram Reel
-                </p>
-                <p className="font-display text-xl sm:text-2xl leading-tight">
-                  {reel.title}
-                </p>
-                <span className="inline-flex items-center gap-1.5 mt-3 text-[10px] tracking-[0.18em] uppercase text-white/75 group-hover:text-white transition">
-                  Watch Reel <ArrowRight size={12} />
-                </span>
-              </div>
-            </motion.a>
-          ))}
-        </div>
-
       </div>
     </section>
 

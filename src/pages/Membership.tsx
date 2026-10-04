@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Check, Crown, Gift, Percent, CalendarDays, Sparkles, ArrowRight, BadgeCheck, Star } from 'lucide-react';
-import { useBooking } from '../components/chrome';
+import { useBooking } from '../components/booking';
 import { SectionHead } from '../components/shared';
 import { IMG } from '../data/images';
 

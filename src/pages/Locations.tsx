@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
-import { Search, MapPin, Star, Phone, Clock, Navigation, Mail } from 'lucide-react';
+import { Search, MapPin, Phone, Clock, Navigation, Mail } from 'lucide-react';
 import { centers, openCenters } from '../data/content';
-import { useBooking } from '../components/chrome';
+import { useBooking } from '../components/booking';
 import { SectionHead, Stars } from '../components/shared';
 import { IMG } from '../data/images';
 

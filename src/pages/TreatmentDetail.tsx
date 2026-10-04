@@ -1,8 +1,8 @@
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Check, Clock, ShieldCheck, Sparkles, ArrowRight, ChevronRight, Calendar, Star } from 'lucide-react';
+import { Check, Clock, ShieldCheck, Sparkles, ArrowRight, ChevronRight, Calendar } from 'lucide-react';
 import { treatments, getSubServices, subServices, slugify } from '../data/content';
-import { useBooking } from '../components/chrome';
+import { useBooking } from '../components/booking';
 import { TreatmentCard, CtaBanner } from '../components/shared';
 
 export default function TreatmentDetail() {

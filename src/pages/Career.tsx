@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Briefcase, MapPin, Calendar, Clock, ArrowRight, Check, ChevronDown, ChevronUp, Search, Filter, Star, Heart, Award, Users, GraduationCap, Stethoscope, BarChart2, Shield, Sparkles, X, Upload } from 'lucide-react';
+import { MapPin, Calendar, Clock, ArrowRight, Check, ChevronDown, ChevronUp, Search, Star, Heart, Users, X, Upload } from 'lucide-react';
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { useBooking } from '../components/chrome';
 import { SectionHead, CtaBanner } from '../components/shared';
 import { IMG } from '../data/images';
 /* Job listings and the filter options live in src/data/jobs.ts, which records
@@ -11,7 +10,7 @@ import { IMG } from '../data/images';
    This page renders `publishedJobs` — all 32 roles are kept there as the full
    record, but only the advertised subset (one per department, no CEO and no
    Manager/Head-level role) is shown publicly. */
-import { publishedJobs as jobs, departments, locations, jobTypes, type Job, LEAVE_POLICY } from '../data/jobs';
+import { publishedJobs as jobs, departments, locations, jobTypes, type Job } from '../data/jobs';
 import {
   careersEmailConfigured,
   sendJobApplication,
@@ -21,15 +20,6 @@ import {
 } from '../lib/applicationEmail';
 
 const fadeUp = { initial: { opacity: 0, y: 22 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: '-80px' }, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } } as const;
-
-const values = [
-  { icon: Heart, title: 'Client-First Culture', desc: 'Every decision starts with "what\'s best for the client?" — honest care over upselling.' },
-  { icon: Award, title: 'Clinical Excellence', desc: 'Physician-led, evidence-based protocols. 100+ hours academy training for every specialist.' },
-  { icon: GraduationCap, title: 'Growth & Learning', desc: 'Annual education budgets, certification sponsorships, mentorship programs, and clear career paths.' },
-  { icon: Users, title: 'Collaborative Team', desc: 'Multidisciplinary rounds, cross-department projects, and a culture of mutual support.' },
-  { icon: Shield, title: 'Work-Life Balance', desc: 'Reasonable shifts, generous leave, hybrid options where possible, and wellness credits.' },
-  { icon: Sparkles, title: 'Innovation Welcome', desc: 'New ideas encouraged — from treatment protocols to client experience improvements.' },
-];
 
 const testimonials = [
   { name: 'Dr. Priya Sharma', role: 'Senior Physiotherapist', location: 'Thapathali', tenure: '3 years', text: 'I\'ve grown from a junior physio to leading the Weight Management rehabilitation program. The mentorship here is real — senior physicians invest time in your development. Plus, seeing clients transform their lives is incredibly rewarding.', avatar: IMG.staff.career1 },
@@ -43,15 +33,6 @@ const stats = [
   { value: '6', label: 'Branch', icon: MapPin },
   { value: '94%', label: 'Staff Retention', icon: Heart },
   { value: '10+', label: 'Promotions', icon: ArrowRight },
-];
-
-const benefits = [
-  { icon: Heart, title: 'Health Insurance', desc: 'Comprehensive coverage for you + dependents (medical, dental, vision)' },
-  { icon: GraduationCap, title: 'Learning Budget', desc: 'Rs. 30,000–50,000/year for courses, certifications, conferences' },
-  { icon: Sparkles, title: 'Free Wellness Credits', desc: 'Rs. 25,000+ annual credits for Healthy Home services (self + family discounts)' },
-  { icon: Calendar, title: 'Generous Leave', desc: `${LEAVE_POLICY.replace('Paid leave: ', '')} + birthday off` },
-  { icon: Shield, title: 'Career Growth', desc: 'Clear promotion paths, mentorship, internal transfers across 6 branch' },
-  { icon: Star, title: 'Staff Perks', desc: 'Referral bonuses, wellness retreats, product discounts, flexible schedules' },
 ];
 
 /* ── Apply modal ─────────────────────────────────────────────────────────
@@ -72,23 +53,47 @@ function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) 
   const [err, setErr] = useState('');
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState<SendResult | null>(null);
+  /** First name latched at submit time, for the success panel. */
+  const [applicantName, setApplicantName] = useState('');
   const [dragOver, setDragOver] = useState(false);
   /* dragenter/dragleave also fire when the pointer crosses the child elements
      inside the drop zone, so a plain boolean flickers. Counting enter/leave
      events instead keeps the highlight steady until the drag really leaves. */
   const dragDepth = useRef(0);
 
-  /* A fresh form per opening, and no stale error or filename left over. */
+  /* A fresh form per opening, and no stale error or filename left over.
+   *
+   * The state half of the reset runs during render rather than in an effect, so
+   * the first frame of a newly opened modal is already clean instead of briefly
+   * showing the previous job's confirmation. The DOM half — clearing the native
+   * form controls and focusing the first field — stays in the effect below,
+   * because those are real DOM operations. Same split as BookingModal in
+   * chrome.tsx.
+   *
+   * `lastJobId` is also cleared when the modal closes, so reopening the *same*
+   * job counts as a fresh opening and resets again. */
+  const jobId = job?.id ?? null;
+  const [lastJobId, setLastJobId] = useState(jobId);
+  if (jobId !== lastJobId) {
+    setLastJobId(jobId);
+    if (jobId) {
+      setFileName('');
+      setErr('');
+      setResult(null);
+      setApplicantName('');
+      setSending(false);
+      setDragOver(false);
+    }
+  }
+
   useEffect(() => {
     if (!job) return;
     formRef.current?.reset();
-    setFileName('');
-    setErr('');
-    setResult(null);
-    setSending(false);
-    setDragOver(false);
-    dragDepth.current = 0;
     nameRef.current?.focus();
+    // Also clears the enter/leave counter, which is a ref rather than state.
+    // Nothing has read it yet on this opening, so this is the same reset the
+    // state block above used to do inline.
+    dragDepth.current = 0;
   }, [job]);
 
   /* Stop the page scrolling behind the panel while it is open. */
@@ -146,6 +151,11 @@ function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) 
     setSending(true);
     const outcome = await sendJobApplication(formRef.current as HTMLFormElement);
     setSending(false);
+    /* Latch the applicant's first name while the form still exists. The success
+       panel below replaces the form entirely, so by the time it renders there is
+       no input left to read the name from — which is why it is kept here rather
+       than read off the ref during render. */
+    setApplicantName(name.split(' ')[0] || 'there');
     setResult(outcome);
   };
 
@@ -181,7 +191,7 @@ function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) 
 
               {result === 'sent' ? (
                 <p className="text-mocha mt-2 text-sm">
-                  Thanks, {nameRef.current?.value.split(' ')[0] || 'there'} — your application and resume for{' '}
+                  Thanks, {applicantName} — your application and resume for{' '}
                   <span className="font-semibold text-ink">{job.title}</span> have been sent to our hiring team.
                   We'll be in touch at the email you gave us.
                 </p>
@@ -369,7 +379,6 @@ function ApplyModal({ job, onClose }: { job: Job | null; onClose: () => void }) 
 }
 
 export default function Career() {
-  const { openBooking } = useBooking();
   const [applying, setApplying] = useState<Job | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDept, setSelectedDept] = useState('All');

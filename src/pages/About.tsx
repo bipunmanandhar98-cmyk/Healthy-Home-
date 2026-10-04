@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Award, HeartHandshake, Microscope, ArrowRight, Quote } from 'lucide-react';
-import { useBooking } from '../components/chrome';
+import { useBooking } from '../components/booking';
 import { SectionHead, CtaBanner } from '../components/shared';
 import { googleRating } from '../data/content';
 import { IMG } from '../data/images';

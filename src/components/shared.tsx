@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useInView } from 'framer-motion';
 import { Star, ArrowRight, Clock, ShieldCheck } from 'lucide-react';
 import type { Treatment } from '../data/content';
 import { getSubServices, slugify, googleRating } from '../data/content';
-import { useBooking } from './chrome';
+import { useBooking } from './booking';
 import { IMG } from '../data/images';
 
 export function Stars({ n = 5, size = 13 }: { n?: number; size?: number }) {

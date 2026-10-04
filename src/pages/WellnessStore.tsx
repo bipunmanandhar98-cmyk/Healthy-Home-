@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Package, Phone, CalendarDays, Sparkles, Check, Tag, ArrowRight, Leaf } from 'lucide-react';
 import { products, productCategories } from '../data/content';
-import { useBooking } from '../components/chrome';
+import { useBooking } from '../components/booking';
 import { SectionHead, CtaBanner } from '../components/shared';
 
 /** Matches the number already used in CtaBanner, so the store does not invent one. */
