@@ -78,8 +78,18 @@ export default function TeamCarousel() {
             right-aligned flex line — where a scroll container cannot scroll back.
             The thumbnails then ran off past the container and were clipped by the
             viewport instead. Letting the strip scroll clips it to its own column,
-            which is what keeps it inside the red box. */}
-        <div ref={stripRef} className="order-2 lg:order-1 flex gap-3 overflow-x-auto no-scrollbar scroll-smooth">
+            which is what keeps it inside the red box.
+
+            py-1 is load-bearing, not spacing. Setting overflow-x makes the
+            y-axis compute to auto as well (CSS promotes a `visible` value on one
+            axis when the other scrolls), so the strip clips in both directions.
+            The selection ring is a 2px box-shadow spread sitting *outside* the
+            thumbnail, and the strip's height is exactly the thumbnail's height,
+            so without this padding the top and bottom of the ring were sheared
+            off and only the left and right arcs survived. The overflow clip
+            region is the padding box, which is exactly where that ring needs to
+            live. */}
+        <div ref={stripRef} className="order-2 lg:order-1 flex gap-3 overflow-x-auto no-scrollbar scroll-smooth py-1">
           {team.map((m, i) => (
             <button
               key={m.id}
