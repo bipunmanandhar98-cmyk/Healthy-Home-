@@ -515,17 +515,11 @@ export default function Home() {
       <div className="mt-10"><TrustBar /></div>
     </section>
 
-    {/* TESTIMONIALS */}
+    {/* LEADERSHIP & EXPERTS */}
     <section className="bg-sand/60 border-y border-linen">
       <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
-        <SectionHead
-          eyebrow="Client Voices"
-          title={<>What our clients <em className="gold-text not-italic">say</em></>}
-          sub="Quoted from each branch's own Google Business Profile — swipe through them."
-        />
-        <div className="mt-10">
-          <TestimonialCarousel />
-        </div>
+        <SectionHead eyebrow="Leadership & Experts" title="Hands you can trust" sub="A few of the 200+ clinicians, coaches and aestheticians behind your results." />
+        <TeamCarousel />
       </div>
     </section>
 
@@ -566,11 +560,17 @@ export default function Home() {
       </div>
     </section>
 
-    {/* LEADERSHIP & EXPERTS */}
+    {/* TESTIMONIALS */}
     <section className="bg-sand/60 border-y border-linen">
       <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
-        <SectionHead eyebrow="Leadership & Experts" title="Hands you can trust" sub="A few of the 200+ clinicians, coaches and aestheticians behind your results." />
-        <TeamCarousel />
+        <SectionHead
+          eyebrow="Client Voices"
+          title={<>What our clients <em className="gold-text not-italic">say</em></>}
+          sub="Quoted from each branch's own Google Business Profile — swipe through them."
+        />
+        <div className="mt-10">
+          <TestimonialCarousel />
+        </div>
       </div>
     </section>
 

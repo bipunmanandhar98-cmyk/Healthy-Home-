@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { team } from '../data/content';
 import TeamAvatar from './TeamAvatar';
@@ -23,6 +23,12 @@ export default function TeamCarousel() {
   const [index, setIndex] = useState(0);
   const active = team[index]!;
   const stripRef = useRef<HTMLDivElement>(null);
+
+  /* The transition is a slide plus a blur, and both are motion the
+     prefers-reduced-motion setting exists to suppress — so when it is set the
+     swap becomes a plain cross-fade with no travel and no blur. */
+  const reduce = useReducedMotion() ?? false;
+  const fade = { opacity: 0 };
 
   // Wrap around, so the arrows never dead-end on the first or last person.
   const step = (d: number) => setIndex(v => (v + d + team.length) % team.length);
@@ -81,10 +87,15 @@ export default function TeamCarousel() {
               onClick={() => setIndex(i)}
               aria-label={`Show ${m.name}`}
               aria-current={i === index}
-              className={`shrink-0 w-16 sm:w-20 lg:w-[86px] overflow-hidden rounded-lg transition ${
+              /* The selected thumbnail is marked with a plain ring and no offset.
+                 The offset version drew its 2px gap in `cream`, which is the page
+                 background — but this section sits on `bg-sand/60`, so the gap
+                 rendered as a mismatched pale halo around the selected photo.
+                 Dropping the offset puts the ring straight against the edge. */
+              className={`shrink-0 w-20 sm:w-24 lg:w-[104px] overflow-hidden rounded-lg transition ${
                 i === index
-                  ? 'ring-2 ring-gold ring-offset-2 ring-offset-cream'
-                  : 'opacity-55 hover:opacity-90'
+                  ? 'ring-2 ring-gold'
+                  : 'opacity-60 hover:opacity-100'
               }`}
             >
               <TeamAvatar
@@ -102,10 +113,10 @@ export default function TeamCarousel() {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, x: 14 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -14 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              initial={reduce ? fade : { opacity: 0, x: 16, filter: 'blur(12px)' }}
+              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+              exit={reduce ? fade : { opacity: 0, x: -16, filter: 'blur(12px)' }}
+              transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
             >
               <TeamAvatar
                 m={active}
@@ -121,10 +132,10 @@ export default function TeamCarousel() {
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              initial={reduce ? fade : { opacity: 0, y: 12, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={reduce ? fade : { opacity: 0, y: -12, filter: 'blur(8px)' }}
+              transition={{ duration: reduce ? 0 : 0.38, ease: [0.22, 1, 0.36, 1] }}
             >
               <p className="font-display italic text-3xl sm:text-4xl leading-tight">{active.name}</p>
               <p className="text-golddark mt-1.5">{active.role}</p>
