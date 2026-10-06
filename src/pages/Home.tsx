@@ -458,7 +458,7 @@ export default function Home() {
             aria-pressed={serviceView === v}
             onClick={() => setServiceView(v)}
             className={`rounded-full px-5 py-2.5 text-[11px] tracking-[0.15em] uppercase font-medium transition-colors ${
-              serviceView === v ? 'bg-ink text-white shadow-sm' : 'text-stone2 hover:text-ink'
+              serviceView === v ? 'bg-gold text-white shadow-sm' : 'text-stone2 hover:text-ink'
             }`}
           >
             {label}
