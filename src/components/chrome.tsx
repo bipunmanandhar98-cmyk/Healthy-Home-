@@ -219,7 +219,10 @@ function BookingModal() {
                           <span className="flex items-center gap-1.5 font-medium text-sm text-stone2">
                             <MapPin size={14} className="shrink-0" />
                             {c.name}
-                            <span className="text-[11px] bg-linen text-stone2 px-2 py-0.5 rounded-full ml-1">HEAD OFFICE</span>
+                            {/* text-ink, not stone2: linen is a border colour and stone2 on it only
+                                reached 2.31:1. This is the one place on the site
+                                where copy sits on linen. */}
+                            <span className="text-[11px] bg-linen text-ink px-2 py-0.5 rounded-full ml-1">HEAD OFFICE</span>
                           </span>
                           <span className="block text-xs text-stone2 mt-1">{c.locationLine ?? `${c.address}, ${c.city}, ${c.state}`}</span>
                           {c.phone ? <span className="block text-xs mt-1.5 text-stone2">{c.phone}</span> : null}

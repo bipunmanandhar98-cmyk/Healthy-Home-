@@ -112,17 +112,33 @@ label {
   }
 }
 
+/* Palette. Every foreground here was checked against every background it is
+   actually placed on, not one representative pairing, and each clears WCAG AA
+   4.5:1 for normal text:
+
+     gold      4.54 on sand, 4.71 on cream, carries white at 5.13
+     golddark  5.18 on sand, carries white at 5.85  (one clear step for hover)
+     stone2    4.57 on sand, 4.75 on cream, 5.17 on white
+     mocha     4.63 on sand, 4.80 on cream, 5.23 on white
+
+   gold, stone2 and mocha all failed before: gold carried white text at only
+   3.81 and stone2 sat at 2.64-2.99, which is why secondary copy was hard to
+   read on a phone in daylight. goldlight and mist are used on the dark espresso
+   sections and already cleared 8:1, so they are unchanged.
+
+   linen stays as it is: it is a border and divider colour, not a surface for
+   text. The one place text does sit on it, the HEAD OFFICE badge, now uses ink. */
 @theme {
   --color-cream: #F5F5F7;
   --color-sand: #E9F3F3;
   --color-linen: #D7E5E6;
-  --color-gold: #00919A;
+  --color-gold: #007A80;
   --color-goldlight: #19C7CF;
-  --color-golddark: #007C83;
+  --color-golddark: #007078;
   --color-ink: #172326;
   --color-espresso: #07191B;
-  --color-mocha: #667477;
-  --color-stone2: #85999B;
+  --color-mocha: #616F70;
+  --color-stone2: #617071;
   --color-blush: #D9EEEF;
   --color-mist: #A9BFC1;
   /* ── Type scale ───────────────────────────────────────────────────────
