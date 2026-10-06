@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, MapPin, ChevronDown, Calendar, Star, ArrowRight, Check, Sparkles } from 'lucide-react';
 import { treatments, subServices, centers, bookableCenters, googleRating } from '../data/content';
@@ -344,7 +344,21 @@ export function Navbar() {
      so both behave as accordions and the drawer stays short. */
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const [openSubs, setOpenSubs] = useState<string | null>(null);
-  const [drop, setDrop] = useState(false);
+  /* The mega-menu must never outlive the page it was opened on: hover opens it,
+     but clicking a link inside it navigates while the pointer is still over the
+     header, so no mouseleave ever fires and the panel used to sit there on top of
+     the page you had just gone to.
+
+     Rather than closing it from a click handler on every link in the panel —
+     which is easy to forget the next time somebody adds one — the open state
+     records the history entry it was opened on, and is only treated as open while
+     the location still matches. React Router gives every navigation a fresh key,
+     so any route change closes it for free, including the SERVICES trigger, a
+     link inside the panel, and browser back/forward. No effect and no state write
+     on navigation, which also keeps it clear of set-state-in-effect. */
+  const [dropEntry, setDropEntry] = useState<string | null>(null);
+  const location = useLocation();
+  const drop = dropEntry === location.key;
   const [scrolled, setScrolled] = useState(false);
   const { openBooking } = useBooking();
   const navigate = useNavigate();
@@ -379,11 +393,11 @@ export function Navbar() {
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const openDrop = () => {
     clearTimeout(closeTimer.current);
-    setDrop(true);
+    setDropEntry(location.key);
   };
   const closeDrop = () => {
     clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setDrop(false), 140);
+    closeTimer.current = setTimeout(() => setDropEntry(null), 140);
   };
   useEffect(() => () => clearTimeout(closeTimer.current), []);
 
