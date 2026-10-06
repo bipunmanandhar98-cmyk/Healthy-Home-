@@ -7,28 +7,35 @@ import { useState } from 'react';
  * are 150-200 word walls sitting directly under an h1, which pushes everything
  * else off the screen.
  *
- * The cut is by character count, not by measuring the rendered box. That is a
- * deliberate trade: measuring needs a ref, a resize observer and a layout pass,
- * and any state derived from that re-runs on every resize — which is how the
- * toggle ends up flickering between states, or briefly wrong on first paint.
- * A character threshold is stable, needs no measurement, and cannot flicker.
- * The cost is that the exact cut sits a little differently at each viewport
- * width, which is invisible in practice because the fade covers the seam.
+ * The cutoff is decided by character count, but the visible cut is drawn by
+ * line-clamp. Those are two different jobs and were briefly conflated:
  *
- * Text at or under the threshold renders untouched — no button, no fade — so
- * short descriptions are not given a pointless control. */
+ *   - Character count decides only WHETHER the toggle appears. Measuring the
+ *     rendered box instead would need a ref, a resize observer and a layout
+ *     pass, and state derived from that re-runs on every resize — which is how
+ *     this kind of toggle ends up flickering or briefly wrong on first paint.
+ *     A threshold is stable and cannot flicker.
+ *   - line-clamp decides HOW MUCH is visible, because it truncates on a line
+ *     boundary and adds its own ellipsis.
+ *
+ * An earlier version cut with a fixed max-height and covered the seam with a
+ * white gradient. Two problems: the gradient was `from-white` while these pages
+ * sit on the cream token, so it laid a visible white haze over the text rather
+ * than fading it, and a max-height that is not a multiple of the line-height
+ * slices through the middle of a line instead of ending cleanly. line-clamp
+ * removes the overlay entirely and needs no magic height.
+ *
+ * The 320-character threshold sits in a natural gap in the data: the three main
+ * treatment overviews are 190 / 264 / 305 characters and all sixteen sub-service
+ * overviews are 594 to 1323. So every main description stays plain and every
+ * sub-service folds, without the number being finely tuned.
+ *
+ * Text at or under the threshold renders untouched — no button, no clamp — so
+ * short descriptions are not given a pointless control.
+ */
 
 /** Roughly four lines of body copy at the sizes these pages use. */
 const THRESHOLD = 320;
-
-function clamp(text: string, limit: number) {
-  if (text.length <= limit) return text;
-  const cut = text.slice(0, limit);
-  // Prefer a word boundary, but only if it is not so early that a whole sentence
-  // is dropped — otherwise a hard cut reads better than a stub.
-  const sp = cut.lastIndexOf(' ');
-  return (sp > limit * 0.6 ? cut.slice(0, sp) : cut).trimEnd();
-}
 
 export default function ReadMore({
   text,
@@ -40,22 +47,13 @@ export default function ReadMore({
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
-  const long = text.length > threshold;
-  if (!long) return <p className={`text-mocha leading-relaxed ${className}`}>{text}</p>;
-
-  const shown = open ? text : clamp(text, threshold);
+  if (text.length <= threshold) {
+    return <p className={`text-mocha leading-relaxed ${className}`}>{text}</p>;
+  }
 
   return (
     <div className={className}>
-      <div className="relative">
-        <p className={`text-mocha leading-relaxed ${open ? '' : 'max-h-[9.5rem] overflow-hidden'}`}>
-          {shown}
-        </p>
-        {!open && (
-          // Fade over the last line so the text looks cut rather than truncated.
-          <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white via-white/85 to-transparent" />
-        )}
-      </div>
+      <p className={`text-mocha leading-relaxed ${open ? '' : 'line-clamp-4'}`}>{text}</p>
       <button
         type="button"
         aria-expanded={open}
