@@ -58,7 +58,7 @@ export default function ReadMore({
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(v => !v)}
-        className="mt-2 inline-flex items-center gap-1.5 text-[11px] tracking-[0.18em] uppercase font-medium text-golddark hover:text-[#00747B] transition-colors min-h-[36px]"
+        className="mt-2 inline-flex items-center gap-1.5 text-[11px] tracking-[0.18em] uppercase font-medium text-golddark hover:text-[#00747B] transition-colors min-h-[44px]"
       >
         {open ? 'Read less' : 'Read more'}
         <span aria-hidden="true" className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}>

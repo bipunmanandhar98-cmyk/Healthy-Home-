@@ -52,7 +52,9 @@ function Card({ t, i }: { t: Testimonial; i: number }) {
       aria-label={`Review ${i + 1} of ${testimonials.length}`}
     >
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
+        {/* role="img" so the aria-label is permitted: aria-label is a prohibited
+            attribute on a plain div, and this row is a graphic, not text. */}
+        <div className="flex items-center gap-0.5" role="img" aria-label={`${t.rating} out of 5 stars`}>
           {Array.from({ length: 5 }).map((_, s) => (
             <Star
               key={s}
@@ -77,7 +79,7 @@ function Card({ t, i }: { t: Testimonial; i: number }) {
           type="button"
           onClick={() => setExpanded(v => !v)}
           aria-expanded={expanded}
-          className="self-start -mt-1 mb-1 inline-flex items-center gap-1 min-h-[32px] text-[11px] font-medium text-golddark hover:text-ink transition"
+          className="self-start -mt-1 mb-1 inline-flex items-center gap-1 min-h-[44px] text-[11px] font-medium text-golddark hover:text-ink transition"
         >
           {expanded ? 'Read less' : 'Read more'}
           <ChevronDown

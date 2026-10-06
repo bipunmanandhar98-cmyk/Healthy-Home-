@@ -129,8 +129,15 @@ export default function TeamCarousel() {
       </div>
 
       {/* Controls, centred */}
-      <div className="flex items-center justify-center gap-5 mt-8">
-        <div className="flex items-center gap-2">
+      {/* flex-wrap so the arrows drop to their own line rather than pushing the row
+          past a 320px screen: seven 26px dot targets plus the two 44px arrows
+          and a 16px gap is 308px, which does not fit next to a scrollbar. */}
+      <div className="flex flex-wrap items-center justify-center gap-4 mt-8">
+        {/* Each dot is a 10px bar sitting inside a 44px-tall button, so the row stays
+            visually tight while the touch target is usable. Seven 44px targets
+            would not fit across a 360px screen, hence the horizontal padding
+            rather than a fixed 44px square: the row only grows to about 260px. */}
+        <div className="flex items-center gap-0.5 sm:gap-1">
           {team.map((m, i) => (
             <button
               key={m.id}
@@ -138,10 +145,14 @@ export default function TeamCarousel() {
               onClick={() => setIndex(i)}
               aria-label={`${active.name === m.name ? 'Currently showing' : 'Show'} ${m.name}`}
               aria-current={i === index}
-              className={`rounded-full transition-all ${
-                i === index ? 'w-6 h-2.5 bg-ink' : 'w-2.5 h-2.5 bg-linen hover:bg-stone2'
-              }`}
-            />
+              className="grid place-items-center min-h-[44px] px-2 sm:px-2.5"
+            >
+              <span
+                className={`block rounded-full transition-all ${
+                  i === index ? 'w-6 h-2.5 bg-ink' : 'w-2.5 h-2.5 bg-linen hover:bg-stone2'
+                }`}
+              />
+            </button>
           ))}
         </div>
 

@@ -330,13 +330,18 @@ export default function Home() {
           {/* Bottom-left slider controls. The bar stays visually slim, but the
               button is 44px tall so it is actually tappable on a phone. */}
           <div className="absolute z-20 left-6 sm:left-10 lg:left-16 bottom-7 sm:bottom-10 flex items-end gap-1 -mb-2">
+            {/* w-11 on mobile so the inactive slide dots clear the 44px touch
+                minimum -- they were 32px, under half of it. The visible bar
+                inside each button is narrower than the button, so the row keeps
+                its tight look. Back to the original width from sm up, where a
+                pointer is more likely than a thumb. */}
             {heroSlides.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setHeroSlide(i)}
                 aria-label={`Go to slide ${i + 1}`}
                 aria-current={heroSlide === i}
-                className={`flex items-end h-11 ${heroSlide === i ? 'w-11 sm:w-12' : 'w-8 sm:w-9'}`}
+                className={`flex items-end h-11 ${heroSlide === i ? 'w-11 sm:w-12' : 'w-11 sm:w-9'}`}
               >
                 <span
                   className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -457,7 +462,7 @@ export default function Home() {
             type="button"
             aria-pressed={serviceView === v}
             onClick={() => setServiceView(v)}
-            className={`rounded-full px-5 py-2.5 text-[11px] tracking-[0.15em] uppercase font-medium transition-colors ${
+            className={`rounded-full px-5 py-2.5 min-h-[44px] inline-flex items-center text-[11px] tracking-[0.15em] uppercase font-medium transition-colors ${
               serviceView === v ? 'bg-gold text-white shadow-sm' : 'text-stone2 hover:text-ink'
             }`}
           >

@@ -1,0 +1,11 @@
+# Healthy Home — https://healthyhome.com.np
+#
+# Every page is a client-rendered route, so there is nothing here for a crawler
+# to execute in order to discover content. The site is open to all crawlers.
+#
+# This file exists because the SPA rewrite in vercel.json sends every unmatched
+# path to /index.html, which meant /robots.txt was served as HTML and rejected
+# as malformed. A real file at this path is served ahead of the rewrite.
+
+User-agent: *
+Allow: /
