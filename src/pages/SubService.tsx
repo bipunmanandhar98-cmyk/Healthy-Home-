@@ -4,6 +4,8 @@ import { Check, Clock, ShieldCheck, Sparkles, ArrowRight, ChevronRight, Calendar
 import { treatments, getSubServices, findSubBySlug, slugify } from '../data/content';
 import { useBooking } from '../components/booking';
 import { TreatmentCard, CtaBanner } from '../components/shared';
+import Accordion from '../components/Accordion';
+import ReadMore from '../components/ReadMore';
 
 export default function SubService() {
   const { id, subId } = useParams();
@@ -51,9 +53,11 @@ export default function SubService() {
           <h1 className="font-display text-[44px] mt-2 leading-tight">{sub.name}</h1>
           <p className="font-display italic text-xl text-mocha mt-1">{t.tagline}</p>
 
-          {/* What the treatment/test is */}
+          {/* What the treatment/test is. Long copy here runs to 1300 characters on some
+              services, so it is folded behind Read more rather than left as a wall
+              directly under the h1. */}
           <h2 className="font-display text-2xl mt-6">What is {sub.name}?</h2>
-          <p className="text-mocha leading-relaxed mt-2">{sub.overview}</p>
+          <ReadMore text={sub.overview} className="mt-2" />
 
           <div className="bg-sand rounded-2xl p-5 mt-5 flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -65,60 +69,94 @@ export default function SubService() {
             </div>
           </div>
 
-          {/* Benefits */}
-          <h2 className="font-display text-2xl mt-7">Benefits</h2>
-          <ul className="grid gap-2.5 mt-3">
-            {sub.benefits.map(b => (
-              <li key={b} className="flex items-start gap-2.5 text-sm bg-white border border-linen rounded-2xl px-4 py-3">
-                <span className="w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5"><Check size={12} className="text-golddark" /></span>
-                {b}
-              </li>
-            ))}
-          </ul>
-
-          {/* Who it is suitable for */}
-          <h2 className="font-display text-2xl mt-7">Who is it suitable for?</h2>
-          <ul className="grid gap-2.5 mt-3">
-            {sub.suitableFor.map(b => (
-              <li key={b} className="flex items-start gap-2.5 text-sm">
-                <span className="w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5"><Check size={12} className="text-golddark" /></span>
-                {b}
-              </li>
-            ))}
-          </ul>
-
-          {/* Process / how it works */}
-          <h2 className="font-display text-2xl mt-7">Process — how it works</h2>
-          <ol className="grid gap-3 mt-3">
-            {sub.process.map((p, i) => (
-              <li key={p.title} className="flex gap-4 bg-white border border-linen rounded-2xl p-5">
-                <span className="font-display text-3xl text-gold shrink-0">{i + 1}</span>
-                <span><b className="text-ink">{p.title}</b><br /><span className="text-sm text-mocha">{p.desc}</span></span>
-              </li>
-            ))}
-          </ol>
-
-          {/* Expected results */}
-          <h2 className="font-display text-2xl mt-7">Expected results</h2>
-          <p className="text-mocha leading-relaxed mt-2 text-[15px]">{sub.expectedResults}</p>
-
-          {/* FAQs */}
-          <h2 className="font-display text-2xl mt-7">FAQs</h2>
-          <div className="grid gap-3 mt-3">
-            {sub.faqs.map(f => (
-              <div key={f.q} className="bg-white border border-linen rounded-2xl px-5 py-4"><p className="font-medium text-ink">{f.q}</p><p className="text-sm mt-1 text-mocha">{f.a}</p></div>
-            ))}
-          </div>
-
-          {/* Call-to-action */}
-          <div className="flex flex-wrap gap-3 mt-7">
-            <button onClick={() => openBooking({ treatment: t.id })} className="bg-gold text-white px-6 py-3 rounded-full text-xs tracking-[0.18em] uppercase hover:bg-[#00747B] flex items-center gap-2 shadow-lg shadow-[#00919A]/25"><Calendar size={14} /> Request Consultation</button>
-            <Link to={`/services/${t.id}`} className="border border-ink/20 px-6 py-3 rounded-full text-xs tracking-[0.18em] uppercase hover:bg-gold hover:text-white hover:border-gold transition inline-flex items-center gap-2">Back to {t.name}</Link>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-5">
+          {/* Benefits, suitability, process, expected results and FAQs used to be five
+              always-open blocks stacked in this column, which made it several
+              screens long before reaching the CTA. They are now one accordion
+              directly below this grid; the CTA moves with them so the booking
+              buttons are no longer stranded halfway down the page. */}
+          <div className="flex flex-wrap gap-2 mt-6">
             {['Consultation', 'Easy payment plans', 'Member rewards', 'Free parking'].map(x => <span key={x} className="text-[11px] bg-white border border-linen rounded-full px-3 py-1.5 text-mocha">{x}</span>)}
           </div>
         </motion.div>
+      </section>
+
+      {/* Detail accordion */}
+      <section className="max-w-4xl mx-auto px-4 pb-14">
+        <Accordion
+          initiallyOpen={['benefits']}
+          items={[
+            {
+              id: 'benefits',
+              title: 'Benefits',
+              meta: `${sub.benefits.length}`,
+              content: (
+                <ul className="grid gap-2.5">
+                  {sub.benefits.map(b => (
+                    <li key={b} className="flex items-start gap-2.5 text-sm bg-cream/60 border border-linen rounded-2xl px-4 py-3">
+                      <span className="w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5"><Check size={12} className="text-golddark" /></span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              ),
+            },
+            {
+              id: 'suitable',
+              title: 'Who is it suitable for?',
+              content: (
+                <ul className="grid gap-2.5">
+                  {sub.suitableFor.map(b => (
+                    <li key={b} className="flex items-start gap-2.5 text-sm">
+                      <span className="w-5 h-5 rounded-full bg-gold/15 flex items-center justify-center shrink-0 mt-0.5"><Check size={12} className="text-golddark" /></span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              ),
+            },
+            {
+              id: 'process',
+              title: 'Process — how it works',
+              meta: `${sub.process.length} steps`,
+              content: (
+                <ol className="grid gap-3">
+                  {sub.process.map((p, i) => (
+                    <li key={p.title} className="flex gap-4 bg-cream/60 border border-linen rounded-2xl p-5">
+                      <span className="font-display text-3xl text-gold shrink-0">{i + 1}</span>
+                      <span><b className="text-ink">{p.title}</b><br /><span className="text-sm text-mocha">{p.desc}</span></span>
+                    </li>
+                  ))}
+                </ol>
+              ),
+            },
+            {
+              id: 'results',
+              title: 'Expected results',
+              content: <p className="text-mocha leading-relaxed text-[15px]">{sub.expectedResults}</p>,
+            },
+            {
+              id: 'faqs',
+              title: 'FAQs',
+              meta: `${sub.faqs.length} questions`,
+              content: (
+                <div className="grid gap-3">
+                  {sub.faqs.map(f => (
+                    <div key={f.q} className="bg-cream/60 border border-linen rounded-2xl px-5 py-4">
+                      <p className="font-medium text-ink">{f.q}</p>
+                      <p className="text-sm mt-1 text-mocha leading-relaxed">{f.a}</p>
+                    </div>
+                  ))}
+                </div>
+              ),
+            },
+          ]}
+        />
+
+        {/* Call-to-action */}
+        <div className="flex flex-wrap gap-3 mt-7">
+          <button onClick={() => openBooking({ treatment: t.id })} className="bg-gold text-white px-6 py-3 rounded-full text-xs tracking-[0.18em] uppercase hover:bg-[#00747B] flex items-center gap-2 shadow-lg shadow-[#00919A]/25"><Calendar size={14} /> Request Consultation</button>
+          <Link to={`/services/${t.id}`} className="border border-ink/20 px-6 py-3 rounded-full text-xs tracking-[0.18em] uppercase hover:bg-gold hover:text-white hover:border-gold transition inline-flex items-center gap-2">Back to {t.name}</Link>
+        </div>
       </section>
 
       {/* Related services (siblings branched from same main service) */}
