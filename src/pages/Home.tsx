@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight, BadgeCheck, Calendar, Award, Users, Building2 } from 'lucide-react';
-import { treatments, subServices, faqs, googleRating } from '../data/content';
+import { treatments, subServices, faqs, googleRating, slugify } from '../data/content';
 import { useBooking } from '../components/booking';
 import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared';
 import BeforeAfter from '../components/BeforeAfter';
@@ -24,10 +24,84 @@ const FEATURED_SUB_IDS = [
   'breast-reduction-wm',
 ] as const;
 
+/** The same 16 services regrouped by the concern a visitor arrives with, rather
+ *  than by the department that delivers them.
+ *
+ *  Every entry resolves to sub-services that already exist — a concern is not a
+ *  promise to offer something the site cannot deliver. Together these cover all
+ *  sixteen: weight-loss, weight-loss-home-package, bca-testing, coolsculpting,
+ *  body-shaping, skin-tightening, face-lifting, hydrafacial-treatment,
+ *  chemical-peeling, derma-consultation, stretch-mark-removal,
+ *  laser-hair-removal, breast-reduction, breast-tightening, weight-gain and
+ *  whole-body-lab-test.
+ *
+ *  A service may appear under more than one concern, which is the point of the
+ *  view — Breast Tightening serves both a skin-concern question and a breast one.
+ *  `subs` is keyed by the URL slug rather than the data id, because the id carries
+ *  a parent suffix on some entries ('breast-reduction-wm') while the slug is what
+ *  the site actually routes on.
+ *
+ *  The card's own link goes to the first entry in `subs`, the treatment that best
+ *  represents the concern; the rest are named in the body copy. */
+const CONCERNS = [
+  {
+    id: 'weight-loss',
+    title: 'Weight Loss',
+    lead: 'Steady, supervised fat loss you can actually keep.',
+    subs: ['weight-loss', 'weight-loss-home-package', 'bca-testing'],
+  },
+  {
+    id: 'stubborn-fat',
+    title: 'Stubborn Fat',
+    lead: 'Targeted reduction for the areas diet alone will not reach.',
+    subs: ['coolsculpting', 'body-shaping'],
+  },
+  {
+    id: 'sagging-skin',
+    title: 'Loose or Sagging Skin',
+    lead: 'Tightening and lifting for skin that has lost its snap.',
+    subs: ['skin-tightening', 'face-lifting'],
+  },
+  {
+    id: 'dull-skin',
+    title: 'Dull or Uneven Skin',
+    lead: 'Deep cleansing, texture and tone, starting with a proper assessment.',
+    subs: ['hydrafacial-treatment', 'chemical-peeling', 'derma-consultation'],
+  },
+  {
+    id: 'stretch-marks',
+    title: 'Stretch Marks',
+    lead: 'Fading and smoothing after weight change or pregnancy.',
+    subs: ['stretch-mark-removal'],
+  },
+  {
+    id: 'unwanted-hair',
+    title: 'Unwanted Hair',
+    lead: 'Long-lasting reduction for face and body.',
+    subs: ['laser-hair-removal'],
+  },
+  {
+    id: 'breast',
+    title: 'Breast Changes',
+    lead: 'Reduction, reshaping and lifting.',
+    subs: ['breast-reduction', 'breast-tightening'],
+  },
+  {
+    id: 'health-weight-gain',
+    title: 'Health & Weight Gain',
+    lead: 'Healthy weight gain, and a full picture of your health.',
+    subs: ['weight-gain', 'whole-body-lab-test'],
+  },
+] as const;
+
 export default function Home() {
   const { openBooking } = useBooking();
   const navigate = useNavigate();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  /* "What We Do" can be read two ways: by the department that delivers the
+     treatment, or by the concern that brought the visitor in. Both views list the
+     same services, so this only changes how they are grouped. */
+  const [serviceView, setServiceView] = useState<'category' | 'concern'>('category');
 
   const scrollToSection = (id: string) => {
     const target = document.getElementById(id);
@@ -368,62 +442,122 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        {FEATURED_SUB_IDS.flatMap((id) => {
-          const s = subServices.find((x) => x.id === id);
-          const parent = s ? treatments.find((t) => t.id === s.parentId) : undefined;
-          return s && parent ? [{ ...s, parent }] : [];
-        }).map((s, i) => (
-          <motion.div
-            key={s.id}
-            id={(() => {
-              const name = s.name.toLowerCase();
-              if (name.includes('bca')) return 'bca-testing';
-              if (name.includes('weight')) return 'weight-management';
-              if (name.includes('chemical peel')) return 'chemical-peeling';
-              if (name.includes('hydrafacial')) return 'hydrafacial';
-              if (name.includes('laser hair')) return 'laser-hair-removal';
-              if (name.includes('lab')) return 'lab-test';
-              return undefined;
-            })()}
-            {...fadeUp}
-            transition={{ duration: 0.7, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-white border border-linen rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-500 ease-out"
+      {/* Grouping switch. A button group with aria-pressed rather than a tablist:
+          with only two options there is nothing to arrow between, and a tablist
+          that does not implement arrow-key navigation is worse for a screen
+          reader than two honestly-labelled toggle buttons. */}
+      <div
+        role="group"
+        aria-label="Group services by category or by concern"
+        className="mt-8 inline-flex items-center gap-1 rounded-full border border-linen bg-white p-1"
+      >
+        {([['category', 'By Category'], ['concern', 'By Concern']] as const).map(([v, label]) => (
+          <button
+            key={v}
+            type="button"
+            aria-pressed={serviceView === v}
+            onClick={() => setServiceView(v)}
+            className={`rounded-full px-5 py-2.5 text-[11px] tracking-[0.15em] uppercase font-medium transition-colors ${
+              serviceView === v ? 'bg-ink text-white shadow-sm' : 'text-stone2 hover:text-ink'
+            }`}
           >
-            <Link
-              to={`/services/${s.parent.id}/${s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
-              className="block"
-            >
-              <div className="relative h-36 sm:h-40 overflow-hidden">
-                <img
-                  src={s.image}
-                  alt={s.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  loading="lazy"
-                />
-              </div>
-
-              <div className="p-5 sm:p-6">
-                <p className="text-[10px] tracking-[0.22em] uppercase text-stone2">
-                  {s.parent.name}
-                </p>
-
-                <h3 className="font-medium text-[15px] sm:text-base mt-2.5 leading-snug min-h-[2.5rem]">
-                  {s.name}
-                </h3>
-
-                <p className="text-[11px] sm:text-[11px] text-stone2 mt-2 leading-relaxed line-clamp-2 min-h-[2rem]">
-                  {s.description || `Personalized ${s.name.toLowerCase()} care designed around your goals.`}
-                </p>
-
-                <span className="inline-flex items-center gap-1 mt-4 text-[10px] tracking-[0.18em] uppercase text-[#007C83] font-medium">
-                  Book Now <ArrowRight size={11} />
-                </span>
-              </div>
-            </Link>
-          </motion.div>
+            {label}
+          </button>
         ))}
       </div>
+
+      {serviceView === 'category' ? (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
+          {FEATURED_SUB_IDS.flatMap((id) => {
+            const s = subServices.find((x) => x.id === id);
+            const parent = s ? treatments.find((t) => t.id === s.parentId) : undefined;
+            return s && parent ? [{ ...s, parent }] : [];
+          }).map((s, i) => (
+            <motion.div
+              key={s.id}
+              id={(() => {
+                const name = s.name.toLowerCase();
+                if (name.includes('bca')) return 'bca-testing';
+                if (name.includes('weight')) return 'weight-management';
+                if (name.includes('chemical peel')) return 'chemical-peeling';
+                if (name.includes('hydrafacial')) return 'hydrafacial';
+                if (name.includes('laser hair')) return 'laser-hair-removal';
+                if (name.includes('lab')) return 'lab-test';
+                return undefined;
+              })()}
+              {...fadeUp}
+              transition={{ duration: 0.7, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+              className="bg-white border border-linen rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-500 ease-out"
+            >
+              <Link
+                to={`/services/${s.parent.id}/${s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
+                className="block"
+              >
+                <div className="relative h-36 sm:h-40 overflow-hidden">
+                  <img
+                    src={s.image}
+                    alt={s.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    loading="lazy"
+                  />
+                </div>
+
+                <div className="p-5 sm:p-6">
+                  <p className="text-[10px] tracking-[0.22em] uppercase text-stone2">
+                    {s.parent.name}
+                  </p>
+
+                  <h3 className="font-medium text-[15px] sm:text-base mt-2.5 leading-snug min-h-[2.5rem]">
+                    {s.name}
+                  </h3>
+
+                  <p className="text-[11px] sm:text-[11px] text-stone2 mt-2 leading-relaxed line-clamp-2 min-h-[2rem]">
+                    {s.description || `Personalized ${s.name.toLowerCase()} care designed around your goals.`}
+                  </p>
+
+                  <span className="inline-flex items-center gap-1 mt-4 text-[10px] tracking-[0.18em] uppercase text-[#007C83] font-medium">
+                    Book Now <ArrowRight size={11} />
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-8">
+          {CONCERNS.map((c, i) => {
+            // Resolve by slug, dropping anything that no longer exists rather than
+            // rendering a card that links nowhere.
+            const resolved = c.subs
+              .map((slug) => subServices.find((x) => slugify(x.name) === slug))
+              .filter((x): x is (typeof subServices)[number] => Boolean(x));
+            const primary = resolved[0];
+            if (!primary) return null;
+            const names = resolved.map((x) => x.name).join(', ');
+            return (
+              <motion.div
+                key={c.id}
+                {...fadeUp}
+                transition={{ duration: 0.6, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                className="bg-white border border-linen rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-500 ease-out"
+              >
+                <Link
+                  to={`/services/${primary.parentId}/${slugify(primary.name)}`}
+                  className="block h-full flex flex-col"
+                >
+                  <h3 className="font-medium text-xl leading-snug">{c.title}</h3>
+                  <p className="text-[13px] text-stone2 mt-2.5 leading-relaxed grow">
+                    {c.lead} {names}.
+                  </p>
+                  <span className="inline-flex items-center gap-1 mt-4 text-[10px] tracking-[0.18em] uppercase text-[#007C83] font-medium">
+                    Explore <ArrowRight size={11} />
+                  </span>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
 
       <div className="text-center mt-8">
         <Link
