@@ -85,7 +85,7 @@ export default function PromoPopup() {
             <button
               onClick={() => setOpen(false)}
               aria-label="Close offer"
-              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-ink/70 text-white flex items-center justify-center hover:bg-ink transition"
+              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-gold text-white flex items-center justify-center hover:bg-golddark transition"
             >
               <X size={17} />
             </button>
