@@ -650,7 +650,7 @@ export function Footer() {
             <div className="flex items-center gap-2.5">
               <img src={IMG.brand.logoFooter} alt="Healthy Home logo" className="h-12 w-auto object-contain brightness-0 invert" />
             </div>
-            <p className="text-mist text-sm mt-4 leading-relaxed max-w-xs">Healthy Home — Weight Management, Dermatology and Lab Tests across 6 Nepal branch.</p>
+            <p className="text-mist text-sm mt-4 leading-relaxed max-w-xs">Healthy Home — Weight Management, Dermatology and Lab Tests across 6 Nepal branches.</p>
             <div className="flex items-center gap-1.5 mt-4 text-sm"><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><Star size={15} className="fill-gold text-gold" /><span className="text-mist ml-1">{googleRating.average} · {googleRating.total.toLocaleString()} Google reviews</span></div>
           </div>
           <div>

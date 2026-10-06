@@ -605,7 +605,7 @@ export default function Home() {
               eye lands on the number without the label competing with it. */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7 lg:gap-x-12 lg:gap-y-8">
             {([
-              { badge: <Building2 size={22} />, value: '6', label: 'Branch across Nepal', animated: false },
+              { badge: <Building2 size={22} />, value: '6', label: 'Branches across Nepal', animated: false },
               { badge: <Users size={22} />, value: '50K+', label: 'Sessions received', animated: true },
               { badge: <Award size={22} />, value: '21+', label: 'Years of expertise', animated: false },
               /* A lettered G rather than a star, so the Google figure carries its

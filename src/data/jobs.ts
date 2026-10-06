@@ -618,7 +618,7 @@ const drafts: JobDraft[] = [
   },
   {
     id: 'outlet-manager',
-    title: 'Outlet Manager/ Branch Manager',
+    title: 'Outlet Manager / Branch Manager',
     department: 'Operation',
     location: 'Jamal, Kathmandu',
     type: 'Full-time',

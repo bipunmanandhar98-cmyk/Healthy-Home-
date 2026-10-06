@@ -31,7 +31,7 @@ const fadeUp = {
 /* ---------------------------------- data ---------------------------------- */
 
 const stats = [
-  { value: '6', label: 'Branch Running', icon: Store },
+  { value: '6', label: 'Branches Running', icon: Store },
   { value: '20+', label: 'Years in Wellness', icon: Clock },
   { value: '60K+', label: 'Clients Served', icon: UserCheck },
   { value: '94%', label: 'Client Retention', icon: TrendingUp },

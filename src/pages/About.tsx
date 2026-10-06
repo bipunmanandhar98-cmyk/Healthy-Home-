@@ -21,7 +21,7 @@ const journey = [
   {
     year: '2006',
     title: 'A Dream Beginning',
-    body: 'Two young men, both with unparalleled ambitions and the right knowledge decided to embark on a journey to establish Healthy Home, Nepal\u2019s first weight loss clinic. Mr Krishna forgo his plans to visit Japan and decided to contribute in Nepal. Mr Mohan had just returned from an extensive experience in the wellness industry from abroad. Both forged a charming partnership with their initial outlet in Bagbazaar.',
+    body: 'Two young men, both with unparalleled ambitions and the right knowledge, decided to embark on a journey to establish Healthy Home, Nepal\u2019s first weight loss clinic. Mr Krishna forgave his plans to visit Japan and decided to contribute in Nepal. Mr Mohan had just returned from an extensive experience in the wellness industry from abroad. Both forged a charming partnership with their initial outlet in Bagbazaar.',
     img: IMG.journey.founding,
     alt: 'Healthy Home reception',
   },
@@ -45,14 +45,14 @@ export default function About() {
           <div>
             <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Our Story · Est. 2005</p>
             <h1 className="font-display text-[44px] sm:text-[56px] mt-3 leading-tight">Healthy habits start <em className="gold-text not-italic">at home.</em></h1>
-            <p className="text-mocha mt-5 leading-relaxed max-w-lg">What began as a single flagship studio in 2005 is now a trusted wellness destination — 6 branch, 200+ clinicians, coaches and aestheticians, 50K+ services — still family-run, still focused on natural, lasting results.</p>
+            <p className="text-mocha mt-5 leading-relaxed max-w-lg">What began as a single flagship studio in 2005 is now a trusted wellness destination — 6 branches, 200+ clinicians, coaches and aestheticians, 50K+ services — still family-run, still focused on natural, lasting results.</p>
             <div className="flex gap-3 mt-6">
               <button onClick={() => openBooking()} className="bg-gold hover:bg-[#00747B] text-white px-7 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase shadow-lg shadow-[#00919A]/25">Meet Us In Person</button>
               <Link to="/locations" className="border border-ink/25 text-ink px-7 py-3.5 rounded-full text-xs tracking-[0.2em] uppercase hover:bg-sand">Find a Branch</Link>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3 text-center">
-            {[['2005', 'Serving Nepal'], ['50K+', 'Sessions Received'], ['200+', 'Licensed providers'], ['6', 'Nepal branch'], [`${googleRating.average}★`, 'Google rating'], ['20+', 'Years of glow']].map(([n, l]) => (
+            {[['2005', 'Serving Nepal'], ['50K+', 'Sessions Received'], ['200+', 'Licensed providers'], ['6', 'Nepal branches'], [`${googleRating.average}★`, 'Google rating'], ['20+', 'Years of glow']].map(([n, l]) => (
               <div key={l} className="bg-white border border-linen shadow-sm rounded-2xl p-5"><p className="font-display text-3xl gold-text font-semibold">{n}</p><p className="text-[11px] tracking-widest uppercase text-stone2 mt-1">{l}</p></div>
             ))}
           </div>

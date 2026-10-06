@@ -213,7 +213,7 @@ export default function SkinQuiz({ compact = false }: { compact?: boolean }) {
                       {related.map(t => (
                         <Link key={t.id} to={`/services/${t.id}`} className="text-[11px] bg-white hover:bg-gold hover:text-white border border-linen hover:border-gold rounded-full px-3 py-1.5 transition">{t.name}</Link>
                       ))}
-                      <span className="text-[11px] text-stone2 px-1 py-1.5">· {centers.length} branch · Rs. 5,000/yr membership</span>
+                      <span className="text-[11px] text-stone2 px-1 py-1.5">· {centers.length} branches · Rs. 5,000/yr membership</span>
                     </div>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-2.5 mt-5">

@@ -36,7 +36,7 @@ export default function Membership() {
           <span className="absolute top-0 left-1/2 -translate-x-1/2 bg-gold text-white text-[11px] tracking-[0.2em] uppercase px-5 py-1.5 rounded-b-2xl flex items-center gap-1.5"><Crown size={11} /> Healthy Home Membership</span>
           <p className="text-[11px] tracking-[0.3em] uppercase text-golddark mt-4">Annual Membership</p>
           <p className="font-display text-[56px] mt-2">Rs. 5,000<span className="text-xl text-stone2 font-body">/year</span></p>
-          <p className="text-sm text-mocha italic mt-1">Valid 12 months from activation · All 6 Nepal branch</p>
+          <p className="text-sm text-mocha italic mt-1">Valid 12 months from activation · All 6 Nepal branches</p>
           <button onClick={() => openBooking()} className="mt-6 bg-gold hover:bg-[#00747B] text-white rounded-full px-10 py-3.5 text-xs tracking-[0.2em] uppercase font-medium transition shadow-lg shadow-[#00919A]/25">Become a Member</button>
         </motion.div>
 

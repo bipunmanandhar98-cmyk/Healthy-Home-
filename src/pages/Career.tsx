@@ -30,7 +30,7 @@ const testimonials = [
 
 const stats = [
   { value: '100+', label: 'Team Members', icon: Users },
-  { value: '6', label: 'Branch', icon: MapPin },
+  { value: '6', label: 'Branches', icon: MapPin },
   { value: '94%', label: 'Staff Retention', icon: Heart },
   { value: '10+', label: 'Promotions', icon: ArrowRight },
 ];
@@ -422,9 +422,9 @@ export default function Career() {
         <div className="relative max-w-7xl mx-auto px-4 py-16 sm:py-20 text-center">
           <p className="text-[11px] tracking-[0.35em] uppercase text-golddark">Join Our Team</p>
           <h1 className="font-display text-[44px] sm:text-[56px] mt-3">Build a career in <em className="gold-text not-italic">wellness</em></h1>
-          <p className="text-mocha mt-4 max-w-xl mx-auto">Healthy Home is Nepal's leading wellness destination — 6 branch and 200+ professionals. We're growing and looking for passionate people to join our mission.</p>
+          <p className="text-mocha mt-4 max-w-xl mx-auto">Healthy Home is Nepal's leading wellness destination — 6 branches and 200+ professionals. We're growing and looking for passionate people to join our mission.</p>
           <div className="flex flex-wrap justify-center gap-4 mt-8 text-sm text-mist">
-            <span className="flex items-center gap-1.5"><Check size={14} className="text-gold" /> 6 Branch Across Nepal</span>
+            <span className="flex items-center gap-1.5"><Check size={14} className="text-gold" /> 6 Branches Across Nepal</span>
             <span className="flex items-center gap-1.5"><Check size={14} className="text-gold" /> Physician-Led Care</span>
             <span className="flex items-center gap-1.5"><Check size={14} className="text-gold" /> Growth & Learning Culture</span>
             <span className="flex items-center gap-1.5"><Check size={14} className="text-gold" /> Competitive Benefits</span>

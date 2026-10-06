@@ -90,7 +90,7 @@ export function TreatmentCard({ t, showSubs = false }: { t: Treatment; showSubs?
 export function TrustBar() {
   const items = [
     { icon: ShieldCheck, t: 'Physician-Led', s: 'MD-directed care at every branch' },
-    { icon: Star, t: `${googleRating.average} Google Rating`, s: `${googleRating.total.toLocaleString()} reviews across ${googleRating.branchCount} branch` },
+    { icon: Star, t: `${googleRating.average} Google Rating`, s: `${googleRating.total.toLocaleString()} reviews across ${googleRating.branchCount} branches` },
     { icon: Clock, t: 'Consultations', s: 'No-pressure service mapping' },
   ];
   return (
