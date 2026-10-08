@@ -8,7 +8,6 @@ import BeforeAfter from '../components/BeforeAfter';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import TeamCarousel from '../components/TeamCarousel';
 import LocationsPreview from '../components/LocationsPreview';
-import WhatsAppWidget from '../components/WhatsAppWidget';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { IMG } from '../data/images';
@@ -741,10 +740,6 @@ export default function Home() {
     <LocationsPreview />
 
     <CtaBanner />
-
-      {/* Floating WhatsApp entry point. Home only — see WhatsAppWidget for why
-          this is a deep link rather than an inline chat widget. */}
-      <WhatsAppWidget />
     </div>
   );
 }
