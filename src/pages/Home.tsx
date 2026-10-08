@@ -7,6 +7,7 @@ import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared'
 import BeforeAfter from '../components/BeforeAfter';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import TeamCarousel from '../components/TeamCarousel';
+import LocationsPreview from '../components/LocationsPreview';
 import WhatsAppWidget from '../components/WhatsAppWidget';
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -736,6 +737,8 @@ export default function Home() {
         ))}
       </div>
     </section>
+
+    <LocationsPreview />
 
     <CtaBanner />
 
