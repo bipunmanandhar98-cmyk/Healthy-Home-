@@ -238,3 +238,29 @@ body {
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 input, select, textarea { outline: none; }
+
+/* Botpress chat launcher: lift it clear of the WhatsApp button.
+ *
+ * Both widgets want the bottom-right corner and their defaults collide almost
+ * exactly. Measured from the Botpress 5.0.6 stylesheet:
+ *
+ *   .bpFabWrapper  position:fixed; bottom:24px; right:24px; z-index:9998; 64x64
+ *   WhatsApp      fixed bottom-5 right-4 sm:right-6 z-[110];             56x56
+ *                (=> bottom:20px; right:24px)
+ *
+ * Same right inset, 4px apart vertically, and Botpress is 64px tall against
+ * WhatsApp's 56px — so the FAB covers the WhatsApp link almost completely. At
+ * z-index 9998 vs 110 Botpress also paints on top, which means hit-testing the
+ * centre of the WhatsApp button returns the Botpress element: the WhatsApp CTA
+ * is not merely overlapped, it is unclickable. That link is the live WhatsApp
+ * Business number, so this is worth fixing rather than eyeballing.
+ *
+ * 24 + 56 + 12 = 92px stacks the bubble in the same column, directly above the
+ * WhatsApp button, with both fully visible and tappable.
+ *
+ * The id selector is deliberate. Botpress injects its stylesheet at runtime,
+ * appended to <head> after this file's <link>, so a bare `.bpFabWrapper` rule
+ * would lose on source order despite identical specificity. #fab-root raises
+ * this to (1,1,0) against Botpress's (0,1,0) and wins regardless of order,
+ * without !important. #fab-root is Botpress's own mount point for the FAB. */
+#fab-root .bpFabWrapper { bottom: 92px; }
