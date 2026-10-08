@@ -23,22 +23,27 @@
 
     <!-- Botpress chat widget ("Healthy Home AI Guide").
 
-         `defer` on the loader is the one change to the snippet Botpress ships,
-         and it is deliberate. As given, this is a classic script in <head>, and
-         a classic script there is render-blocking: the browser must download and
-         run it before it parses anything else. inject.js is ~1.7 MB
-         uncompressed, so that is the entire first paint held behind a chat
-         bubble.
+     Byte-for-byte the snippet from the Botpress dashboard, deliberately
+     unaltered. An earlier commit added defer to the loader; that has been
+     reverted so this file matches the vendor install instructions exactly.
 
-         `defer` removes the blocking without changing what runs when. Deferred
-         scripts still execute in document order, so inject.js still defines
-         window.botpress before the config below calls window.botpress.init(),
-         and document.currentScript — which inject.js reads to locate its own
-         script tag — is still populated for deferred execution. The widget
-         still appears on first paint; it just no longer gates it.
+     Reverting costs something real, so it is recorded here rather than just
+     dropped. Without defer this is a classic script in <head>, which is
+     render-blocking: the browser fetches and runs inject.js before parsing
+     anything else, and inject.js is ~1.7 MB uncompressed, so first paint
+     waits on the chat loader. defer avoided that without changing execution
+     order (deferred scripts still run in document order, so window.botpress
+     is still defined before the config calls init(), and
+     document.currentScript is still populated), and the init handshake was
+     verified working with it in place.
 
-         Keep the order of these two tags. Swapping them breaks init(). -->
-    <script src="https://cdn.botpress.cloud/webchat/v5.0/inject.js" defer></script>
+     It was not the cause of the launcher bubble failing to appear, though.
+     That was traced to document.visibilityState being "hidden", which stops
+     Botpress mounting at all. defer bought no observable benefit, so
+     matching the vendor snippet is worth more than the theoretical saving.
+
+     Keep the order of these two tags. Swapping them breaks init(). -->
+    <script src="https://cdn.botpress.cloud/webchat/v5.0/inject.js"></script>
     <script
       src="https://files.bpcontent.cloud/2026/10/08/09/20261008091535-FT87IBCI.js"
       defer
