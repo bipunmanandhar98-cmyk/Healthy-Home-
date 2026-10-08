@@ -1,6 +1,6 @@
 import { Star } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { testimonials } from '../data/content';
+import { testimonials, googleRating } from '../data/content';
 
 /**
  * Testimonial wall, built to a supplied reference: an eyebrow rule beside an
@@ -47,21 +47,43 @@ export default function TestimonialWall() {
       <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
         <div className="grid lg:grid-cols-[0.6fr_1.4fr] gap-x-10 lg:gap-x-16 items-start">
 
-          {/* Left: eyebrow rule, italic title, standfirst. */}
-          <div className="lg:sticky lg:top-28">
-            <div className="flex gap-4 sm:gap-5">
-              <span aria-hidden="true" className="mt-4 h-px w-9 sm:w-12 shrink-0 bg-ink/25" />
-              <h2 className="font-display italic text-[26px] sm:text-[32px] leading-[1.3] text-ink text-balance">
-                Real clients, real results
-              </h2>
-            </div>
-            <p className="text-[15px] leading-relaxed text-[#414D4F] mt-5 max-w-sm">
+          {/* Left: eyebrow, title, standfirst. Set on the site's SectionHead scale —
+              gold uppercase eyebrow, non-italic display heading at leading 1.14,
+              15px mocha standfirst — so this band reads as part of the site
+              rather than as a pasted-in design. It is SectionHead's markup
+              inline because SectionHead centres by default and constrains
+              itself to max-w-2xl, neither of which suits a narrow left column
+              beside a masonry wall.
+
+              No sm: size step here, unlike SectionHead's text-4xl sm:text-[44px].
+              This column is about 350px wide at lg, and 44px set across it would
+              wrap the title to five lines. text-4xl is the same base step the
+              rest of the site uses; only the lg bump is dropped. */}
+          <div className="lg:sticky lg:top-28 max-w-md">
+            <p className="text-[11px] tracking-[0.35em] uppercase font-medium text-golddark">
+              Client Voices
+            </p>
+            <h2 className="font-display text-4xl leading-[1.14] mt-3 text-ink text-balance">
+              Real clients, real results
+            </h2>
+            {/* #414D4F rather than SectionHead's text-mocha. Measured on this
+                band's ground, which is sand/60 over the cream page and resolves
+                to #EEF4F5, mocha is 4.70:1 — passing, but tight enough that
+                Lighthouse flagged this section for colour-contrast when the
+                same colour sat on the trust band's stronger sand at 4.63:1.
+                #414D4F measures 7.88:1 here and is the same tone the trust
+                band uses, so the two stay consistent and both clear AA with
+                room to spare. */}
+            <p className="mt-4 text-[15px] leading-relaxed text-[#414D4F]">
               Verbatim from each branch&rsquo;s own Google Business Profile —
               {' '}{testimonials.length} reviews, quoted unedited.
             </p>
-            <p className="text-[13px] text-[#414D4F] mt-6 flex items-center gap-1.5">
+            {/* Reads googleRating rather than a literal. It previously said
+                "5.0 average", which was simply wrong — the figure across the
+                five reviewed branches is 4.8. */}
+            <p className="text-[13px] text-[#414D4F] mt-5 flex items-center gap-1.5">
               <Star size={13} className="fill-gold text-gold" aria-hidden="true" />
-              5.0 average across every branch reviewed
+              {googleRating.average.toFixed(1)} average across {googleRating.branchCount} reviewed branches
             </p>
           </div>
 
@@ -90,14 +112,14 @@ export default function TestimonialWall() {
                 />
 
                 <div className="absolute inset-x-0 bottom-0 p-3.5 lg:p-4">
-                  <blockquote className="text-[12px] leading-[1.5] text-white/85 line-clamp-2">
+                  <blockquote className="text-[12.5px] leading-[1.5] text-white/85 line-clamp-2">
                     &ldquo;{t.text}&rdquo;
                   </blockquote>
                   <figcaption className="mt-2.5">
-                    <cite className="not-italic block text-[13px] font-semibold text-white leading-tight">
+                    <cite className="not-italic block text-[14px] font-semibold text-white leading-tight">
                       {t.name}
                     </cite>
-                    <span className="block text-[11px] text-white/70 leading-tight mt-0.5">
+                    <span className="block text-[12px] text-white/70 leading-tight mt-0.5">
                       {t.treatment} &middot; {branchName(t.branch)}
                     </span>
                   </figcaption>

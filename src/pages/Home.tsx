@@ -605,16 +605,21 @@ export default function Home() {
     <section className="bg-sand border-y border-linen">
       <div className="max-w-7xl mx-auto px-4 py-16 lg:py-24">
 
-        {/* Title left, standfirst right. */}
+        {/* Title left, standfirst right. Set on the site's SectionHead scale —
+            gold uppercase eyebrow, non-italic display heading at leading 1.14,
+            15px mocha standfirst — to match the testimonial wall below it and
+            the rest of the site.
+
+            No sm: size step, unlike SectionHead's text-4xl sm:text-[44px]: this
+            column is about 350px wide at lg and 44px would wrap the title to
+            five lines. text-4xl is the same base step the site uses; only the
+            lg bump is dropped. */}
         <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-x-10 gap-y-6 lg:gap-x-20">
-          <div className="flex gap-4 sm:gap-5">
-            <span aria-hidden="true" className="mt-4 h-px w-9 sm:w-14 shrink-0 bg-ink/25" />
-            {/* No max-width: measured at this column, "Healthy Home unique" is
-                337px, so any cap under that forces the heading to three lines
-                where the reference runs two. text-balance keeps the break even
-                ("What makes Healthy" / "Home unique") instead of orphaning
-                "unique" on a line of its own. */}
-            <h2 className="font-display italic text-[26px] sm:text-[32px] leading-[1.3] text-ink text-balance">
+          <div>
+            <p className="text-[11px] tracking-[0.35em] uppercase font-medium text-golddark">
+              Our Standards
+            </p>
+            <h2 className="font-display text-4xl leading-[1.14] mt-3 text-ink text-balance">
               What makes Healthy Home unique
             </h2>
           </div>
