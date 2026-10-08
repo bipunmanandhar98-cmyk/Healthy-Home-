@@ -5,7 +5,7 @@ import { treatments, subServices, faqs, googleRating, openCenters, slugify } fro
 import { useBooking } from '../components/booking';
 import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared';
 import BeforeAfter from '../components/BeforeAfter';
-import TestimonialCarousel from '../components/TestimonialCarousel';
+import TestimonialWall from '../components/TestimonialWall';
 import TeamCarousel from '../components/TeamCarousel';
 import LocationsPreview from '../components/LocationsPreview';
 import { AnimatePresence } from 'framer-motion';
@@ -716,18 +716,7 @@ export default function Home() {
     </section>
 
     {/* TESTIMONIALS */}
-    <section className="bg-sand/60 border-y border-linen">
-      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
-        <SectionHead
-          eyebrow="Client Voices"
-          title={<>What our clients <em className="gold-text not-italic">say</em></>}
-          sub="Quoted from each branch's own Google Business Profile — swipe through them."
-        />
-        <div className="mt-10">
-          <TestimonialCarousel />
-        </div>
-      </div>
-    </section>
+    <TestimonialWall />
 
     {/* FAQ */}
     <section className="max-w-3xl mx-auto px-4 py-16 lg:py-20">
