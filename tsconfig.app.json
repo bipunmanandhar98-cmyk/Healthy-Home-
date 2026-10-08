@@ -13,6 +13,11 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    /* Mirrors resolve.alias '@' in vite.config.ts. TypeScript and Vite resolve
+       independently, so an `@/...` import needs an entry in both or it will be
+       understood by the editor and then fail to bundle, or the reverse. */
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] },
     "strict": true,
     "noFallthroughCasesInSwitch": true
   },
