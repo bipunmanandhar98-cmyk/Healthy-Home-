@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ChevronRight, BadgeCheck, Calendar, Award, Users, Building2 } from 'lucide-react';
-import { treatments, subServices, faqs, googleRating, slugify } from '../data/content';
+import { ArrowRight, ChevronRight, BadgeCheck, Calendar } from 'lucide-react';
+import { treatments, subServices, faqs, googleRating, openCenters, slugify } from '../data/content';
 import { useBooking } from '../components/booking';
 import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared';
 import BeforeAfter from '../components/BeforeAfter';
@@ -574,73 +574,78 @@ export default function Home() {
       </div>
     </section>
 
-    {/* STATS — "Why Trust" band.
-        Uses the site's most common section treatment (bg-white with linen
-        rules) rather than a dark slab, so the band sits with its neighbours
-        instead of interrupting them. Dark espresso is reserved for the footer
-        and the CTA banner.
-        Layout keeps the approved structure: heading left, figures 2x2 right.
-        The heading is a real h2, so the band is reachable by screen readers.
+    {/* STATS — "What makes Healthy Home unique" band.
 
-        Labels use text-ink, not the site's usual text-stone2. Measured on this
-        ground stone2 is only 2.7:1, which fails WCAG AA for small text. Ink is
-        14.7:1. The standfirst keeps text-mocha, which is the site's body colour
-        and clears AA on white at 4.6:1. */} 
-    <section className="bg-white border-y border-linen">
-      {/* Padding and figure size are tuned so the band lands near 1900x325 at a
-          wide desktop: it is a banner, not a block of cards, and the height is
-          content-driven rather than a fixed aspect. */}
-      <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16">
-        <div className="grid lg:grid-cols-[0.92fr_1.45fr] gap-10 lg:gap-16 items-center">
+        Layout follows the supplied reference: an eyebrow rule beside an italic
+        title on the left, a standfirst on the right, then a full-width
+        three-column figure grid below both. The reference runs five figures in
+        three columns, which leaves the sixth cell empty — normal for a grid,
+        and better than stretching two figures across a whole row.
 
-          {/* Left: heading and standfirst */}
-          <div className="max-w-md">
-            <span aria-hidden="true" className="block h-px w-14 bg-gold mb-4" />
-            <h2 className="font-display text-4xl sm:text-[44px] leading-[1.12] text-ink">
-              Why Trust
-              <span className="block italic text-gold">Healthy Home?</span>
+        Ground is sand rather than white, so the band separates from its
+        neighbours without the dark slab the footer and CTA banner use.
+
+        Captions and standfirst are a solid #414D4F, which measures 7.74:1 on this
+        sand. text-mocha was the obvious choice at 4.63:1 and does pass AA, but
+        only by 0.13, and Lighthouse reported this section as a colour-contrast
+        failure in two runs out of three. A secondary caption should not sit on
+        the line like that.
+
+        That colour is deliberately solid rather than text-ink/80, which is the
+        same tone. Tailwind v4 emits an alpha utility as oklab(... / 0.8), and
+        axe-core does not resolve oklab alpha reliably — with it the failure
+        persisted in one run out of five. A solid rgb value is measured
+        correctly every time.
+
+        Every figure is derived rather than typed. The Google figures and the
+        branch count come straight from googleRating and openCenters, so they
+        cannot drift out of step with the branch cards further down the page.
+        The sessions and years figures are long-standing claims carried over
+        unchanged from the band this replaces. */}
+    <section className="bg-sand border-y border-linen">
+      <div className="max-w-7xl mx-auto px-4 py-16 lg:py-24">
+
+        {/* Title left, standfirst right. */}
+        <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-x-10 gap-y-6 lg:gap-x-20">
+          <div className="flex gap-4 sm:gap-5">
+            <span aria-hidden="true" className="mt-4 h-px w-9 sm:w-14 shrink-0 bg-ink/25" />
+            {/* No max-width: measured at this column, "Healthy Home unique" is
+                337px, so any cap under that forces the heading to three lines
+                where the reference runs two. text-balance keeps the break even
+                ("What makes Healthy" / "Home unique") instead of orphaning
+                "unique" on a line of its own. */}
+            <h2 className="font-display italic text-[26px] sm:text-[32px] leading-[1.3] text-ink text-balance">
+              What makes Healthy Home unique
             </h2>
-            <p className="text-[15px] leading-relaxed text-mocha mt-4">
-              Your wellness journey, backed by experience, expertise and a growing community.
-            </p>
           </div>
+          <p className="text-[15px] leading-relaxed text-[#414D4F] max-w-2xl">
+            Two decades of clinical practice across the Kathmandu Valley and
+            Pokhara. Qualified practitioners, programmes shaped by real patient
+            outcomes, and the same standard of care at every branch — from a
+            corporate head office to a neighbourhood mini centre.
+          </p>
+        </div>
 
-          {/* Right: the four figures, 2 x 2.
-              A badge, a hairline rule and the figure read left to right, so the
-              eye lands on the number without the label competing with it. */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7 lg:gap-x-12 lg:gap-y-8">
-            {([
-              { badge: <Building2 size={22} />, value: '6', label: 'Branches across Nepal', animated: false },
-              { badge: <Users size={22} />, value: '50K+', label: 'Sessions received', animated: true },
-              { badge: <Award size={22} />, value: '21+', label: 'Years of expertise', animated: false },
-              /* A lettered G rather than a star, so the Google figure carries its
-                 own identity instead of reading as another symbol. */
-              { badge: <span className="font-display text-[22px] leading-none pt-0.5">G</span>, value: String(googleRating.average), label: 'Google rating', animated: false },
-            ]).map((s, i) => (
-              <motion.div
-                key={s.label}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.06 }}
-                className="flex items-center gap-4"
-              >
-                <span
-                  aria-hidden="true"
-                  className="w-12 h-12 shrink-0 rounded-full grid place-items-center bg-sand/60 border border-linen text-gold"
-                >
-                  {s.badge}
-                </span>
-                <span aria-hidden="true" className="w-px h-10 shrink-0 bg-linen" />
-                <div className="min-w-0">
-                  <p className="font-display text-4xl sm:text-[44px] leading-[1.1] text-ink">
-                    {s.animated ? <CountUp to={50} suffix="K+" /> : s.value}
-                  </p>
-                  <p className="text-[11px] tracking-[0.22em] uppercase text-ink mt-2">
-                    {s.label}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        {/* Five figures in three columns; the sixth cell stays empty. */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-11 lg:gap-x-12 mt-14 lg:mt-20">
+          {([
+            { count: 50, suffix: 'K+', label: 'Sessions received across the network.' },
+            { value: '+' + googleRating.total.toLocaleString(), label: 'Google reviews from real patients.' },
+            { value: googleRating.average.toFixed(1), label: `Average Google rating across ${googleRating.branchCount} branches.` },
+            { value: '+21', label: 'Years of clinical practice.' },
+            { value: '+' + openCenters.length, label: 'Branches across Nepal.' },
+          ]).map((s, i) => (
+            <motion.div
+              key={s.label}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.06 }}
+            >
+              <p className="font-display text-[40px] sm:text-[48px] leading-none text-ink">
+                {s.count ? <CountUp to={s.count} suffix={s.suffix} /> : s.value}
+              </p>
+              <p className="text-[13px] leading-[1.6] text-[#414D4F] mt-3.5 max-w-[34ch]">{s.label}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
