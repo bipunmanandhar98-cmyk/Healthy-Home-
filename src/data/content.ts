@@ -485,13 +485,6 @@ export type Center = {
   /** Badge shown on the locations card, e.g. 'Corporate' or 'Mini'. */
   tag?: string;
   /**
-   * Optional branch photo for the location card. No branch has one yet, so the
-   * card draws a branded initials tile instead — it never shows a broken image.
-   * Add the file under public/images/branches/, register it in the image
-   * registry (one key per placement, as that file requires), then set it here.
-   */
-  img?: string;
-  /**
    * Restricts the services offered at this branch to these sub-service ids.
    * When set, the booking modal lists only these instead of the main services.
    */
