@@ -41,6 +41,23 @@ function branchName(branch: string) {
   return branch.replace(/^Healthy Home\s+/i, '');
 }
 
+/**
+ * How many reviews the wall shows.
+ *
+ * Nine, not ten, so that three-per-row lands as an exact 3x3 block. With ten
+ * the last row orphans a single tile, which reads as a mistake rather than a
+ * grid. Truncating the array rather than filtering means the tenth review is
+ * dropped from view, not from the data - it is still in content.ts and still
+ * counted by googleRating.
+ *
+ * The excluded one is currently Prakriti Karki, the last entry. That is a
+ * placeholder decision, not a judgement on the review; swap the slice or name
+ * the review to drop if a different one should go.
+ */
+const SHOWN = 9;
+
+const shown = testimonials.slice(0, SHOWN);
+
 export default function TestimonialWall() {
   return (
     <section className="bg-sand/60 border-y border-linen">
@@ -76,7 +93,7 @@ export default function TestimonialWall() {
                 room to spare. */}
             <p className="mt-4 text-[15px] leading-relaxed text-[#414D4F]">
               Verbatim from each branch&rsquo;s own Google Business Profile —
-              {' '}{testimonials.length} reviews, quoted unedited.
+              {' '}{shown.length} reviews, quoted unedited.
             </p>
             {/* Reads googleRating rather than a literal. It previously said
                 "5.0 average", which was simply wrong — the figure across the
@@ -87,9 +104,13 @@ export default function TestimonialWall() {
             </p>
           </div>
 
-          {/* Right: the brick grid. */}
+          {/* Three per row at lg, so nine tiles form an exact 3x3 block. Two columns
+              below lg: at 390px three 9:16 tiles would be about 111px wide,
+              which cannot hold a name and a readable line of quote.
+              Tiles are uniformly 9:16 rather than the mixed ratios used
+              before, since uniform tiles are what make the rows line up. */}
           <div className="columns-2 lg:columns-3 gap-3 lg:gap-4 mt-10 lg:mt-0">
-            {testimonials.map((t, i) => (
+            {shown.map((t, i) => (
               <motion.figure
                 key={t.name}
                 {...fadeUp}
@@ -101,7 +122,7 @@ export default function TestimonialWall() {
                   alt=""
                   loading="lazy"
                   decoding="async"
-                  className={`w-full object-cover transition-transform duration-500 group-hover:scale-[1.04] ${i % 3 === 0 ? 'aspect-[4/5]' : 'aspect-square'}`}
+                  className="w-full aspect-[9/16] object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
 
                 {/* Scrim. Opaque enough at the bottom that the white caption
