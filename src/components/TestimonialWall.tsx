@@ -104,12 +104,21 @@ export default function TestimonialWall() {
             </p>
           </div>
 
-          {/* Three per row at lg, so nine tiles form an exact 3x3 block. Two columns
-              below lg: at 390px three 9:16 tiles would be about 111px wide,
-              which cannot hold a name and a readable line of quote.
-              Tiles are uniformly 9:16 rather than the mixed ratios used
-              before, since uniform tiles are what make the rows line up. */}
-          <div className="columns-2 lg:columns-3 gap-3 lg:gap-4 mt-10 lg:mt-0">
+          {/* Three per row from sm up, two below.
+
+              The sm: step is not cosmetic. With columns-2 lg:columns-3, a
+              viewport between 640px and 1024px got two columns of very wide 9:16
+              tiles - measured at 1000px wide they came out 478x850 each, five
+              rows deep, which made the section 4641px tall. That is over six
+              screens of scrolling for nine reviews, and it broke the
+              one-section-per-screen rhythm on exactly the widths where the
+              layout is one column to begin with. Three columns from sm keeps
+              the tiles near 314x559 there, so the wall lands around 1677px
+              instead.
+
+              Below sm, two columns: at 390px three 9:16 tiles would be about
+              111px wide, too narrow to carry a name and a readable line. */}
+          <div className="columns-2 sm:columns-3 gap-3 lg:gap-4 mt-10 lg:mt-0">
             {shown.map((t, i) => (
               <motion.figure
                 key={t.name}
