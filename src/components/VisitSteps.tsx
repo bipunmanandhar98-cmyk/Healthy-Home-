@@ -99,6 +99,23 @@ export default function VisitSteps() {
                         number being the quiet element and the word the one you are
                         choosing. Measuring against white instead of cream is what
                         put a colour-contrast failure on every single run. */}
+                      {/* The number cannot take #00919A, though the word can. The word is 44px, so
+                            WCAG AA's 3:1 large-text bar applies and #00919A gives
+                            3.54:1 on this cream ground. The number is 11px — small
+                            text, which needs 4.5:1 — and the same colour measured
+                            3.54:1 there, failing on every Lighthouse run. So the
+                            number stays on gold-dark, #007078, at 5.37:1. Same teal
+                            family, one step darker, which reads as hierarchy rather
+                            than as a mismatched pair.
+
+                            #00919A is a literal hex rather than the --color-gold
+                            token, which is #007A80. #00919A is the pre-audit gold
+                            and is still hardcoded in the stylesheet — the gold-text
+                            gradient, gold-line, the marquee, the before/after
+                            handle — so the project has not dropped it. It measures
+                            3.54:1 here, clearing the bar that applies; the token
+                            would give 4.77:1. Both pass, so this is a brand choice.
+                            Say the word if you would rather it tracked the token. */}
                       <span
                         aria-hidden="true"
                         className={`font-mono text-[11px] tracking-[0.2em] transition-colors ${
@@ -109,7 +126,7 @@ export default function VisitSteps() {
                       </span>
                       <span
                         className={`font-display text-[34px] sm:text-[44px] leading-[1.06] transition-colors duration-300 ${
-                          on ? 'text-ink' : 'text-[#7C8484] group-hover:text-mocha'
+                          on ? 'text-[#00919A]' : 'text-[#7C8484] group-hover:text-mocha'
                         }`}
                       >
                         {s.title}
