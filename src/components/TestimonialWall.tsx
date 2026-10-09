@@ -33,10 +33,12 @@ import { testimonials, googleRating } from '../data/content';
  * caption two lines below it, so describing the photo would only make a screen
  * reader announce the name twice.
  *
- * No line clamp on the quote. An earlier version cut each review to two lines,
- * which was hiding 93px to 187px of text per tile - ten lines on the longest
- * one. Measured against the tile sizes below, the full text fits everywhere, so
- * truncating it was solving a problem that did not exist.
+ * Tiles carry a name and a treatment, not the review text. That is the explicit
+ * instruction, and it is also what the reference does. It removes the last
+ * source of clipped text in this component: with the quotes showing, the longest
+ * review needed 260px of a 530px tile and the caption had to be measured against
+ * the tile at six breakpoints to be sure it fitted. Two short lines cannot
+ * overflow. The full reviews are untouched in content.ts.
  */
 
 const fadeUp = {
@@ -101,9 +103,11 @@ export default function TestimonialWall() {
                 #414D4F measures 7.88:1 here and is the same tone the trust
                 band uses, so the two stay consistent and both clear AA with
                 room to spare. */}
+            {/* Says "reviews", not "quoted unedited". The tiles carry the reviewer's name
+                and treatment only, so describing them as quoted would be a claim
+                the page does not back up. The full text is still in content.ts. */}
             <p className="mt-4 text-[15px] leading-relaxed text-[#414D4F]">
-              Verbatim from each branch&rsquo;s own Google Business Profile —
-              {' '}{shown.length} reviews, quoted unedited.
+              Real reviews from each branch&rsquo;s own Google Business Profile.
             </p>
             {/* Reads googleRating rather than a literal. It previously said
                 "5.0 average", which was simply wrong — the figure across the
@@ -133,7 +137,7 @@ export default function TestimonialWall() {
               quote in full. At 390px two columns would give a 173px-wide tile
               where 85 words needs roughly 360px of text and cannot fit at any
               legible size. */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 lg:gap-4 mt-10 lg:mt-0">
+          <div className="columns-2 sm:columns-3 gap-3 lg:gap-4 mt-10 lg:mt-0">
             {shown.map((t, i) => (
               <motion.figure
                 key={t.name}
@@ -149,33 +153,40 @@ export default function TestimonialWall() {
                   className="w-full aspect-[9/16] object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
 
-                {/* Scrim. Solid espresso across the bottom 55% of the tile, then fading to
-                    transparent at the top.
+                {/* Scrim. Solid espresso across the bottom 40% of the tile, fading to
+                    transparent above it.
 
-                    The 55% is measured, not guessed. The caption is 22% to 49%
-                    of tile height across the six breakpoints, 49% being the
-                    worst at 640px with two columns. A scrim that is only opaque
-                    near the very bottom leaves the top of a tall caption
-                    sitting on a barely darkened photo, and Lighthouse then
-                    reports the white text as a colour-contrast failure. Solid to
-                    55% puts every caption fully on espresso at every width.
+                    40% is the measured worst case, not a guess. The caption is
+                    a name and a treatment, and on a narrow tile the name wraps:
+                    "Arjun Bahadur Kshetri" needs two lines in the 171px tile a
+                    390px phone gets with two columns, which lifts the caption to
+                    33% of tile height. Measured across five widths:
+
+                      390px 2col  171x304  caption 99px  33%
+                      640px 3col  192x341  caption 82px  24%
+                      768px 3col  235x417  caption 82px  20%
+                      1024px 3col 320x569  caption 67px  12%
+                      1440px 3col 395x702  caption 67px   9%
+
+                    Solid to 40% keeps every one of those inside the opaque part.
+                    A 20% scrim, which is all the tallest desktop caption needs,
+                    left the phone and tablet captions sitting on a barely
+                    darkened photograph, and that is where the intermittent
+                    colour-contrast failures were coming from.
 
                     The caption colours are solid rather than white/85 and
                     white/70 because Tailwind v4 emits an alpha utility as
                     oklab(... / 0.85), and axe-core does not resolve oklab alpha
-                    reliably - with them the contrast failure persisted on some
-                    runs and not others. These are flat hex values, measured at
-                    14.4:1, 18:1 and 8.6:1 against espresso. */}
+                    reliably - with them, contrast failures came and went between
+                    otherwise identical runs. Flat hex values, #FFFFFF and
+                    #A8B6B6, measure 18:1 and 8.6:1 against espresso. */}
                 <span
                   aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-t from-espresso from-55% to-transparent"
+                  className="absolute inset-0 bg-gradient-to-t from-espresso from-40% to-transparent"
                 />
 
                 <div className="absolute inset-x-0 bottom-0 p-3.5 lg:p-4">
-                  <blockquote className="text-[12.5px] leading-[1.5] text-[#E4EBEB]">
-                    &ldquo;{t.text}&rdquo;
-                  </blockquote>
-                  <figcaption className="mt-2.5">
+                  <figcaption>
                     <cite className="not-italic block text-[14px] font-semibold text-white leading-tight">
                       {t.name}
                     </cite>
