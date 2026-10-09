@@ -3,9 +3,10 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight, BadgeCheck, Calendar } from 'lucide-react';
 import { treatments, subServices, faqs, googleRating, openCenters, slugify } from '../data/content';
 import { useBooking } from '../components/booking';
-import { SectionHead, TrustBar, CtaBanner, CountUp } from '../components/shared';
+import { SectionHead, CtaBanner, CountUp } from '../components/shared';
 import BeforeAfter from '../components/BeforeAfter';
 import TestimonialWall from '../components/TestimonialWall';
+import VisitSteps from '../components/VisitSteps';
 import TeamCarousel from '../components/TeamCarousel';
 import LocationsPreview from '../components/LocationsPreview';
 import { AnimatePresence } from 'framer-motion';
@@ -655,20 +656,8 @@ export default function Home() {
       </div>
     </section>
 
-    {/* HOW IT WORKS */}
-    <section className="max-w-7xl mx-auto px-4 py-16 lg:py-20">
-      <SectionHead eyebrow="Effortless by Design" title="Your visit in 3 steps" />
-      <div className="grid md:grid-cols-3 gap-5 lg:gap-6 mt-10">
-        {[['01', 'Consultation', 'Body/fat + wellness analysis, honest recommendations and written pricing. 30-45 minutes, zero pressure.'], ['02', 'Personalized plan', 'Sequenced services mapped around your goals, schedule and budget.'], ['03', 'Support + maintain', 'Coaching, reviews and products then maintain.']].map(([n, t, s]) => (
-          <motion.div key={n} {...fadeUp} className="bg-white border border-linen rounded-3xl p-7 relative overflow-hidden group hover:shadow-xl transition-all duration-500 ease-out">
-            <p className="font-display text-[56px] text-sand group-hover:text-blush transition absolute top-3 right-5">{n}</p>
-            <p className="font-display text-2xl relative">{t}</p>
-            <p className="text-sm text-mocha mt-2 leading-relaxed relative">{s}</p>
-          </motion.div>
-        ))}
-      </div>
-      <div className="mt-10"><TrustBar /></div>
-    </section>
+    {/* HOW IT WORKS — word-list layout, see VisitSteps */}
+    <VisitSteps />
 
     {/* LEADERSHIP & EXPERTS */}
     <section className="bg-sand/60 border-y border-linen">
