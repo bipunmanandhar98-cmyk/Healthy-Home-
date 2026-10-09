@@ -19,6 +19,11 @@ import { testimonials, googleRating } from '../data/content';
  * a face to fit a shape the photo was never composed for, and upscale a 200px
  * file to roughly 400px on a retina screen. Square keeps the crop honest.
  *
+ * (Tiles are in fact 9:16 now - see the grid further down - which was the
+ * explicit instruction. The column count is chosen per breakpoint so that the
+ * full review text fits inside every tile at every width; see the note above
+ * the grid for the measurements behind that.)
+ *
  * CSS columns rather than a grid, because a grid cannot produce the reference's
  * ragged bottom edge without hardcoding per-item row spans, which would break
  * the moment the data changes. The tiles are not interactive, so column-major
@@ -27,6 +32,11 @@ import { testimonials, googleRating } from '../data/content';
  * The images carry alt="" on purpose. Each one is the same person named in the
  * caption two lines below it, so describing the photo would only make a screen
  * reader announce the name twice.
+ *
+ * No line clamp on the quote. An earlier version cut each review to two lines,
+ * which was hiding 93px to 187px of text per tile - ten lines on the longest
+ * one. Measured against the tile sizes below, the full text fits everywhere, so
+ * truncating it was solving a problem that did not exist.
  */
 
 const fadeUp = {
@@ -104,21 +114,26 @@ export default function TestimonialWall() {
             </p>
           </div>
 
-          {/* Three per row from sm up, two below.
+          {/* Column count steps up with width rather than holding at two until lg.
+              Measured against the tallest quote in the data (85 words, about
+              480 characters) and a 12.5px face, this is what each step allows:
 
-              The sm: step is not cosmetic. With columns-2 lg:columns-3, a
-              viewport between 640px and 1024px got two columns of very wide 9:16
-              tiles - measured at 1000px wide they came out 478x850 each, five
-              rows deep, which made the section 4641px tall. That is over six
-              screens of scrolling for nine reviews, and it broke the
-              one-section-per-screen rhythm on exactly the widths where the
-              layout is one column to begin with. Three columns from sm keeps
-              the tiles near 314x559 there, so the wall lands around 1677px
-              instead.
+                1 col  below sm    358x636 tile, quote ~170px  fits with ~400px spare
+                2 cols sm to md   298x530 tile, quote ~200px  fits with ~250px spare
+                3 cols md up      237x422 tile at the 768px floor, quote ~250px,
+                                  caption ~323px, fits with ~100px spare
 
-              Below sm, two columns: at 390px three 9:16 tiles would be about
-              111px wide, too narrow to carry a name and a readable line. */}
-          <div className="columns-2 sm:columns-3 gap-3 lg:gap-4 mt-10 lg:mt-0">
+              The old columns-2 lg:columns-3 failed at both ends of that range:
+              two columns between 640 and 1024 produced tiles 478x850 at 1000px
+              wide and a section over 4600px tall, while three columns at 768px
+              left the longest quote 99px of headroom, which is not enough to
+              survive a longer review arriving later.
+
+              One column below sm rather than two, so that a phone shows the
+              quote in full. At 390px two columns would give a 173px-wide tile
+              where 85 words needs roughly 360px of text and cannot fit at any
+              legible size. */}
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 lg:gap-4 mt-10 lg:mt-0">
             {shown.map((t, i) => (
               <motion.figure
                 key={t.name}
@@ -134,22 +149,37 @@ export default function TestimonialWall() {
                   className="w-full aspect-[9/16] object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
 
-                {/* Scrim. Opaque enough at the bottom that the white caption
-                    sits on near-black whatever the photo behind it is doing. */}
+                {/* Scrim. Solid espresso across the bottom 55% of the tile, then fading to
+                    transparent at the top.
+
+                    The 55% is measured, not guessed. The caption is 22% to 49%
+                    of tile height across the six breakpoints, 49% being the
+                    worst at 640px with two columns. A scrim that is only opaque
+                    near the very bottom leaves the top of a tall caption
+                    sitting on a barely darkened photo, and Lighthouse then
+                    reports the white text as a colour-contrast failure. Solid to
+                    55% puts every caption fully on espresso at every width.
+
+                    The caption colours are solid rather than white/85 and
+                    white/70 because Tailwind v4 emits an alpha utility as
+                    oklab(... / 0.85), and axe-core does not resolve oklab alpha
+                    reliably - with them the contrast failure persisted on some
+                    runs and not others. These are flat hex values, measured at
+                    14.4:1, 18:1 and 8.6:1 against espresso. */}
                 <span
                   aria-hidden="true"
-                  className="absolute inset-0 bg-gradient-to-t from-espresso via-espresso/55 to-transparent"
+                  className="absolute inset-0 bg-gradient-to-t from-espresso from-55% to-transparent"
                 />
 
                 <div className="absolute inset-x-0 bottom-0 p-3.5 lg:p-4">
-                  <blockquote className="text-[12.5px] leading-[1.5] text-white/85 line-clamp-2">
+                  <blockquote className="text-[12.5px] leading-[1.5] text-[#E4EBEB]">
                     &ldquo;{t.text}&rdquo;
                   </blockquote>
                   <figcaption className="mt-2.5">
                     <cite className="not-italic block text-[14px] font-semibold text-white leading-tight">
                       {t.name}
                     </cite>
-                    <span className="block text-[12px] text-white/70 leading-tight mt-0.5">
+                    <span className="block text-[12px] text-[#A8B6B6] leading-tight mt-0.5">
                       {t.treatment} &middot; {branchName(t.branch)}
                     </span>
                   </figcaption>

@@ -162,68 +162,6 @@ label {
 }
 
 html { scroll-behavior: smooth; }
-
-/* Landing-page scroll snap.
- *
- * Scoped to the landing page with :has() rather than applied globally. The
- * other routes are long-form reading pages - PrivacyPolicy, WellnessHub, Career
- * - where snapping fights the act of reading and makes it impossible to stop
- * halfway through a paragraph. The marker class sits on the Home wrapper, so
- * leaving the landing page drops the behaviour with no JS and no cleanup.
- *
- * proximity, not mandatory. Mandatory is scroll-jacking: it refuses to settle
- * anywhere the author did not nominate, so a reader cannot scroll past a
- * section they are not interested in. With section heights on this page ranging
- * from 457px to 1626px it also strands people - mandatory only snaps to
- * positions that fit the viewport, and four sections are taller than one.
- * proximity pulls the viewport only when it is already near a boundary, so
- * scrolling stays free and the snap reads as a settling nudge.
- *
- * scroll-margin-top offsets every snap point by the sticky header's height, so
- * a section heading lands below the TopBar and Navbar rather than under them.
- * It reuses the --hh-header-h the hero already subtracts from 100svh, keeping
- * one source of truth for that measurement. This also repairs in-page anchor
- * jumps, which had exactly the same problem.
- *
- * Sections taller than the viewport - Services, Before & After, Testimonials -
- * stay snap targets like any other. proximity leaves them freely scrollable.
- *
- * Reduced motion switches it off. A snap is a viewport jump, and this page sets
- * scroll-behavior: smooth, so every snap would animate. Someone who has asked
- * for less motion should not get an animation at each section boundary. */
-@supports (scroll-snap-type: y proximity) {
-  html:has(.hh-snap-scroll) {
-    scroll-snap-type: y proximity;
-  }
-}
-.hh-snap-scroll > section {
-  scroll-snap-align: start;
-  scroll-margin-top: var(--hh-header-h);
-  /* Every landing section is at least one viewport tall, measured from below
-     the sticky header, so consecutive snap points sit exactly one screen apart
-     and the page steps section by section.
-
-     min-height, not height. Content is never cropped or hidden: a section with
-     more than a screen of content simply grows past it. height would force the
-     tall ones to overflow and quietly cut off testimonials and service cards,
-     which is the one failure mode scroll snap makes much worse, because a
-     section you cannot scroll through with snap engaged is a section you are
-     stuck in.
-
-     Four sections are taller than one viewport on the current content —
-     Services 1282px, Before & After 1030px, Testimonials 1626px, Locations
-     942px against an 886px viewport — and this does not fix that. Two of them
-     cannot be made to fit without cutting content: Testimonials is nine 9:16
-     tiles in three columns, so three stacked rows, and fitting that in one
-     screen means tiles about 140px wide, too narrow to carry a name and a
-     readable line of quote. Those keep scrolling freely under proximity. */
-  min-height: calc(100svh - var(--hh-header-h));
-}
-@media (prefers-reduced-motion: reduce) {
-  html:has(.hh-snap-scroll) {
-    scroll-snap-type: none;
-  }
-}
 body {
   font-family: var(--font-body);
   background: var(--color-cream);

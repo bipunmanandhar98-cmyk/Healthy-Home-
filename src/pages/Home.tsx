@@ -207,11 +207,7 @@ export default function Home() {
   }, []);
 
   return (
-    /* hh-snap-scroll is the marker index.css keys off to turn scroll snap on
-       for this route only. It sits on this wrapper rather than being applied to
-       html directly so :has() can scope it — every other route is a reading
-       page that should scroll freely. */
-    <div className="hh-snap-scroll">
+    <div>
       {/* HERO — FULL-SCREEN IMAGE SLIDER */}
       <section className="bg-cream">
         {/* Height excludes the sticky header (--hh-header-h) so the CTAs are
