@@ -162,6 +162,49 @@ label {
 }
 
 html { scroll-behavior: smooth; }
+
+/* Landing-page scroll snap.
+ *
+ * Scoped to the landing page with :has() rather than applied globally. The
+ * other routes are long-form reading pages - PrivacyPolicy, WellnessHub, Career
+ * - where snapping fights the act of reading and makes it impossible to stop
+ * halfway through a paragraph. The marker class sits on the Home wrapper, so
+ * leaving the landing page drops the behaviour with no JS and no cleanup.
+ *
+ * proximity, not mandatory. Mandatory is scroll-jacking: it refuses to settle
+ * anywhere the author did not nominate, so a reader cannot scroll past a
+ * section they are not interested in. With section heights on this page ranging
+ * from 457px to 1626px it also strands people - mandatory only snaps to
+ * positions that fit the viewport, and four sections are taller than one.
+ * proximity pulls the viewport only when it is already near a boundary, so
+ * scrolling stays free and the snap reads as a settling nudge.
+ *
+ * scroll-margin-top offsets every snap point by the sticky header's height, so
+ * a section heading lands below the TopBar and Navbar rather than under them.
+ * It reuses the --hh-header-h the hero already subtracts from 100svh, keeping
+ * one source of truth for that measurement. This also repairs in-page anchor
+ * jumps, which had exactly the same problem.
+ *
+ * Sections taller than the viewport - Services, Before & After, Testimonials -
+ * stay snap targets like any other. proximity leaves them freely scrollable.
+ *
+ * Reduced motion switches it off. A snap is a viewport jump, and this page sets
+ * scroll-behavior: smooth, so every snap would animate. Someone who has asked
+ * for less motion should not get an animation at each section boundary. */
+@supports (scroll-snap-type: y proximity) {
+  html:has(.hh-snap-scroll) {
+    scroll-snap-type: y proximity;
+  }
+}
+.hh-snap-scroll > section {
+  scroll-snap-align: start;
+  scroll-margin-top: var(--hh-header-h);
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.hh-snap-scroll) {
+    scroll-snap-type: none;
+  }
+}
 body {
   font-family: var(--font-body);
   background: var(--color-cream);
